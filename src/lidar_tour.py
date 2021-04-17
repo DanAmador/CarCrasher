@@ -53,33 +53,31 @@ def main():
     bb = BeamBuilder(launch=True, auto_setup_car=False, scenario_name="Lidar Tour")
 
 
-    bb.car_setup(car=Cars.ETK,pos=(-717.121, 101, 118.675), rot_quat=(0, 0, 0.3826834, 0.9238795), sensors={"lidar": Lidar()})
+    bb.car_setup(car=Cars.ETK, pos=(-717.121, 101, 118.675), rot_quat=(0, 0, 0.3826834, 0.9238795), sensors={"lidar": Lidar()})
 
 
 
     try:
-        bb.build_environment()
+        bb.build_environment(ai_mode="span")
 
         window = open_window(SIZE, SIZE)
         lidar_vis = LidarVisualiser(Lidar.max_points)
-        lidar_vis.open(SIZE, SIZE)
+        #lidar_vis.open(SIZE, SIZE)
 
         bb.bmng.pause()
-        vehicle.ai_set_mode('span')
 
-        def update():
-            bb.vehicle.poll_sensors()
-            points = lidar.data['points']
-            bb.bmng.step(3, wait=False)
-
-            lidar_vis.update_points(points, vehicle.state)
-            glutPostRedisplay()
-
-        glutReshapeFunc(lidar_resize)
-        glutIdleFunc(update)
-        glutMainLoop()
+        #def update():
+        #    bb.vehicle.poll_sensors()
+        #    points = lidar.data['points']
+        #    bb.bmng.step(3, wait=False)
+        #    lidar_vis.update_points(points, vehicle.state)
+        #    glutPostRedisplay()
+        #glutReshapeFunc(lidar_resize)
+        #glutIdleFunc(update)
+        #glutMainLoop()
     finally:
-        bng.close()
+        print("this shit crashed")
+        #bb.bmng.close()
 
 
 if __name__ == '__main__':
