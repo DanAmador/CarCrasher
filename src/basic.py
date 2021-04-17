@@ -4,7 +4,11 @@ from beamngpy import BeamNGpy, Vehicle, Scenario, ProceduralRing, StaticObject
 from beamngpy.sensors import Camera
 from pathlib import Path
 import numpy as np
-beamng = beam_factory()
+import BeamBuilder
+
+
+
+beamng = BeamBuilder()
 beamng.open(launch=False)
 
 scenario = Scenario('west_coast_usa', 'object_placement')

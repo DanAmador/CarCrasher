@@ -1,7 +1,15 @@
 from pathlib import Path
-from beamngpy import BeamNGpy
+from enum import Enum
 
-beam_tech_path  = Path("Z:\BeamNG.tech.v0.21.3.0")
-user_path = Path("Z:\Wat")
-def beam_factory():
-    return BeamNGpy('localhost', 64256, home=beam_tech_path, user=user_path)
+
+class UserSettings():
+    beam_tech_path  = Path("Z:\BeamNG.tech.v0.21.3.0")
+    user_path = Path("Z:\Wat")
+
+class Levels():
+    WEST_COAST = 'west_coast_usa'
+
+
+class Cars():
+    ETK = "etk800"
+
