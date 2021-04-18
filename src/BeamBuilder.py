@@ -59,7 +59,7 @@ class BeamBuilder():
         self.camera = Camera(cam_pos, cam_dir, 60, (2048, 2048), near_far=(1, 4000),colour=colour,depth=depth, annotation=annotation, instance=instance) 
         return self.camera
     
-    def scenario_setup(self, level : Levels, name: str = "example") -> Scenario:
+    def scenario_setup(self, level : Levels = Levels.WEST_COAST, name: str = "example") -> Scenario:
         scenario = Scenario(level, name)
         self.scenario = scenario
         return scenario
