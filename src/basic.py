@@ -6,7 +6,7 @@ from BeamBuilder import BeamBuilder
 from config import Cars
 
 
-bb = BeamBuilder(launch=True, auto_setup_car=False)
+bb = BeamBuilder(launch=True)
 
 bb.car_setup(car=Cars.ETK, pos=(-198.5, -164.189, 119.7) )
 

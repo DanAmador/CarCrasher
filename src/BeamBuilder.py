@@ -6,11 +6,11 @@ from config import Levels, Cars
 
 class BeamBuilder():
 
-    def __init__(self, launch=False, scenario_name="Beam Builder", auto_setup_car=True, auto_setup_cam=True):
+    def __init__(self, launch=False, scenario_name="Beam Builder"):
         self.bmng = self.beam_factory(launch)
-        self.scenario = self.scenario_setup(Levels.WEST_COAST, name= scenario_name)
-        self.vehicle = self.car_setup() if auto_setup_car else None
-        self.camera = self.cam_setup() if auto_setup_cam else None
+        self.scenario = None
+        self.vehicle =  None
+        self.camera =  None
 
         self.meshes = []
 
@@ -23,6 +23,16 @@ class BeamBuilder():
         if not hud:
             self.bmng.hide_hud()
         
+        if self.scenario == None:
+            self.scenario_setup(Levels.WEST_COAST, name= scenario_name)
+
+        if self.vehicle == None:
+            self.car_setup()
+        
+        if self.camera == None:
+            self.cam_setup()
+
+
         self.bmng.set_steps_per_second(60)
 
         self.scenario.make(self.bmng)
