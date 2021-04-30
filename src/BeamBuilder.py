@@ -13,7 +13,6 @@ class BeamBuilder:
         self.vehicle = None
         self.camera = None
         self.scenario_name = scenario_name
-
         self.meshes = []
 
     def build_environment(self, hud=False, steps=60, ai_mode=None):
@@ -52,15 +51,13 @@ class BeamBuilder:
         bmng.open(launch=launch)
         return bmng
 
-    def cam_setup(self, cam_pos=(-0.3, 1, 1), cam_dir=None, colour=True, depth=False, annotation=False,
+    def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=False, annotation=False,
                   instance=False) -> Camera:
-        if cam_dir == None:
-            cam_dir = (445 - cam_pos[0], 301 - cam_pos[1], 208 - cam_pos[2])
-        self.camera = Camera(cam_pos, cam_dir, 60, (2048, 2048), near_far=(1, 4000), colour=colour, depth=depth,
+        self.camera = Camera(cam_pos, cam_dir, 75, (1920, 1080), near_far=(1, 100), colour=colour, depth=depth,
                              annotation=annotation, instance=instance)
         return self.camera
 
-    def scenario_setup(self, level: Levels = Levels.WEST_COAST, name: str = "example") -> Scenario:
+    def scenario_setup(self, level: Levels = Levels.WEST_COAST, name: str = "example_scenario") -> Scenario:
         scenario = Scenario(level, name)
         self.scenario = scenario
         return scenario

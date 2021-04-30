@@ -1,4 +1,5 @@
 import asyncio
+import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -7,7 +8,7 @@ from typing import List
 from beamngpy import BeamNGpy, Vehicle, Image
 
 from BeamBuilder import BeamBuilder
-
+import time
 data_path = (Path(__file__).absolute()).parent.parent / "data"
 
 beam2folderNames = {
@@ -15,6 +16,8 @@ beam2folderNames = {
     "instance": "seg_maps",
     "depth": "depth",
     "annotation": "annotation",
+    "annotation_dict": "annotation_dict",
+
 }
 
 
@@ -23,12 +26,16 @@ class Capture:
     frame: int
     data: dict
     name: str
+    annotation_json: dict
 
     def save_to_file(self, entry_path, seq_name):
         for beamName, folderName in beam2folderNames.items():
             img = self.data.get(beamName)
             if img is not None:
-                img.save((entry_path / folderName / seq_name / self.name).absolute())
+                img.convert("RGB").save((entry_path / folderName / seq_name / f"{self.name}.png").absolute())
+
+        with open((entry_path / "annotation_dict" / seq_name / f"{self.name}.json").absolute(), 'w') as f:
+            json.dump(self.annotation_json, f)
 
 
 @dataclass
@@ -44,6 +51,7 @@ class ImageSequence:
         self.captures = []
 
     def save_frames(self):
+        print(f"Saving {len(self.captures)} objects")
         for capture in self.captures:
             capture.save_to_file(self.entry_path, self.seq_folder)
 
@@ -76,7 +84,6 @@ class ImageSequence:
 
 def capture_footage(bmng: BeamNGpy, vehicle: Vehicle, seq: ImageSequence, framerate: int = 24,
                     total_captures: int = 240):
-
     current_capture = 0
     wait_time = int(60 / framerate)
     print(f"Taking picture every {wait_time} steps at {framerate}fps")
@@ -85,14 +92,15 @@ def capture_footage(bmng: BeamNGpy, vehicle: Vehicle, seq: ImageSequence, framer
         current_capture += 1
         vehicle.poll_sensors()
         data = vehicle.sensors['camera'].data
-        pic_name = f"{str(current_capture).zfill(6)}.png"
+        pic_name = f"{str(current_capture).zfill(6)}"
         print(current_capture)
-        seq.append(Capture(current_capture, data, pic_name))
+
+        seq.append(Capture(current_capture, data, pic_name, annotation_json=bb.bmng.get_annotations()))
         bmng.render_cameras()
         bmng.step(wait_time)
         bmng.pause()
-        # data['colour'].convert('RGB').save((curr_img_seq / pic_name).absolute(), "PNG")
 
+    bmng.resume()
     return seq
 
 
@@ -100,14 +108,10 @@ if __name__ == "__main__":
     bb = BeamBuilder(launch=False)
     cam = bb.cam_setup(annotation=True)
     bb.scenario_setup()
-    bb.car_setup(sensors={"camera": cam})
-
+    bb.car_setup(sensors={"camera": cam}, rot_quat=(0, 0, 0.3826834, 0.9238795))
     bb.build_environment(ai_mode="span")
-    # data = ego.sensors['camera'].data
-    # annotations = bb.bmng.get_annotations()
-    # print(annotations)
-    # with open((data_path / "test.json").absolute(), 'w') as f:
-    #    json.dump(annotations, f)
+    #bb.bmng.set_relative_camera(pos=(2,2,2))
 
     sequence = ImageSequence("Example", data_path)
+    time.sleep(5)
     capture_footage(bb.bmng, bb.vehicle, sequence, total_captures=10).save_frames()
