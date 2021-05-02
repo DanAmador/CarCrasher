@@ -24,8 +24,8 @@ from OpenGL.GLUT import *
 from beamngpy import BeamNGpy, Scenario, Vehicle, setup_logging
 from beamngpy.sensors import Lidar
 from beamngpy.visualiser import LidarVisualiser
-from BeamBuilder import BeamBuilder
-from config import Levels, Cars
+from ..BeamBuilder import BeamBuilder
+from ..config import Levels, Cars
 
 SIZE = 1024
 
@@ -50,7 +50,7 @@ def main():
     setup_logging()
 
     
-    bb = BeamBuilder(launch=True, scenario_name="Lidar Tour")
+    bb = BeamBuilder(launch=False, scenario_name="Lidar Tour")
 
 
     bb.car_setup(car=Cars.ETK, pos=(-717.121, 101, 118.675), rot_quat=(0, 0, 0.3826834, 0.9238795), sensors={"lidar": Lidar()})
@@ -62,19 +62,21 @@ def main():
 
         window = open_window(SIZE, SIZE)
         lidar_vis = LidarVisualiser(Lidar.max_points)
-        #lidar_vis.open(SIZE, SIZE)
+        lidar_vis.open(SIZE, SIZE)
 
         bb.bmng.pause()
 
-        #def update():
-        #    bb.vehicle.poll_sensors()
-        #    points = lidar.data['points']
-        #    bb.bmng.step(3, wait=False)
-        #    lidar_vis.update_points(points, vehicle.state)
-        #    glutPostRedisplay()
-        #glutReshapeFunc(lidar_resize)
-        #glutIdleFunc(update)
-        #glutMainLoop()
+        def update():
+            bb.vehicle.poll_sensors()
+            points = lidar.data['points']
+            bb.bmng.step(3, wait=False)
+            lidar_vis.update_points(points, vehicle.state)
+            glutPostRedisplay()
+        glutReshapeFunc(lidar_resize)
+        glutIdleFunc(update)
+        glutMainLoop()
+    except Exception as  e:
+        print(e)
     finally:
         print("this shit crashed")
         #bb.bmng.close()
