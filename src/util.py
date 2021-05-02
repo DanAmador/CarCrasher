@@ -34,6 +34,5 @@ beam2folderNames = {
     "instance": "seg_maps",
     "depth": "depth",
     "annotation": "annotation",
-    "annotation_dict": "annotation_dict",
 
 }

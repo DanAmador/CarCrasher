@@ -26,12 +26,10 @@ class Capture:
 @dataclass
 class ImageSequence:
     captures: List[Capture]
-    sequence_name: str
     entry_path: Path
 
-    def __init__(self, name: str, data_path_entry: Path):
+    def __init__(self, data_path_entry: Path):
         create_paths([data_path_entry])
-        self.sequence_name = name
         self.entry_path = data_path_entry
         self.seq_folder = create_folders(self.entry_path)
         self.captures = []
@@ -72,11 +70,11 @@ def capture_footage(bmng: BeamNGpy, vehicle: Vehicle, seq: ImageSequence, framer
 
 
 if __name__ == "__main__":
-    bb = BeamBuilder(launch=False)
+    bb = BeamBuilder(launch=True)
     cam = bb.cam_setup(annotation=True)
     bb.scenario_setup(level=Levels.WEST_COAST)
     bb.car_setup(sensors={"camera": cam}, rot_quat=(0, 0, 0.3826834, 0.9238795))
-    bb.build_environment(ai_mode="span", steps=30)
+    bb.build_environment(ai_mode="span", steps=30, hud=True)
     bb.vehicle.ai_set_speed(300, mode="limit")
     # bb.bmng.set_relative_camera(pos=(2,2,2))
 
