@@ -43,7 +43,6 @@ class ImageSequence:
         self.captures.append(capture)
 
 
-
 def capture_footage(bmng: BeamNGpy, vehicle: Vehicle, seq: ImageSequence, framerate: int = 24,
                     total_captures: int = 240, duration=None):
     current_capture = 0
@@ -78,7 +77,7 @@ if __name__ == "__main__":
     bb.vehicle.ai_set_speed(300, mode="limit")
     # bb.bmng.set_relative_camera(pos=(2,2,2))
 
-    sequence = ImageSequence( data_path / "raw")
+    sequence = ImageSequence(data_path / "raw")
     input("Press space to record")
     # time.sleep(6)
     capture_footage(bb.bmng, bb.vehicle, sequence,

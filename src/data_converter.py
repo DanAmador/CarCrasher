@@ -43,35 +43,35 @@ import numpy as np
 # 'license plate', -1,
 
 mapping_dict = {
-    "BACKGROUND": [],
-    "BUILDINGS": [],
-    "CAR": ["ground"],
-    "DASHED_LINE": [],
-    "COBBLESTONE": [],
-    "NATURE": [],
-    "OBSTACLES": [],
-    "DRIVING_INSTRUCTIONS": [],
-    "POLE": [],
-    "STREET": ["bridge"],
-    "RESTRICTED_STREET": [],
-    "ROADBLOCK": [],
-    "SIDEBARS": [],
-    "SIDEWALK": ["sidewalk"],
-    "SKY": ["sky"],
-    "SOLID_LINE": [],
-    "SPEED_BUMP": [],
-    "TRAFFIC_SIGNALS": [],
-    "TRAFFIC_SIGNS": [],
-    "TRUCK_TRAILERS": [],
-    "TRUCK": [],
-    "ZEBRA_CROSSING": [],
-    "GUARD_RAIL": [],
-    "WATER": [],
-    "ROCK": [],
-    "SAND": [],
-    "GRASS": [],
-    "MUD": [],
-    "ASPHALT": []
+    "SKY": "sky",
+    "STREET": "road",
+    "SIDEWALK": "sidewalk",
+    "ASPHALT": "road",
+    "CAR": "car",
+    "BUILDINGS": "building",
+    "POLE": "truck",
+    "BACKGROUND": None,
+    "DASHED_LINE": None,
+    "COBBLESTONE": None,
+    "NATURE": None,
+    "OBSTACLES": None,
+    "DRIVING_INSTRUCTIONS": None,
+    "RESTRICTED_STREET": None,
+    "ROADBLOCK": None,
+    "SIDEBARS": None,
+    "SOLID_LINE": None,
+    "SPEED_BUMP": None,
+    "TRAFFIC_SIGNALS": None,
+    "TRAFFIC_SIGNS": None,
+    "TRUCK_TRAILERS": None,
+    "TRUCK": None,
+    "ZEBRA_CROSSING": None,
+    "GUARD_RAIL": None,
+    "WATER": None,
+    "ROCK": None,
+    "SAND": None,
+    "GRASS": None,
+    "MUD": None,
 }
 
 
@@ -85,26 +85,23 @@ def get_all_seg_seqs(base_path: Path):
         return set()
 
 
-def callback(p):
-    print(p)
-    return p
-
-
 def convert(unprocessed: Path, bmng: dsm.Dataset, grayscale=False):
     save_path = Path(str(unprocessed.absolute()).replace("raw", "mapped"))
     create_paths([save_path])
     pics = [x for x in unprocessed.iterdir() if x.is_file()]
     for pic in pics:
         image = cv2.imread(str(pic.absolute()))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        processed_image = np.zeros(image.shape)
         for k, v in bmng.mappings.items():
-            image[np.where((image == k).all(axis=2))] = v
+            processed_image[np.where((image == k).all(axis=2))] = v
 
         img_path = str((save_path / pic.name).absolute())
         print(img_path)
         if grayscale:
-            image = cv2.convertScaleAbs(image)
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        cv2.imwrite(img_path, image)
+            processed_image = cv2.convertScaleAbs(processed_image)
+            processed_image = cv2.cvtColor(processed_image, cv2.COLOR_RGB2GRAY)
+        cv2.imwrite(img_path, processed_image)
 
 
 if __name__ == "__main__":
