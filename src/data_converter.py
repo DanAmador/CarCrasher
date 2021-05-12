@@ -11,7 +11,7 @@ import numpy as np
 
 def get_all_seg_seqs(base_path: Path):
     try:
-        seqs = set([p for p in (base_path / "annotation").iterdir() if p.is_dir()])
+        seqs = set([p for p in base_path.iterdir() if p.is_dir()])
 
         return seqs
     except Exception as e:
@@ -20,8 +20,9 @@ def get_all_seg_seqs(base_path: Path):
 
 
 def convert(unprocessed: Path, bmng_dataset: dsm.Dataset, grayscale=False):
-    save_path = Path(str(unprocessed.absolute()).replace("raw", "mapped"))
+    save_path = Path(str(unprocessed.absolute()).replace("raw_annotations", "annotations"))
     create_paths([save_path])
+
     pics = [x for x in unprocessed.iterdir() if x.is_file()]
     for pic in pics:
         image = cv2.imread(str(pic.absolute()))
@@ -43,13 +44,14 @@ if __name__ == "__main__":
     bmng = dsm.beamng_dataset
     bmng.create_mappings_from_dict(beam2CityLabelMap, dsm.cityscapes, use_grayscale)
 
-    proc_data_path = data_path/ "captures" / "annotations"
-    raw_data_path = data_path / "captures" / "raw_annotations"
+    proc_data_path = data_path / "captures" / "annotations"
     proc_seqs = get_all_seg_seqs(proc_data_path)
+
+    raw_data_path = data_path / "captures" / "raw_annotations"
     raw_seqs = get_all_seg_seqs(raw_data_path)
     diff = raw_seqs.difference(proc_seqs)
     print(f" {len(diff)} sequences found without processing")
 
-    create_folders(proc_data_path, with_seq=False)
+    # create_folders(proc_data_path, with_seq=False)
     for unprocessed_seq in diff:
         convert(unprocessed_seq, bmng, use_grayscale)
