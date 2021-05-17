@@ -1,12 +1,10 @@
-from copy import copy
 from pathlib import Path
 
-from PIL import Image
-
-from util import data_path, create_paths, create_folders, beam2CityLabelMap
-import DatasetMapper as dsm
 import cv2
 import numpy as np
+
+import DatasetMapper as dsm
+from util import data_path, create_paths, beam2CityLabelMap
 
 
 def get_all_seg_seqs(base_path: Path):

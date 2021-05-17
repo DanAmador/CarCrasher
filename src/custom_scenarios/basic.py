@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     bb = BeamBuilder(launch=True)
 
-    bb.car_setup(car=Cars.ETK, pos=(-198.5, -164.189, 119.7) )
+    bb.with_car(car=Cars.ETK, pos=(-198.5, -164.189, 119.7))
 
 
 

@@ -53,7 +53,7 @@ def main():
     bb = BeamBuilder(launch=False, scenario_name="Lidar Tour")
 
 
-    bb.car_setup(car=Cars.ETK, pos=(-717.121, 101, 118.675), rot_quat=(0, 0, 0.3826834, 0.9238795), sensors={"lidar": Lidar()})
+    bb.with_car(car=Cars.ETK, pos=(-717.121, 101, 118.675), rot_quat=(0, 0, 0.3826834, 0.9238795), sensors={"lidar": Lidar()})
 
 
 
