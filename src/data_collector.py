@@ -1,5 +1,6 @@
 import queue
 import threading
+from concurrent.futures.thread import ThreadPoolExecutor
 from dataclasses import dataclass
 from multiprocessing.dummy import Pool as ThreadPool
 from pathlib import Path
@@ -12,17 +13,21 @@ from config import Levels, AIMode
 from util import create_paths, data_path, beam2folderNames, create_folders
 import time
 
+
 @dataclass(frozen=False)
 class Capture:
     frame: int
     data: dict
     name: str
+    entry_path: Path
+    seq_name: str
 
-    def save_to_file(self, entry_path: Path, seq_name: str):
+    def save_to_file(self):
+        print(f"Saving {self.seq_name}/{self.name}")
         for beamName, folderName in beam2folderNames.items():
             img = self.data.get(beamName)
             if img is not None:
-                img.convert("RGB").save((entry_path / folderName / seq_name / f"{self.name}.png").absolute())
+                img.convert("RGB").save((self.entry_path / folderName / self.seq_name / f"{self.name}.png").absolute())
 
 
 @dataclass
@@ -35,27 +40,7 @@ class ImageSequence:
         self.entry_path = data_path_entry
         self.seq_folder = create_folders(self.entry_path)
         self.captures = []
-        self.save_queue = queue.Queue()
         self.vehicle = vehicle
-
-    def save_frames(self):
-        if len(self.captures) != 0:
-            print(f"Saving {len(self.captures)} frames for {self.seq_folder}")
-            for capture in self.captures:
-                self.save_queue.put(capture)
-
-            self.captures = []
-            with ThreadPool() as pool:
-                pool.apply_async(self.save_worker, (self.save_queue,))
-        # $capture.save_to_file()
-
-    def save_worker(self, q, multiplicity=5, maxlevel=3, lock=threading.Lock()):
-        for capture in iter(q.get, None):  # blocking get until None is received
-            try:
-                with lock:
-                    capture.save_to_file(self.entry_path, self.seq_folder)
-            finally:
-                q.task_done()
 
     def capture_frame(self, current_frame):
         self.vehicle.poll_sensors()
@@ -63,13 +48,40 @@ class ImageSequence:
         pic_name = f"{str(current_frame).zfill(6)}"
         # print(f"current_capture {current_frame} of {total_captures}")
 
-        self.captures.append(Capture(current_frame, data, pic_name))
+        self.captures.append(Capture(current_frame, data, pic_name, self.entry_path, self.seq_folder))
 
 
 @dataclass()
 class SequenceManager:
-    sequences: List[ImageSequence]
-    bb: BeamBuilder
+    def __init__(self, bb: BeamBuilder, sequences_list=None):
+        if sequences_list is None:
+            sequences_list = []
+        self.bb: BeamBuilder = bb
+        self.sequences: List[ImageSequence] = sequences_list
+        self.save_queue = queue.Queue()
+        self.threads = []
+
+        for t in range(10):
+            worker = threading.Thread(target=self.save_worker)
+            worker.daemon = True
+            worker.start()
+            self.threads.append(worker)
+
+    def save_frames(self):
+        for seq in self.sequences:
+            if len(seq.captures) != 0:
+                print(f"Saving {len(seq.captures)} frames for {seq.seq_folder}")
+                for capture in seq.captures:
+                    self.save_queue.put(capture)
+
+                seq.captures = []
+
+        # $capture.save_to_file()
+
+    def save_worker(self):
+        while True:
+            capture = self.save_queue.get()
+            capture.save_to_file()
 
     def capture_footage(self, steps_per_sec=60, framerate: int = 24, total_captures: int = 240, duration=None):
         current_capture = 0
@@ -79,15 +91,17 @@ class SequenceManager:
         if duration is not None:
             total_captures = framerate * duration
         batch_idx = max(total_captures / 5, 1)
-
+        frame_buffer = 0
         while current_capture <= total_captures:
             current_capture += 1
+            frame_buffer += 1
             print(f"current_capture {current_capture} of {total_captures}")
             for sequence in sequences:
                 sequence.capture_frame(current_capture)
 
-                if len(sequence.captures) > batch_idx or current_capture == total_captures:
-                    sequence.save_frames()
+            if frame_buffer > batch_idx or current_capture == total_captures:
+                frame_buffer = 0
+                self.save_frames()
             self.bb.bmng.render_cameras()
             self.bb.bmng.step(wait_time)
             self.bb.bmng.pause()
@@ -118,8 +132,6 @@ def setup_test_sequence():
             car.ai_set_speed(60, "limit")
         sequences_list.append(ImageSequence(data_path / "captures", car))
 
-    # Set AIs
-
     return sequences_list
 
 
@@ -134,8 +146,9 @@ if __name__ == "__main__":
     # bb.bmng.set_relative_camera(pos=(2,2,2))
 
     # sequence = ImageSequence(data_path / "captures")
-    manager = SequenceManager(sequences, bb)
+    manager = SequenceManager(bb, sequences)
     while True:
+
         #input("Press enter to record clip")
         time.sleep(6)
         manager.capture_footage(steps_per_sec=steps_per_sec, framerate=framerate, duration=1
