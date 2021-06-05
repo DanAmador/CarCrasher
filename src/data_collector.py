@@ -1,8 +1,6 @@
 import queue
 import threading
-from concurrent.futures.thread import ThreadPoolExecutor
 from dataclasses import dataclass
-from multiprocessing.dummy import Pool as ThreadPool
 from pathlib import Path
 from typing import List
 
@@ -10,8 +8,8 @@ from beamngpy import Vehicle
 
 from BeamBuilder import BeamBuilder
 from config import Levels, AIMode
-from util import create_paths, data_path, beam2folderNames, create_folders
-import time
+from config import UserSettings as us
+from util import create_paths, beam2folderNames, create_folders
 
 
 @dataclass(frozen=False)
@@ -130,7 +128,7 @@ def setup_test_sequence():
             car.ai_set_mode(AIMode.CHASE)
             car.ai_set_target(target.vid)
             car.ai_set_speed(60, "limit")
-        sequences_list.append(ImageSequence(data_path / "captures", car))
+        sequences_list.append(ImageSequence(us.data_path / "captures", car))
 
     return sequences_list
 
@@ -149,8 +147,8 @@ if __name__ == "__main__":
     manager = SequenceManager(bb, sequences)
     while True:
 
-        #input("Press enter to record clip")
-        time.sleep(6)
+        input("Press enter to record clip")
+        # time.sleep(6)
         manager.capture_footage(steps_per_sec=steps_per_sec, framerate=framerate, duration=1
                                 # total_captures=10
                                 )

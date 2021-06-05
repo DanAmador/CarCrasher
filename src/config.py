@@ -1,9 +1,10 @@
-from pathlib import Path
+from util import project_root
 
 
 class UserSettings:
-    beam_tech_path = Path("Z:\BeamNG.tech.v0.21.3.0")
-    user_path = Path("Z:\Wat")
+    beam_tech_path = project_root / "BeamNG.tech"
+    user_path = project_root / "user_path"
+    data_path = project_root / "data"
 
 
 class Levels:

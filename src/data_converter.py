@@ -4,7 +4,8 @@ import cv2
 import numpy as np
 
 import DatasetMapper as dsm
-from util import data_path, create_paths, beam2CityLabelMap
+from util import create_paths, beam2CityLabelMap
+from config import UserSettings as us
 
 
 def get_all_seg_seqs(base_path: Path):
@@ -42,10 +43,10 @@ if __name__ == "__main__":
     bmng = dsm.beamng_dataset
     bmng.create_mappings_from_dict(beam2CityLabelMap, dsm.cityscapes, use_grayscale)
 
-    proc_data_path = data_path / "captures" / "annotations"
+    proc_data_path = us.data_path / "captures" / "annotations"
     proc_seqs = get_all_seg_seqs(proc_data_path)
 
-    raw_data_path = data_path / "captures" / "raw_annotations"
+    raw_data_path = us.data_path / "captures" / "raw_annotations"
     raw_seqs = get_all_seg_seqs(raw_data_path)
     diff = raw_seqs.difference(proc_seqs)
     print(f" {len(diff)} sequences found without processing")

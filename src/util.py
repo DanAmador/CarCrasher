@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-data_path = (Path(__file__).absolute()).parent.parent / "data"
+project_root = (Path(__file__).absolute()).parent.parent
 
 
 def create_paths(paths):
