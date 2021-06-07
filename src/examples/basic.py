@@ -2,8 +2,8 @@ from beamngpy import BeamNGpy, Vehicle, Scenario, ProceduralRing, StaticObject
 from beamngpy.sensors import Camera
 from pathlib import Path
 import numpy as np
-from ..BeamBuilder import BeamBuilder
-from ..config import Cars
+from src.BeamBuilder import BeamBuilder
+from src.config import Cars
 
 if __name__ == "__main__":
 
