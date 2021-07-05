@@ -2,13 +2,13 @@ import time
 
 from BeamBuilder import BeamBuilder
 from config import Levels
-from custom_scenarios import BasicCarChase
+from custom_scenarios import BasicCarChase, FallFromSkyScenario
 from recorder import SequenceManager
 
 
 if __name__ == "__main__":
     framerate = 24
-    steps_per_sec = 100
+    steps_per_sec = 60
 
     bb = BeamBuilder(launch=True,steps_per_sec= steps_per_sec)
 
@@ -18,9 +18,9 @@ if __name__ == "__main__":
     # sequence = ImageSequence(data_path / "captures")
     manager = SequenceManager(bb, scenario)
     while True:
-        # input("Press enter to record clip")
-        time.sleep(6)
+        input("Press enter to record clip")
+        # time.sleep(6)
         print("Starting recording")
-        manager.capture_footage(steps_per_sec=steps_per_sec, framerate=framerate, duration=10
+        manager.capture_footage(steps_per_sec=steps_per_sec, framerate=framerate, duration=5
                                 # total_captures=10
                                 )

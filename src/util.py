@@ -31,7 +31,7 @@ def create_folders(entry_path: Path, with_seq = True):
 
 beam2folderNames = {
     "colour": "images",
-    "instance": "seg_maps",
+    "instance": "instance_maps",
     "depth": "depth",
     "annotation": "raw_annotations",
 
@@ -72,6 +72,8 @@ beam2folderNames = {
 # 'bicycle', 33,
 # 'license plate', -1,
 
+
+
 beam2CityLabelMap = {
     "SKY": "sky",
     "STREET": "road",
@@ -80,6 +82,7 @@ beam2CityLabelMap = {
     "CAR": "car",
     "BUILDINGS": "building",
     "POLE": "truck",
+    "TRUCK": "truck",
     "BACKGROUND": None,
     "DASHED_LINE": None,
     "COBBLESTONE": None,
@@ -94,7 +97,6 @@ beam2CityLabelMap = {
     "TRAFFIC_SIGNALS": None,
     "TRAFFIC_SIGNS": None,
     "TRUCK_TRAILERS": None,
-    "TRUCK": None,
     "ZEBRA_CROSSING": None,
     "GUARD_RAIL": None,
     "WATER": None,
@@ -103,4 +105,3 @@ beam2CityLabelMap = {
     "GRASS": None,
     "MUD": None,
 }
-

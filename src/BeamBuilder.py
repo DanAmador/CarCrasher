@@ -78,6 +78,8 @@ class BeamBuilder:
             print("No scenario defined while building vehicle, building default")
             self.with_scenario(Levels.WEST_COAST, name=self.scenario_name)
         else:
+            if rot is not None:
+                rot_quat = None
             self.scenario.add_vehicle(vehicle, pos=pos, rot=rot, rot_quat=rot_quat)
 
         if len(self.vehicles) == 0:

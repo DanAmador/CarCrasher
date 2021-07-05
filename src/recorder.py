@@ -85,7 +85,8 @@ class SequenceManager:
             f"Recording {len(self.scenario.sequences)} sequences at  {framerate}fps every {wait_time} steps at {steps_per_sec} physics steps per second ")
         if duration is not None:
             total_captures = framerate * duration
-        batch_idx = max(total_captures // 50, 1)
+        batch_idx = max(total_captures /
+                        50, 1)
         frame_buffer = 0
         while current_capture <= total_captures:
             current_capture += 1

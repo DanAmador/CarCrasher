@@ -19,7 +19,7 @@ def get_all_seg_seqs(base_path: Path):
 
 
 def convert(unprocessed: Path, bmng_dataset: dsm.Dataset, grayscale=False):
-    save_path = Path(str(unprocessed.absolute()).replace("raw_annotations", "annotations"))
+    save_path = Path(str(unprocessed.absolute()).replace("raw_annotations", "seg_maps"))
     create_paths([save_path])
 
     pics = [x for x in unprocessed.iterdir() if x.is_file()]
@@ -34,19 +34,20 @@ def convert(unprocessed: Path, bmng_dataset: dsm.Dataset, grayscale=False):
         print(img_path)
         if grayscale:
             processed_image = cv2.convertScaleAbs(processed_image)
-            processed_image = cv2.cvtColor(processed_image, cv2.COLOR_RGB2GRAY)
+            processed_image = cv2.cvtColor(processed_image, cv2.COLOR_RGB2GRAY).astype('uint8')
         cv2.imwrite(img_path, processed_image)
 
 
 if __name__ == "__main__":
     use_grayscale = True
+    folder_name = "beamng"
     bmng = dsm.beamng_dataset
     bmng.create_mappings_from_dict(beam2CityLabelMap, dsm.cityscapes, use_grayscale)
 
-    proc_data_path = us.data_path / "captures" / "annotations"
+    proc_data_path = us.data_path / folder_name / "seg_maps"
     proc_seqs = get_all_seg_seqs(proc_data_path)
 
-    raw_data_path = us.data_path / "captures" / "raw_annotations"
+    raw_data_path = us.data_path / folder_name / "raw_annotations"
     raw_seqs = get_all_seg_seqs(raw_data_path)
     diff = raw_seqs.difference(proc_seqs)
     print(f" {len(diff)} sequences found without processing")
