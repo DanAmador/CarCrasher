@@ -5,7 +5,7 @@ from typing import List
 from beamngpy import Vehicle
 
 import BeamBuilder
-from config import AIMode
+from config import AIMode, Levels
 from recorder import ImageSequence
 from config import UserSettings as us
 
@@ -22,16 +22,28 @@ class AbstractRecordingScenario(ABC):
         return
 
     @abstractmethod
-    def setup_scenario(self):
+    def setup_scenario(self, steps_per_sec = 24):
         return []
 
 
-class BasicCarChase(AbstractRecordingScenario):
+class FallFromSkyScenario(AbstractRecordingScenario):
+
+    def setup_scenario(self, steps_per_sec=24):
+        # self.bb.with_scenari
+        pass
     def on_recording_step(self):
         pass
 
-    def setup_scenario(self):
 
+class BasicCarChase(AbstractRecordingScenario):
+
+    def on_recording_step(self):
+        pass
+
+    def setup_scenario(self, steps_per_sec=24):
+
+        self.bb.with_scenario(level=Levels.WEST_COAST)
+        self.bb.build_environment(ai_mode="span", hud=True)
         sequences_list = []
         start_pos = (-718, 101, 118)
 

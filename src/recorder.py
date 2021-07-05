@@ -76,6 +76,7 @@ class SequenceManager:
         while True:
             capture = self.save_queue.get()
             capture.save_to_file()
+            del capture
 
     def capture_footage(self, steps_per_sec=60, framerate: int = 24, total_captures: int = 240, duration=None):
         current_capture = 0
@@ -84,7 +85,7 @@ class SequenceManager:
             f"Recording {len(self.scenario.sequences)} sequences at  {framerate}fps every {wait_time} steps at {steps_per_sec} physics steps per second ")
         if duration is not None:
             total_captures = framerate * duration
-        batch_idx = max(total_captures / 5, 1)
+        batch_idx = max(total_captures // 50, 1)
         frame_buffer = 0
         while current_capture <= total_captures:
             current_capture += 1

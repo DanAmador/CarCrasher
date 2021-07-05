@@ -8,7 +8,7 @@ from config import Levels, Cars
 
 class BeamBuilder:
 
-    def __init__(self, launch=False, scenario_name="Beam Builder"):
+    def __init__(self, launch=False, scenario_name="Beam Builder", steps_per_sec = 60):
         self.bmng = self.beam_factory(launch)
         self.scenario = None
         self.vehicles = {}
@@ -16,8 +16,9 @@ class BeamBuilder:
         self.camera = None
         self.scenario_name = scenario_name
         self.meshes = []
+        self.steps_per_second = steps_per_sec
 
-    def build_environment(self, hud=False, steps=60, ai_mode=None):
+    def build_environment(self, hud=False, ai_mode=None):
 
         if not hud:
             self.bmng.hide_hud()
@@ -30,7 +31,7 @@ class BeamBuilder:
 
         self.scenario.add_camera(self.camera, 'camera')
 
-        self.bmng.set_steps_per_second(steps)
+        self.bmng.set_steps_per_second(self.steps_per_second)
 
         self.scenario.make(self.bmng)
         # self.meshes = self.scenario.find_procedural_meshes()
