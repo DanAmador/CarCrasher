@@ -45,10 +45,12 @@ class Dataset:
         return group
 
     def create_mappings_from_dict(self, mapping_dict: Dict[str, List[str]], other_dataset: Dataset, grayscale=False):
-        for k, label in mapping_dict.items():
+        for key, label in mapping_dict.items():
             if label is not None:
-                self_label = self.get_label(k)
+                self_label = self.get_label(key)
                 other_label = other_dataset.get_label(label)
                 gray = other_label.id
                 gray_tup = (gray, gray, gray)
                 self.mappings[self_label.color] = other_label.color if not grayscale else gray_tup
+            else:
+                print(f"{key} and {label} not found")

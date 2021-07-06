@@ -67,7 +67,7 @@ beamng_dataset = Dataset(labels=[
     Label(name="SAND", color=(255, 196, 32)),
     Label(name="GRASS", color=(64, 128, 64)),
     Label(name="MUD", color=(128, 96, 32)),
-    Label(name="ASPHALT", color=(128, 128, 12))
+    Label(name="ASPHALT", color=(128, 128, 128))
 
 ])
 

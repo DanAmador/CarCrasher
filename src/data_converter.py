@@ -47,7 +47,7 @@ class DataConverter:
             threads.append(worker)
             worker.start()
         for thread in threads:  # iterates over the threads
-            thread.join(20)  # waits until the thread has finished work
+            thread.join(10)  # waits until the thread has finished work
 
         print("Done converting")
 
@@ -64,8 +64,8 @@ class DataConverter:
     def convert_worker(self):
         while True:
 
-            r = (img_path, save_path) = self.work_q.get()
-            print(r)
+            (img_path, save_path) = self.work_q.get()
+            print(img_path)
             self.convert(img_path, save_path)
 
     def convert(self, pic: Path, save_path: Path):
@@ -74,8 +74,9 @@ class DataConverter:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         processed_image = np.zeros(image.shape)
 
-        for k, v in self.bmng_dataset.mappings.items():
-            processed_image[np.where((image == k).all(axis=2))] = v
+        for mask, replaced_value in self.bmng_dataset.mappings.items():
+
+            processed_image[np.where((image == mask).all(axis=2))] = replaced_value
 
         if self.grayscale:
             processed_image = cv2.convertScaleAbs(processed_image)
