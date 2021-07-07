@@ -7,6 +7,7 @@ from typing import List
 from beamngpy import Vehicle
 
 from BeamBuilder import BeamBuilder
+from thread_worker import ThreadQueueWorker
 from util import create_paths, beam2folderNames, create_folders
 
 
@@ -19,7 +20,7 @@ class Capture:
     seq_name: str
 
     def save_to_file(self):
-      #  print(f"Saving {self.seq_name}/{self.name}")
+        #  print(f"Saving {self.seq_name}/{self.name}")
         for beamName, folderName in beam2folderNames.items():
             img = self.data.get(beamName)
             if img is not None:
@@ -46,27 +47,23 @@ class ImageSequence:
 
         self.captures.append(Capture(current_frame, data, pic_name, self.entry_path, self.seq_folder))
 
+
 @dataclass()
 class SequenceManager:
     def __init__(self, bb: BeamBuilder, scenario):
 
         self.bb: BeamBuilder = bb
-        self.save_queue = queue.Queue()
         self.threads = []
         self.scenario = scenario
-
-        for t in range(10):
-            worker = threading.Thread(target=self.save_worker)
-            worker.daemon = True
-            worker.start()
-            self.threads.append(worker)
+        self.worker_q = ThreadQueueWorker(self.save_worker)
+        self.worker_q.start_execution()
 
     def save_frames(self):
         for seq in self.scenario.sequences:
             if len(seq.captures) != 0:
                 print(f"Saving {len(seq.captures)} frames for {seq.seq_folder}")
                 for capture in seq.captures:
-                    self.save_queue.put(capture)
+                    self.worker_q.push_to_queue(capture)
 
                 seq.captures = []
 
@@ -74,7 +71,7 @@ class SequenceManager:
 
     def save_worker(self):
         while True:
-            capture = self.save_queue.get()
+            capture = self.worker_q.work_q.get()
             capture.save_to_file()
             del capture
 
@@ -104,4 +101,3 @@ class SequenceManager:
             self.bb.bmng.pause()
 
         self.bb.bmng.resume()
-
