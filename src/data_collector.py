@@ -2,15 +2,15 @@ import time
 
 from BeamBuilder import BeamBuilder
 from config import Levels
-from custom_scenarios import BasicCarChase, FallFromSkyScenario
+from custom_scenarios import BasicCarChase, FallFromSkyScenario, TestCrash
 from recorder import SequenceManager
 
 
 if __name__ == "__main__":
     framerate = 24
-    steps_per_sec = 60
+    steps_per_sec = 200
 
-    bb = BeamBuilder(launch=True,steps_per_sec= steps_per_sec)
+    bb = BeamBuilder(launch=False,steps_per_sec= steps_per_sec)
 
     scenario = BasicCarChase(bb)
     # bb.bmng.set_relative_camera(pos=(2,2,2))

@@ -8,7 +8,7 @@ from config import Levels, Cars
 
 class BeamBuilder:
 
-    def __init__(self, launch=False, scenario_name="Beam Builder", steps_per_sec = 60):
+    def __init__(self, launch=False, scenario_name="Beam Builder", steps_per_sec=60):
         self.bmng = self.beam_factory(launch)
         self.scenario = None
         self.vehicles = {}
@@ -52,7 +52,9 @@ class BeamBuilder:
         return bmng
 
     def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=False, annotation=False,
-                  instance=False) -> Camera:
+                  instance=False, first_person=False) -> Camera:
+        if first_person:
+            cam_pos = (0, 2, 2)
         self.camera = Camera(cam_pos, cam_dir, 75, (1920, 1080), near_far=(1, 100), colour=colour, depth=depth,
                              annotation=annotation, instance=instance)
         return self.camera
@@ -86,7 +88,7 @@ class BeamBuilder:
             self.ego_vehicle = vehicle
 
         self.vehicles[vehicle_id] = vehicle
-        return self
+        return vehicle
 
     def get_vehicle(self, name: str = "ego") -> Vehicle:
         return self.vehicles.get(name, self.ego_vehicle)
@@ -97,4 +99,4 @@ class BeamBuilder:
 
 if __name__ == "__main__":
     bb = BeamBuilder(launch=True)
-    bb.build_environment(ai_mode="span")
+    # bb.build_environment(ai_mode="span")

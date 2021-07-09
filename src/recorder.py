@@ -85,6 +85,7 @@ class SequenceManager:
         batch_idx = max(total_captures /
                         50, 1)
         frame_buffer = 0
+
         while current_capture <= total_captures:
             current_capture += 1
             frame_buffer += 1
@@ -95,9 +96,9 @@ class SequenceManager:
             if frame_buffer > batch_idx or current_capture == total_captures:
                 frame_buffer = 0
                 self.save_frames()
+            self.scenario.on_recording_step()
             self.bb.bmng.render_cameras()
             self.bb.bmng.step(wait_time)
-            self.scenario.on_recording_step()
             self.bb.bmng.pause()
 
         self.bb.bmng.resume()
