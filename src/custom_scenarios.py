@@ -112,7 +112,6 @@ class FallFromSkyScenario(AbstractRecordingScenario):
     def setup_scenario(self, steps_per_sec=24):
         import random
         self.bb.with_scenario(level=Levels.SMALL_GRID)
-        self.bb.build_environment(ai_mode="span", hud=True)
 
         cam = self.bb.cam_setup(annotation=True, first_person=True)
         vehicle = self.bb.with_car(pos=(0, 0, 50),
@@ -120,6 +119,7 @@ class FallFromSkyScenario(AbstractRecordingScenario):
                                    sensors={"camera": cam})
         # self.make_camera_static(cam, vehicle, (0, -2, 10))
 
+        self.bb.build_environment()
         self.create_sequences([self.bb.ego_vehicle])
 
     def on_recording_step(self):

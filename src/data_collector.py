@@ -5,14 +5,13 @@ from config import Levels
 from custom_scenarios import BasicCarChase, FallFromSkyScenario, TestCrash
 from recorder import SequenceManager
 
-
 if __name__ == "__main__":
     framerate = 24
     steps_per_sec = 200
 
-    bb = BeamBuilder(launch=False,steps_per_sec= steps_per_sec)
+    bb = BeamBuilder(launch=True, steps_per_sec=steps_per_sec)
 
-    scenario = BasicCarChase(bb)
+    scenario = FallFromSkyScenario(bb)
     # bb.bmng.set_relative_camera(pos=(2,2,2))
 
     # sequence = ImageSequence(data_path / "captures")

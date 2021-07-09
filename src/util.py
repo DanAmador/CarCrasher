@@ -1,7 +1,16 @@
 import os
+from json import JSONEncoder
 from pathlib import Path
 
 project_root = (Path(__file__).absolute()).parent.parent
+import numpy
+
+
+class NumpyArrayEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, numpy.ndarray):
+            return obj.tolist()
+        return JSONEncoder.default(self, obj)
 
 
 def create_paths(paths):
@@ -10,7 +19,7 @@ def create_paths(paths):
             os.mkdir(p)
 
 
-def create_folders(entry_path: Path, with_seq = True):
+def create_folders(entry_path: Path, with_seq=True):
     folder_names = list(beam2folderNames.values())
     folders = [entry_path / name for name in folder_names]
     create_paths([entry_path])
@@ -34,9 +43,9 @@ beam2folderNames = {
     "instance": "instance_maps",
     "depth": "depth",
     "annotation": "raw_annotations",
-
+    "extrinsic": "extrinsic",
+    "vertices": "vertices"
 }
-
 
 # 'unlabeled',
 # 'ego vehicle',
@@ -71,7 +80,6 @@ beam2folderNames = {
 # 'motorcycle', 32
 # 'bicycle', 33,
 # 'license plate', -1,
-
 
 
 beam2CityLabelMap = {

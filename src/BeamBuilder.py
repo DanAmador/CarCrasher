@@ -64,7 +64,7 @@ class BeamBuilder:
         self.scenario = scenario
         return self
 
-    def with_car(self, car: Cars = Cars.ETK, vehicle_id="ego", pos=(-717, 101, 118), rot=None,
+    def with_car(self, car: Cars = Cars.ETK, vehicle_id="car", pos=(-717, 101, 118), rot=None,
                  rot_quat=(0, 0, 0.3826834, 0.9238795), sensors={}):
         vehicle = Vehicle(vehicle_id, model=car, licence='AntonGinzburg')
 
