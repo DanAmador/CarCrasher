@@ -67,8 +67,7 @@ class Capture:
 
     def save_to_file(self):
         #  print(f"Saving {self.seq_name}/{self.name}")
-        cam = None
-        depth = None
+
         for beamName, folderName in beam2folderNames.items():
             img = self.data.get(beamName)
             if beamName == "extrinsic":
@@ -77,29 +76,7 @@ class Capture:
                     json.dump(img, f, cls=NumpyArrayEncoder)
                 continue
             if img is not None:
-
-                if beamName == "depth":
-                    depth = img
                 img.convert("RGB").save((self.entry_path / folderName / self.seq_name / f"{self.name}.png").absolute())
-
-        if cam and depth:
-            verts = self.sample_depth_map(cam, depth, 1000)
-            with open((self.entry_path / "vertices" / self.seq_name / f"{self.name}.json").absolute(), "w") as f:
-                json.dump(verts, f, cls=NumpyArrayEncoder)
-
-    def sample_depth_map(self, cam, depth, number_of_points):
-        vertices = []
-
-        (w, h) = depth.size
-        max_depth = cam["depth"]
-
-        cam_pos = np.array(cam["pos"])
-        cam_dir = np.array(cam["direction"])[None, :]
-        for n in range(number_of_points):
-            coordinates = random.randint(0, w-1), random.randint(0, h-1)
-            depth_scaler = (depth.getpixel(coordinates) / 256) * max_depth
-            vertices.append(cam_pos + cam_dir * depth_scaler)
-        return vertices
 
 
 @dataclass

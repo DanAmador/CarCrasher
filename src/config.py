@@ -1,10 +1,12 @@
-from util import project_root
+from pathlib import Path
+
+project_root = (Path(__file__).absolute()).parent.parent
 
 
 class UserSettings:
     beam_tech_path = project_root / "BeamNG.tech"
     user_path = project_root / "user_path"
-    data_path = project_root / "data"
+    data_path = project_root / "data" / "beamng"
 
 
 class Levels:

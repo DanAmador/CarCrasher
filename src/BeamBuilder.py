@@ -55,7 +55,7 @@ class BeamBuilder:
                   instance=False, first_person=False) -> Camera:
         if first_person:
             cam_pos = (0, 2, 2)
-        self.camera = Camera(cam_pos, cam_dir, 75, (1920, 1080), near_far=(1, 100), colour=colour, depth=depth,
+        self.camera = Camera(cam_pos, cam_dir, 75, (1920, 1080), near_far=(1, 50), colour=colour, depth=depth,
                              annotation=annotation, instance=instance)
         return self.camera
 

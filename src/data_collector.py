@@ -7,11 +7,11 @@ from recorder import SequenceManager
 
 if __name__ == "__main__":
     framerate = 24
-    steps_per_sec = 200
+    steps_per_sec = 24
 
     bb = BeamBuilder(launch=True, steps_per_sec=steps_per_sec)
 
-    scenario = FallFromSkyScenario(bb)
+    scenario = BasicCarChase(bb)
     # bb.bmng.set_relative_camera(pos=(2,2,2))
 
     # sequence = ImageSequence(data_path / "captures")

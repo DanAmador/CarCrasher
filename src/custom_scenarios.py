@@ -66,7 +66,7 @@ class AbstractRecordingScenario(ABC):
     def create_sequences(self, car_list):
         sequences_list = []
         for car in car_list:
-            sequences_list.append(ImageSequence(us.data_path / "beamng", car))
+            sequences_list.append(ImageSequence(us.data_path, car))
 
         self.sequences = sequences_list
 
@@ -141,7 +141,7 @@ class BasicCarChase(AbstractRecordingScenario):
 
         target: Vehicle = None
         cars = []
-        num_cars = 3
+        num_cars = 2
         for i in range(num_cars):
 
             offset = tuple((x - y) for x, y in zip(start_pos[0], start_pos[1]))

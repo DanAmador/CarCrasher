@@ -2,7 +2,6 @@ import os
 from json import JSONEncoder
 from pathlib import Path
 
-project_root = (Path(__file__).absolute()).parent.parent
 import numpy
 
 
@@ -44,7 +43,6 @@ beam2folderNames = {
     "depth": "depth",
     "annotation": "raw_annotations",
     "extrinsic": "extrinsic",
-    "vertices": "vertices"
 }
 
 # 'unlabeled',
