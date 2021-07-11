@@ -56,7 +56,7 @@ class BeamBuilder:
         if first_person:
             cam_pos = (0, 2, 2)
         self.camera = Camera(cam_pos, cam_dir, 75, (1920, 1080), near_far=(1, 50), colour=colour, depth=depth,
-                             annotation=annotation, instance=instance)
+                             annotation=annotation, instance=instance, depth_inverse=True)
         return self.camera
 
     def with_scenario(self, level: Levels = Levels.WEST_COAST, name: str = "example_scenario") -> BeamBuilder:

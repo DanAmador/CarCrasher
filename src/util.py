@@ -43,6 +43,8 @@ beam2folderNames = {
     "depth": "depth",
     "annotation": "raw_annotations",
     "extrinsic": "extrinsic",
+    "pointclouds": "pointclouds",
+    "fragments": "fragments"
 }
 
 # 'unlabeled',
