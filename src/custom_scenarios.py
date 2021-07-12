@@ -16,10 +16,8 @@ from OpenGL.GLUT import *
 import numpy as np
 import random
 
-SIZE = 1024
 
 
-#
 @dataclass(unsafe_hash=True)
 class StaticCamera:
     camera: Camera
@@ -80,7 +78,6 @@ class AbstractRecordingScenario(ABC):
 
 
 class WithLidarView(AbstractRecordingScenario):
-
 
     def __init__(self, bb):
         from beamngpy.visualiser import LidarVisualiser
@@ -155,6 +152,24 @@ class FallFromSkyScenario(WithLidarView):
         self.create_sequences([self.bb.ego_vehicle])
 
 
+class CameraMatrixTest(WithLidarView):
+
+    def on_recording_step(self):
+        pass
+
+    def setup_scenario(self, steps_per_sec=24):
+        import random
+        self.bb.with_scenario(level=Levels.SMALL_GRID)
+
+        cam = self.bb.cam_setup(annotation=True, first_person=True)
+        vehicle = self.bb.with_car(pos=(1, 0, 0),
+                                   rot=(0, 0, 0),
+                                   sensors={"camera": cam, "lidar": Lidar()})
+        # self.make_camera_static(cam, vehicle, (0, -2, 10))
+
+        self.bb.build_environment()
+        self.create_sequences([self.bb.ego_vehicle])
+
 
 class BasicCarChase(WithLidarView):
 
@@ -168,9 +183,13 @@ class BasicCarChase(WithLidarView):
 
         start_pos = [(-741.79, 80.56, 119.13), (-667.98, 154.64, 117.40)]
 
-        target: Vehicle = None
+        target: Vehicle = self.bb.ego_vehicle
         cars = []
         num_cars = 2
+        cars.append(target)
+
+        target.ai_set_mode(AIMode.RANDOM)
+        target.ai_set_speed(99, "set")
         for i in range(num_cars):
 
             offset = tuple((x - y) for x, y in zip(start_pos[0], start_pos[1]))
@@ -178,19 +197,17 @@ class BasicCarChase(WithLidarView):
             new_pos = tuple(x + (y / num_cars) for x, y in zip(start_pos[1], offset))
             car_name = f"car_{i}"
             cam = self.bb.cam_setup(annotation=True)
-            self.bb.with_car(vehicle_id=car_name, sensors={"camera": cam, "lidar":Lidar()}, pos=new_pos),
+            self.bb.with_car(vehicle_id=car_name, sensors={"camera": cam, "lidar": Lidar()}, pos=new_pos,
+                             rot=(0, 180, 0)),
             # rot_quat=(-1, 0, 0.3826834, 0.9238795))
             car = self.bb.get_vehicle(car_name)
             cars.append(car)
-            if i == 1:
-                car.ai_set_mode(AIMode.RANDOM)
-                car.ai_set_speed(99, "set")
-                target = car
+
+            if target is not None:
+                car.ai_set_mode(AIMode.CHASE)
+                car.ai_set_target(target.vid)
+                car.ai_set_speed(200, "limit")
             else:
-                if target is not None:
-                    car.ai_set_mode(AIMode.CHASE)
-                    car.ai_set_target(target.vid)
-                    car.ai_set_speed(200, "limit")
-                else:
-                    print("Basic Car chase has no target")
+                print(f"Basic Car {i}  has no target")
+
         self.create_sequences(cars)

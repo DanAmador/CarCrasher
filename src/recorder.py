@@ -14,48 +14,6 @@ from thread_worker import ThreadQueueWorker
 from util import create_paths, beam2folderNames, create_folders, NumpyArrayEncoder
 
 
-def ply_header(count_vertices, with_normals=False, point_num_views=False):
-    if with_normals:
-        header = [
-            "ply",
-            "format ascii 1.0",
-            "element vertex {}".format(count_vertices),
-            "property float x",
-            "property float y",
-            "property float z",
-            "property float nx",
-            "property float ny",
-            "property float nz",
-            "property uchar diffuse_red",
-            "property uchar diffuse_green",
-            "property uchar diffuse_blue",
-        ]
-    else:
-        header = [
-            "ply",
-            "format ascii 1.0",
-            "element vertex {}".format(count_vertices),
-            "property float x",
-            "property float y",
-            "property float z",
-            "property uchar diffuse_red",
-            "property uchar diffuse_green",
-            "property uchar diffuse_blue",
-        ]
-
-    if point_num_views:
-        header += ["property uchar views"]
-
-    header += ["end_header"]
-
-    return header
-
-
-def points_to_ply_string(vertices, point_num_views=False):
-    header = ply_header(len(vertices) - 1, point_num_views=point_num_views)
-    return "\n".join(header + vertices + [""])
-
-
 @dataclass(frozen=False)
 class Capture:
     frame: int
@@ -68,17 +26,17 @@ class Capture:
         #  print(f"Saving {self.seq_name}/{self.name}")
 
         for beamName, folderName in beam2folderNames.items():
-
+            f_path = self.entry_path / folderName / self.seq_name
             img = self.data.get(beamName)
-            if beamName == "extrinsic":
-                with open((self.entry_path / "extrinsic" / self.seq_name / f"{self.name}.json").absolute(), "w") as f:
+            if beamName == "camera":
+                with open((f_path / f"{self.name}.json").absolute(), "w") as f:
                     json.dump(img, f, cls=NumpyArrayEncoder)
             elif beamName == "pointclouds":
 
                 vertices = self.data.get("points")
                 # vertices = points.reshape(points.size // 3, 3)
                 # random.shuffle(vertices)
-                with open((self.entry_path / "pointclouds" / self.seq_name / f"{self.name}.txt").absolute(), "w") as f:
+                with open((f_path / f"{self.name}.txt").absolute(), "w") as f:
                     for idx in range(len(vertices)):
                         # print(p)
                         # p = p.tolist()
@@ -93,14 +51,14 @@ class Capture:
                         except IndexError:
                             print(f"index error with {p}")
                             continue
-                # o3d.io.write_point_cloud(pcd_name, pcd, False, True)
+            # o3d.io.write_point_cloud(pcd_name, pcd, False, True)
             elif img is not None:
-                img.convert("RGB").save((self.entry_path / folderName / self.seq_name / f"{self.name}.png").absolute())
+                img.convert("RGB").save((f_path / f"{self.name}.png").absolute())
 
         del self.data
 
+            # __init__(self: open3d.cpu.pybind.geometry.PointCloud, points: open3d.cpu.pybind.utility.Vector3dVector)
 
-# __init__(self: open3d.cpu.pybind.geometry.PointCloud, points: open3d.cpu.pybind.utility.Vector3dVector)
 
 @dataclass
 class ImageSequence:
@@ -122,9 +80,8 @@ class ImageSequence:
         state = self.vehicle.sensors["state"].data
 
         points = []
-        if lidar :
-            points = lidar.data["points"].reshape(lidar.data["points"].size//3, 3)
-        data = cam.data
+        if lidar:
+            points = lidar.data["points"].reshape(lidar.data["points"].size // 3, 3)
         pic_name = f"{str(current_frame).zfill(6)}"
         # print(f"current_capture {current_frame} of {total_captures}")
         local_cam_pos = np.array(cam.pos)
@@ -138,10 +95,15 @@ class ImageSequence:
             np.cross(up, car_dir)
         ])
         # car_pos_matrix = [np.array()]
-        data["extrinsic"] = {
-            "pos": world_car_pos + local_cam_pos,
-            "direction": (car_pos_matrix @ local_cam_dir.T).T,
+
+        data = copy.copy(cam.data)
+        data["camera"] = {
+            "fov": cam.fov,
+            "width": cam.resolution[0],
+            "height": cam.resolution[1],
             "depth": cam.near_far[1],
+            "pos": world_car_pos + local_cam_pos,
+            "euler_rot": np.reshape(car_pos_matrix @ local_cam_dir.T, (3,)),
         }
         data["points"] = points
         self.captures.append(Capture(current_frame, data, pic_name, self.entry_path, self.seq_folder))

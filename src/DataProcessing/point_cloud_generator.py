@@ -1,8 +1,11 @@
+import json
 import math
+import time
 from pathlib import Path
 
 import numpy as np
 import open3d as o3d
+from beamngpy import angle_to_quat, compute_rotation_matrix
 
 from src.config import UserSettings as us
 from src.util import create_paths
@@ -16,12 +19,11 @@ if with_opencv:
 
 
 def build_intrinsic():
-    intrinsic = o3d.camera.PinholeCameraIntrinsic(
-        o3d.camera.PinholeCameraIntrinsicParameters.PrimeSenseDefault)
+    intrinsic = o3d.camera.PinholeCameraIntrinsic(o3d.camera.PinholeCameraIntrinsicParameters.PrimeSenseDefault)
 
     (fx, fy) = intrinsic.get_focal_length()
     (cx, cy) = intrinsic.get_principal_point()
-    intrinsic = o3d.camera.PinholeCameraIntrinsic(1920, 1080, fx, fy, cx, cy)
+    # intrinsic.set_intrinsics(1920, 1080, fx, fy, cx, cy)
     return intrinsic
 
 
@@ -168,28 +170,68 @@ class PointCloudGenerator:
         merged = o3d.geometry.PointCloud()
         pcd = None
         pcd_path = path_dataset / "pointclouds" / config["seq_name"]
+        cameras = path_dataset / "camera" / config["seq_name"]
+
         pcds = [p for p in pcd_path.iterdir() if p.is_file()]
+        cams = [p for p in cameras.iterdir() if p.is_file()]
+        vis = o3d.visualization.Visualizer()
+        vis.create_window(width=640, height=480)
+        vis.add_geometry(merged)
+        e = o3d.visualization.rendering.OffscreenRenderer(intrinsic.width, intrinsic.height)
 
         for p in pcds:
             pcd = o3d.io.read_point_cloud(str(p.absolute()), print_progress=True, format="xyz")
-
             merged = merged + pcd
-        # for idx, (color, depth) in enumerate(zip(color_files, depth_files)):
+            print(merged)
+            vis.add_geometry(pcd)
+            vis.update_geometry(merged)
+            vis.poll_events()
+            vis.update_renderer()
+
+        # flip_transform = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]]
+        # merged.transform(flip_transform)
+
+        vis.update_geometry(merged)
+        intrinsic = build_intrinsic()
+        i = 0
+        for cam in cams:
+            c = json.loads(cam.read_text())
+            i = i+ 2
+            look_at = np.array(c["euler_rot"])
+            translation = np.array(c["pos"]).reshape(3,1)
+            e.setup_camera(translation, look_at, np.array([0,0,1]).reshape(3,1))
+            e.render_to_image()
+            rot_matrix = compute_rotation_matrix(angle_to_quat(look_at))
+            mat4x4 = np.append(np.eye(3), np.array([0,0,0]).reshape(1,3), axis=0)
+            mat4x4 = np.append(mat4x4,np.array([0,0,0,1]).reshape(4,1), axis=1)
+            # intrinsic = o3d.camera.PinholeCameraIntrinsic()
+            print(intrinsic)
+            print(mat4x4)
+            new_cam = o3d.camera.PinholeCameraParameters()
+            new_cam.extrinsic = mat4x4
+            new_cam.intrinsic = intrinsic
+
+            ctr = vis.get_view_control()
+            ctr.convert_from_pinhole_camera_parameters(new_cam)
+            vis.poll_events()
+            vis.update_renderer()
+            # time.sleep(2)
+
+        vis.run()
+    # for idx, (color, depth) in enumerate(zip(color_files, depth_files)):
         #     rgbd_image = PointCloudGenerator.read_rgbd_image(color, depth, True, config)
         #     if pcd:
         #         del pcd
-                # rgbd_image,
-                # o3d.camera.PinholeCameraIntrinsic(
-                #     o3d.camera.PinholeCameraIntrinsicParameters.PrimeSenseDefault))
+        # rgbd_image,
+        # o3d.camera.PinholeCameraIntrinsic(
+        #     o3d.camera.PinholeCameraIntrinsicParameters.PrimeSenseDefault))
 
-            # if idx % 5 == 0:
-            #     merged = merged.voxel_down_sample(.5)
+        # if idx % 5 == 0:
+        #     merged = merged.voxel_down_sample(.5)
 
-
-        o3d.visualization.draw_geometries([merged])
-            # if idx % 20 == 1:
-            #     break
-
+        # o3d.visualization.draw_geometries([merged])
+        # if idx % 20 == 1:
+        #     break
 
         #
         # pg_path = get_posegraph_name(path_dataset, config, fragment_id, True)

@@ -2,7 +2,7 @@ import time
 
 from BeamBuilder import BeamBuilder
 from config import Levels
-from custom_scenarios import BasicCarChase, FallFromSkyScenario, TestCrash
+from custom_scenarios import BasicCarChase, FallFromSkyScenario, TestCrash, CameraMatrixTest
 from recorder import SequenceManager
 
 if __name__ == "__main__":

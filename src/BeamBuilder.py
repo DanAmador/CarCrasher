@@ -1,7 +1,7 @@
 from __future__ import annotations
 import config
 from beamngpy import BeamNGpy, Scenario, Vehicle
-from beamngpy.sensors import Camera
+from beamngpy.sensors import Camera, Lidar
 from config import UserSettings as cfg
 from config import Levels, Cars
 
@@ -23,12 +23,11 @@ class BeamBuilder:
         if not hud:
             self.bmng.hide_hud()
 
-        if self.ego_vehicle is None:
-            self.with_car()
-
         if self.camera is None:
             self.cam_setup()
 
+        if self.ego_vehicle is None:
+            self.with_car(sensors={"camera": self.camera, "lidar": Lidar()})
         self.scenario.add_camera(self.camera, 'camera')
 
         self.bmng.set_steps_per_second(self.steps_per_second)

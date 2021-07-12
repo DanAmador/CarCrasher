@@ -42,7 +42,7 @@ beam2folderNames = {
     "instance": "instance_maps",
     "depth": "depth",
     "annotation": "raw_annotations",
-    "extrinsic": "extrinsic",
+    "camera": "camera",
     "pointclouds": "pointclouds",
     "fragments": "fragments"
 }
