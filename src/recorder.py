@@ -1,60 +1,59 @@
-import queue
+import copy
+import json
+import random
 import threading
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List
 
+import numpy as np
 from beamngpy import Vehicle
 
 from BeamBuilder import BeamBuilder
 from thread_worker import ThreadQueueWorker
 from util import create_paths, beam2folderNames, create_folders, NumpyArrayEncoder
 
-import numpy as np
-import json
 
-# TODO check this
-# def ply_header(count_vertices, with_normals=False, point_num_views=False):
-#     if with_normals:
-#         header = [
-#             "ply",
-#             "format ascii 1.0",
-#             "element vertex {}".format(count_vertices),
-#             "property float x",
-#             "property float y",
-#             "property float z",
-#             "property float nx",
-#             "property float ny",
-#             "property float nz",
-#             "property uchar diffuse_red",
-#             "property uchar diffuse_green",
-#             "property uchar diffuse_blue",
-#         ]
-#     else:
-#         header = [
-#             "ply",
-#             "format ascii 1.0",
-#             "element vertex {}".format(count_vertices),
-#             "property float x",
-#             "property float y",
-#             "property float z",
-#             "property uchar diffuse_red",
-#             "property uchar diffuse_green",
-#             "property uchar diffuse_blue",
-#         ]
-#
-#     if point_num_views:
-#         header += ["property uchar views"]
-#
-#     header += ["end_header"]
-#
-#     return header
-#
-#
-# def points_to_ply_string(vertices, point_num_views=False):
-#     header = ply_header(len(vertices), point_num_views=point_num_views)
-#     return "\n".join(header + vertices + [""])
-import random
+def ply_header(count_vertices, with_normals=False, point_num_views=False):
+    if with_normals:
+        header = [
+            "ply",
+            "format ascii 1.0",
+            "element vertex {}".format(count_vertices),
+            "property float x",
+            "property float y",
+            "property float z",
+            "property float nx",
+            "property float ny",
+            "property float nz",
+            "property uchar diffuse_red",
+            "property uchar diffuse_green",
+            "property uchar diffuse_blue",
+        ]
+    else:
+        header = [
+            "ply",
+            "format ascii 1.0",
+            "element vertex {}".format(count_vertices),
+            "property float x",
+            "property float y",
+            "property float z",
+            "property uchar diffuse_red",
+            "property uchar diffuse_green",
+            "property uchar diffuse_blue",
+        ]
+
+    if point_num_views:
+        header += ["property uchar views"]
+
+    header += ["end_header"]
+
+    return header
+
+
+def points_to_ply_string(vertices, point_num_views=False):
+    header = ply_header(len(vertices) - 1, point_num_views=point_num_views)
+    return "\n".join(header + vertices + [""])
 
 
 @dataclass(frozen=False)
@@ -69,15 +68,39 @@ class Capture:
         #  print(f"Saving {self.seq_name}/{self.name}")
 
         for beamName, folderName in beam2folderNames.items():
+
             img = self.data.get(beamName)
             if beamName == "extrinsic":
-                cam = img
                 with open((self.entry_path / "extrinsic" / self.seq_name / f"{self.name}.json").absolute(), "w") as f:
                     json.dump(img, f, cls=NumpyArrayEncoder)
-                continue
-            if img is not None:
+            elif beamName == "pointclouds":
+
+                vertices = self.data.get("points")
+                # vertices = points.reshape(points.size // 3, 3)
+                # random.shuffle(vertices)
+                with open((self.entry_path / "pointclouds" / self.seq_name / f"{self.name}.txt").absolute(), "w") as f:
+                    for idx in range(len(vertices)):
+                        # print(p)
+                        # p = p.tolist()
+
+                        if idx > 5000:
+                            break
+                        try:
+                            # p = " ".join([str(v) for v in vertices[random.randint(0, len(vertices))]])
+                            # p = vertices[random.randint(0, len(vertices))]
+                            p = vertices[random.randint(0, len(vertices))]
+                            f.write(f"{p[0]} {p[1]} {p[2]}\n")
+                        except IndexError:
+                            print(f"index error with {p}")
+                            continue
+                # o3d.io.write_point_cloud(pcd_name, pcd, False, True)
+            elif img is not None:
                 img.convert("RGB").save((self.entry_path / folderName / self.seq_name / f"{self.name}.png").absolute())
 
+        del self.data
+
+
+# __init__(self: open3d.cpu.pybind.geometry.PointCloud, points: open3d.cpu.pybind.utility.Vector3dVector)
 
 @dataclass
 class ImageSequence:
@@ -90,13 +113,18 @@ class ImageSequence:
         self.seq_folder = create_folders(self.entry_path)
         self.captures = []
         self.vehicle = vehicle
+        self.points = np.array([])
 
     def capture_frame(self, current_frame):
         self.vehicle.poll_sensors()
+        lidar = self.vehicle.sensors["lidar"]
         cam = self.vehicle.sensors["camera"]
         state = self.vehicle.sensors["state"].data
-        data = cam.data
 
+        points = []
+        if lidar :
+            points = lidar.data["points"].reshape(lidar.data["points"].size//3, 3)
+        data = cam.data
         pic_name = f"{str(current_frame).zfill(6)}"
         # print(f"current_capture {current_frame} of {total_captures}")
         local_cam_pos = np.array(cam.pos)
@@ -113,8 +141,9 @@ class ImageSequence:
         data["extrinsic"] = {
             "pos": world_car_pos + local_cam_pos,
             "direction": (car_pos_matrix @ local_cam_dir.T).T,
-            "depth": cam.near_far[1]
+            "depth": cam.near_far[1],
         }
+        data["points"] = points
         self.captures.append(Capture(current_frame, data, pic_name, self.entry_path, self.seq_folder))
 
 
@@ -143,10 +172,10 @@ class SequenceManager:
         while True:
             capture = self.worker_q.work_q.get()
             capture.save_to_file()
-            del capture
 
     def capture_footage(self, steps_per_sec=60, framerate: int = 24, total_captures: int = 240, duration=None):
         current_capture = 0
+
         wait_time = max(int(60 / framerate), 1)
         print(
             f"Recording {len(self.scenario.sequences)} sequences at  {framerate}fps every {wait_time} steps at {steps_per_sec} physics steps per second ")
@@ -166,9 +195,9 @@ class SequenceManager:
             if frame_buffer > batch_idx or current_capture == total_captures:
                 frame_buffer = 0
                 self.save_frames()
-            self.scenario.on_recording_step()
             self.bb.bmng.render_cameras()
             self.bb.bmng.step(wait_time)
+            self.scenario.on_recording_step()
             self.bb.bmng.pause()
 
         self.bb.bmng.resume()

@@ -17,8 +17,8 @@ if __name__ == "__main__":
     # sequence = ImageSequence(data_path / "captures")
     manager = SequenceManager(bb, scenario)
     while True:
-        input("Press enter to record clip")
-        # time.sleep(6)
+        # input("Press enter to record clip")
+        time.sleep(6)
         print("Starting recording")
         manager.capture_footage(steps_per_sec=steps_per_sec, framerate=framerate, duration=5
                                 # total_captures=10

@@ -4,44 +4,47 @@ from dataclasses import dataclass
 from typing import List, Tuple
 
 from beamngpy import Vehicle
-from beamngpy.sensors import Camera
+from beamngpy.sensors import Camera, Lidar
 
 import BeamBuilder
 from config import AIMode, Levels
 from recorder import ImageSequence
 from config import UserSettings as us
-
+from OpenGL.GL import *
+from OpenGL.GLU import *
+from OpenGL.GLUT import *
 import numpy as np
-
 import random
 
+SIZE = 1024
+
 
 #
-# @dataclass(unsafe_hash=True)
-# class StaticCamera:
-#     camera: Camera
-#     vehicle: Vehicle
-#     world_pos: np.array
-#     look_at: np.array
-#
-#     def __init__(self, cam: Camera, vehicle: Vehicle, world_start_pos: Tuple[float, float, float]):
-#         self.camera = cam
-#         self.vehicle = vehicle
-#         self.start_pos = np.array(cam.pos)
-#         self.world_pos = np.array(world_start_pos)
-#         # self.look_at = cam.direction
-#
-#     def update_position(self):
-#         vehicle_pos = np.array(self.vehicle.state["pos"])
-#         # new_pos = tuple(x - y for x, y in zip(vehicle_pos, self.world_pos))
-#         new_pos = self.world_pos - vehicle_pos
-#         print(f"{vehicle_pos} - {self.world_pos} = {new_pos}")
-#         # print(f"{vehicle_pos} - {self.world_pos} -  {self.start_pos}")
-#         self.camera.pos = new_pos
-#         cam_dir = new_pos / np.linalg.norm(new_pos)
-#         # print(cam_dir)
-#         self.camera.direction = cam_dir
-#         # self.camera.direction = (1,0,0)
+@dataclass(unsafe_hash=True)
+class StaticCamera:
+    camera: Camera
+    vehicle: Vehicle
+    world_pos: np.array
+    look_at: np.array
+
+    def __init__(self, cam: Camera, vehicle: Vehicle, world_start_pos: Tuple[float, float, float]):
+        self.camera = cam
+        self.vehicle = vehicle
+        self.start_pos = np.array(cam.pos)
+        self.world_pos = np.array(world_start_pos)
+        # self.look_at = cam.direction
+
+    def update_position(self):
+        vehicle_pos = np.array(self.vehicle.state["pos"])
+        # new_pos = tuple(x - y for x, y in zip(vehicle_pos, self.world_pos))
+        new_pos = self.world_pos - vehicle_pos
+        print(f"{vehicle_pos} - {self.world_pos} = {new_pos}")
+        # print(f"{vehicle_pos} - {self.world_pos} -  {self.start_pos}")
+        self.camera.pos = new_pos
+        cam_dir = new_pos / np.linalg.norm(new_pos)
+        # print(cam_dir)
+        self.camera.direction = cam_dir
+        # self.camera.direction = (1,0,0)
 
 
 class AbstractRecordingScenario(ABC):
@@ -76,16 +79,42 @@ class AbstractRecordingScenario(ABC):
     #
 
 
-class TestCrash(AbstractRecordingScenario):
-    def on_recording_step(self):
-        return
+class WithLidarView(AbstractRecordingScenario):
+
+
+    def __init__(self, bb):
+        from beamngpy.visualiser import LidarVisualiser
+        super().__init__(bb)
+        self.lidar_vis = LidarVisualiser(Lidar.max_points)
+        # self.lidar_vis.open(SIZE, SIZE)
+
+        # glutReshapeFunc(self.lidar_resize)
+
+    @staticmethod
+    def lidar_resize(width, height):
+        if height == 0:
+            height = 1
+
+        glViewport(0, 0, width, height)
+
+    @staticmethod
+    def open_window(width, height):
+        glutInit()
+        glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE)
+        glutInitWindowSize(width, height)
+        window = glutCreateWindow(b'Lidar Tour')
+        WithLidarView.lidar_resize(width, height)
+        return window
+
+
+class TestCrash(WithLidarView):
 
     def spawn_car_random_position(self, index) -> Vehicle:
         car_name = f"car_{index}"
         cam = self.bb.cam_setup(annotation=True, first_person=True)
 
         vehicle = self.bb.with_car(vehicle_id=car_name, pos=(random.randint(-1, 360), random.randint(0, 360), 0),
-                                   sensors={"camera": cam})
+                                   sensors={"camera": cam, "lidar": Lidar()})
         return vehicle
 
     def setup_scenario(self, steps_per_sec=24):
@@ -107,7 +136,10 @@ class TestCrash(AbstractRecordingScenario):
         self.create_sequences(vehicles)
 
 
-class FallFromSkyScenario(AbstractRecordingScenario):
+class FallFromSkyScenario(WithLidarView):
+
+    def on_recording_step(self):
+        pass
 
     def setup_scenario(self, steps_per_sec=24):
         import random
@@ -116,18 +148,15 @@ class FallFromSkyScenario(AbstractRecordingScenario):
         cam = self.bb.cam_setup(annotation=True, first_person=True)
         vehicle = self.bb.with_car(pos=(0, 0, 50),
                                    rot=(random.randint(0, 360), random.randint(0, 360), random.randint(0, 360)),
-                                   sensors={"camera": cam})
+                                   sensors={"camera": cam, "lidar": Lidar()})
         # self.make_camera_static(cam, vehicle, (0, -2, 10))
 
         self.bb.build_environment()
         self.create_sequences([self.bb.ego_vehicle])
 
-    def on_recording_step(self):
-        super().on_recording_step()
-        return
 
 
-class BasicCarChase(AbstractRecordingScenario):
+class BasicCarChase(WithLidarView):
 
     def on_recording_step(self):
         pass
@@ -149,7 +178,7 @@ class BasicCarChase(AbstractRecordingScenario):
             new_pos = tuple(x + (y / num_cars) for x, y in zip(start_pos[1], offset))
             car_name = f"car_{i}"
             cam = self.bb.cam_setup(annotation=True)
-            self.bb.with_car(vehicle_id=car_name, sensors={"camera": cam}, pos=new_pos),
+            self.bb.with_car(vehicle_id=car_name, sensors={"camera": cam, "lidar":Lidar()}, pos=new_pos),
             # rot_quat=(-1, 0, 0.3826834, 0.9238795))
             car = self.bb.get_vehicle(car_name)
             cars.append(car)
@@ -165,4 +194,3 @@ class BasicCarChase(AbstractRecordingScenario):
                 else:
                     print("Basic Car chase has no target")
         self.create_sequences(cars)
-
