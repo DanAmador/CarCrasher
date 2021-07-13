@@ -44,7 +44,8 @@ beam2folderNames = {
     "annotation": "raw_annotations",
     "camera": "camera",
     "pointclouds": "pointclouds",
-    "fragments": "fragments"
+    "fragments": "fragments",
+    "unprojections": "unprojections"
 }
 
 # 'unlabeled',

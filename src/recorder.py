@@ -57,7 +57,7 @@ class Capture:
 
         del self.data
 
-            # __init__(self: open3d.cpu.pybind.geometry.PointCloud, points: open3d.cpu.pybind.utility.Vector3dVector)
+        # __init__(self: open3d.cpu.pybind.geometry.PointCloud, points: open3d.cpu.pybind.utility.Vector3dVector)
 
 
 @dataclass
@@ -102,8 +102,11 @@ class ImageSequence:
             "width": cam.resolution[0],
             "height": cam.resolution[1],
             "depth": cam.near_far[1],
-            "pos": world_car_pos + local_cam_pos,
+            "world_car_pos": world_car_pos ,
+            "local_cam_pos": local_cam_pos,
             "euler_rot": np.reshape(car_pos_matrix @ local_cam_dir.T, (3,)),
+            "car_dir": car_dir,
+            "up": up
         }
         data["points"] = points
         self.captures.append(Capture(current_frame, data, pic_name, self.entry_path, self.seq_folder))
