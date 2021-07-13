@@ -30,7 +30,7 @@ class SegmentationMasksConversion:
             save_path = Path(str(unprocessed.absolute()).replace("raw_annotations", "seg_maps"))
             create_paths([save_path])
 
-            pics = get_all_files_in_path()
+            pics = get_all_files_in_path(unprocessed)
             for pic in pics:
                 self.queue_worker.push_to_queue((pic, save_path))
 

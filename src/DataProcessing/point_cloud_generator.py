@@ -1,21 +1,18 @@
 import json
 import math
+import pickle
 import time
-from pathlib import Path
 
 import numpy as np
 import open3d as o3d
-from beamngpy import angle_to_quat, compute_rotation_matrix
+import torch
+from beamngpy import compute_rotation_matrix, angle_to_quat
+from open3d.cpu.pybind.visualization import rendering
 
 from src.config import UserSettings as us
 from src.util import create_paths
-from .common import get_folder_diff, get_all_files_in_path, initialize_opencv, get_rgbd_file_lists
-from .optimize_posegraph import optimize_posegraph_for_fragment, get_posegraph_name
-
-reg = o3d.pipelines.registration
-with_opencv = initialize_opencv()
-if with_opencv:
-    from .opencv_pose_estimation import pose_estimation
+from .common import get_folder_diff
+import cv2
 
 
 def build_intrinsic():
@@ -23,12 +20,11 @@ def build_intrinsic():
 
     (fx, fy) = intrinsic.get_focal_length()
     (cx, cy) = intrinsic.get_principal_point()
-    # intrinsic.set_intrinsics(1920, 1080, fx, fy, cx, cy)
+    intrinsic.set_intrinsics(1920, 1080, fx, fy, cx, cy)
     return intrinsic
 
 
 def create_config(seq_path):
-    # TODO use beam info
     return {
         "name": "Beam Dataset",
         "path_dataset": str(seq_path.parent.absolute()),
@@ -48,7 +44,6 @@ def create_config(seq_path):
 
 
 class PointCloudGenerator:
-
     @staticmethod
     def read_rgbd_image(color_file, depth_file, convert_rgb_to_intensity, config):
         color = o3d.io.read_image(color_file)
@@ -63,236 +58,118 @@ class PointCloudGenerator:
         return rgbd_image
 
     @staticmethod
-    def register_one_rgbd_pair(s, t, color_files, depth_files, intrinsic,
-                               with_opencv, config):
-        source_rgbd_image = PointCloudGenerator.read_rgbd_image(color_files[s],
-                                                                depth_files[s], True,
-                                                                config)
-        target_rgbd_image = PointCloudGenerator.read_rgbd_image(color_files[t],
-                                                                depth_files[t], True,
-                                                                config)
-
-        option = o3d.pipelines.odometry.OdometryOption()
-        option.max_depth_diff = config["max_depth_diff"]
-        if abs(s - t) != 1:
-            if with_opencv:
-                success_5pt, odo_init = pose_estimation(source_rgbd_image,
-                                                        target_rgbd_image,
-                                                        intrinsic, False)
-                if success_5pt:
-                    [success, trans, info
-                     ] = o3d.pipelines.odometry.compute_rgbd_odometry(
-                        source_rgbd_image, target_rgbd_image, intrinsic, odo_init,
-                        o3d.pipelines.odometry.RGBDOdometryJacobianFromHybridTerm(),
-                        option)
-                    return [success, trans, info]
-            return [False, np.identity(4), np.identity(6)]
-        else:
-            odo_init = np.identity(4)
-            [success, trans, info] = o3d.pipelines.odometry.compute_rgbd_odometry(
-                source_rgbd_image, target_rgbd_image, intrinsic, odo_init,
-                o3d.pipelines.odometry.RGBDOdometryJacobianFromHybridTerm(), option)
-            return [success, trans, info]
-
-    @staticmethod
-    def make_posegraph_for_fragment(path_dataset, sid, eid, color_files,
-                                    depth_files, fragment_id, n_fragments,
-                                    intrinsic, with_opencv, config):
-        o3d.utility.set_verbosity_level(o3d.utility.VerbosityLevel.Info)
-        pose_graph = o3d.pipelines.registration.PoseGraph()
-        trans_odometry = np.identity(4)
-        pose_graph.nodes.append(
-            o3d.pipelines.registration.PoseGraphNode(trans_odometry))
-        for s in range(sid, eid):
-            for t in range(s + 1, eid):
-                # odometry
-                if t == s + 1:
-                    print(
-                        "Fragment %03d / %03d :: RGBD matching between frame : %d and %d"
-                        % (fragment_id, n_fragments - 1, s, t))
-                    [success, trans,
-                     info] = PointCloudGenerator.register_one_rgbd_pair(s, t, color_files, depth_files,
-                                                                        intrinsic, with_opencv, config)
-                    trans_odometry = np.dot(trans, trans_odometry)
-                    trans_odometry_inv = np.linalg.inv(trans_odometry)
-                    pose_graph.nodes.append(
-                        o3d.pipelines.registration.PoseGraphNode(
-                            trans_odometry_inv))
-                    pose_graph.edges.append(
-                        o3d.pipelines.registration.PoseGraphEdge(s - sid,
-                                                                 t - sid,
-                                                                 trans,
-                                                                 info,
-                                                                 uncertain=False))
-
-                # keyframe loop closure
-                if s % config['n_keyframes_per_n_frame'] == 0 and t % config['n_keyframes_per_n_frame'] == 0:
-                    print("Fragment %03d / %03d :: RGBD matching between frame : %d and %d"
-                          % (fragment_id, n_fragments - 1, s, t))
-                    [success, trans, info] = PointCloudGenerator.register_one_rgbd_pair(s, t, color_files, depth_files,
-                                                                                        intrinsic, with_opencv, config)
-                    if success:
-                        pose_graph.edges.append(
-                            o3d.pipelines.registration.PoseGraphEdge(
-                                s - sid, t - sid, trans, info, uncertain=True))
-
-        fragment_name = f"{str(fragment_id).zfill(6)}"
-        p = path_dataset / "fragments" / config["seq_name"] / "unoptimized" / f"{fragment_name}.json"
-        print(f"Saving pose at {p}")
-        o3d.io.write_pose_graph(str(p.absolute()), pose_graph)
-
-    @staticmethod
-    def integrate_rgb_frames_for_fragment(color_files, depth_files, fragment_id,
-                                          n_fragments, pose_graph_name, intrinsic,
-                                          config):
-        pose_graph = o3d.io.read_pose_graph(pose_graph_name)
-        volume = o3d.pipelines.integration.ScalableTSDFVolume(
-            voxel_length=config["tsdf_cubic_size"] / 512.0,
-            sdf_trunc=0.04,
-            color_type=o3d.pipelines.integration.TSDFVolumeColorType.RGB8)
-        for i in range(len(pose_graph.nodes)):
-            i_abs = fragment_id * config['n_frames_per_fragment'] + i
-            print(
-                "Fragment %03d / %03d :: integrate rgbd frame %d (%d of %d)." %
-                (fragment_id, n_fragments - 1, i_abs, i + 1, len(pose_graph.nodes)))
-            rgbd = PointCloudGenerator.read_rgbd_image(color_files[i_abs], depth_files[i_abs], False,
-                                                       config)
-            pose = pose_graph.nodes[i].pose
-            volume.integrate(rgbd, intrinsic, np.linalg.inv(pose))
-        mesh = volume.extract_triangle_mesh()
-        mesh.compute_vertex_normals()
-        return mesh
-
-    @staticmethod
-    def make_pointcloud_for_fragment(path_dataset, color_files, depth_files,
-                                     fragment_id, n_fragments, intrinsic, config):
-
+    def build_pointcloud(path_dataset, seq_name):
         merged = o3d.geometry.PointCloud()
-        pcd = None
-        pcd_path = path_dataset / "pointclouds" / config["seq_name"]
-        cameras = path_dataset / "camera" / config["seq_name"]
+        pcd_path = path_dataset / "pointclouds" / seq_name
 
-        pcds = [p for p in pcd_path.iterdir() if p.is_file()]
-        cams = [p for p in cameras.iterdir() if p.is_file()]
-        vis = o3d.visualization.Visualizer()
-        vis.create_window(width=640, height=480)
-        vis.add_geometry(merged)
-        e = o3d.visualization.rendering.OffscreenRenderer(intrinsic.width, intrinsic.height)
+        pcd_paths = [p for p in pcd_path.iterdir() if p.is_file()]
 
-        for p in pcds:
+        for p in pcd_paths:
             pcd = o3d.io.read_point_cloud(str(p.absolute()), print_progress=True, format="xyz")
             merged = merged + pcd
-            print(merged)
-            vis.add_geometry(pcd)
-            vis.update_geometry(merged)
-            vis.poll_events()
-            vis.update_renderer()
 
-        # flip_transform = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]]
-        # merged.transform(flip_transform)
-
-        vis.update_geometry(merged)
-        intrinsic = build_intrinsic()
-        i = 0
-        for cam in cams:
-            c = json.loads(cam.read_text())
-            i = i+ 2
-            look_at = np.array(c["euler_rot"])
-            translation = np.array(c["pos"]).reshape(3,1)
-            e.setup_camera(translation, look_at, np.array([0,0,1]).reshape(3,1))
-            e.render_to_image()
-            rot_matrix = compute_rotation_matrix(angle_to_quat(look_at))
-            mat4x4 = np.append(np.eye(3), np.array([0,0,0]).reshape(1,3), axis=0)
-            mat4x4 = np.append(mat4x4,np.array([0,0,0,1]).reshape(4,1), axis=1)
-            # intrinsic = o3d.camera.PinholeCameraIntrinsic()
-            print(intrinsic)
-            print(mat4x4)
-            new_cam = o3d.camera.PinholeCameraParameters()
-            new_cam.extrinsic = mat4x4
-            new_cam.intrinsic = intrinsic
-
-            ctr = vis.get_view_control()
-            ctr.convert_from_pinhole_camera_parameters(new_cam)
-            vis.poll_events()
-            vis.update_renderer()
-            # time.sleep(2)
-
-        vis.run()
-    # for idx, (color, depth) in enumerate(zip(color_files, depth_files)):
-        #     rgbd_image = PointCloudGenerator.read_rgbd_image(color, depth, True, config)
-        #     if pcd:
-        #         del pcd
-        # rgbd_image,
-        # o3d.camera.PinholeCameraIntrinsic(
-        #     o3d.camera.PinholeCameraIntrinsicParameters.PrimeSenseDefault))
-
-        # if idx % 5 == 0:
-        #     merged = merged.voxel_down_sample(.5)
-
-        # o3d.visualization.draw_geometries([merged])
-        # if idx % 20 == 1:
-        #     break
-
-        #
-        # pg_path = get_posegraph_name(path_dataset, config, fragment_id, True)
-        # mesh = PointCloudGenerator.integrate_rgb_frames_for_fragment(
-        #     color_files, depth_files, fragment_id, n_fragments,
-        #     pg_path,
-        #     intrinsic, config)
-        # pcd = o3d.geometry.PointCloud()
-        # pcd.points = mesh.vertices
-        # pcd.colors = mesh.vertex_colors
-        # print(pcd)
-        # fragment_name = f"{str(fragment_id).zfill(6)}"
-        # pcd_name = str(path_dataset / "fragments" / config["seq_name"] / "pointclouds" / f"{fragment_name}.ply")
-        # o3d.io.write_point_cloud(pcd_name, merged, False, True)
-        # print(f"SAved {pcd_name} : {merged}")
+        return merged
 
     @staticmethod
-    def process_single_fragment(fragment_id, color_files, depth_files, n_files, n_fragments, config):
+    def unproject_pcd(path_dataset, pcd, seq_name, save_image=False):
+        # vis = o3d.visualization.Visualizer()
+        # vis.create_window(width=640, height=480)
+        # vis.add_geometry(pcd)
+        cameras = path_dataset / "camera" / seq_name
+        depth_path = path_dataset / "depth" / seq_name
+        unp_path = path_dataset / "unprojections" / seq_name
+        cams = [p for p in cameras.iterdir() if p.is_file()]
 
-        sid = fragment_id * config['n_frames_per_fragment']
-        eid = min(sid + config['n_frames_per_fragment'], n_files)
-        intrinsic = build_intrinsic()
-        dataset_path = Path(config["path_dataset"]).parent
+        cam_i = build_intrinsic()
+        render = o3d.visualization.rendering.OffscreenRenderer(cam_i.width, cam_i.height)
+        # render.scene.scene.enable_sun_light(True)
+        depth_mat = rendering.Material()
+        depth_mat.shader = "depth"
+        render.scene.show_axes(True)
+        render.scene.add_geometry("merged", pcd, depth_mat)
+        render.scene.set_background([0, 0, 0, 0])
+        pcd_tree = o3d.geometry.KDTreeFlann(pcd)
 
-        # PointCloudGenerator.make_posegraph_for_fragment(dataset_path, sid, eid, color_files,
-        #                                                 depth_files, fragment_id, n_fragments,
-        #                                                 intrinsic, with_opencv, config)
-        # optimize_posegraph_for_fragment(dataset_path, fragment_id, config)
-        PointCloudGenerator.make_pointcloud_for_fragment(dataset_path, color_files,
-                                                         depth_files, fragment_id, n_fragments,
-                                                         intrinsic, config)
+        pcd = np.asarray(pcd.points)
 
-    def run(self, multithreaded=False):
+        # o3d.visualization.draw_geometries([pcd])
+        for cam_extrs in cams:
+            cam_e = json.loads(cam_extrs.read_text())
+            # render.setup_camera()
+            world_pos = np.array(cam_e["world_cam_pos"])
+            cam_pos = np.array(cam_e["local_cam_pos"])
+            pos = world_pos + cam_pos
+            look_at = np.array(cam_e["car_dir"]) + pos
+            render.setup_camera(cam_e["fov"], look_at, pos, cam_e["up"])
 
+            img = render.render_to_image()
+            if save_image:
+                save_path = path_dataset / "fragments" / f"{cam_extrs.stem}.png"
+                # print(save_path)
+                o3d.io.write_image(str(save_path.absolute()), img)
+            point_screen_coords = np.argwhere(np.any(np.asarray(img) != [0, 0, 0], axis=2))
+            d_img = cv2.imread(str(depth_path / f"{cam_extrs.stem}.png"))
+            unprojections = {}
+            amount_of_points = len(point_screen_coords)
+            for idx,(h, w) in enumerate(point_screen_coords):
+                if idx % 50000 == 0:
+                    print(f"Unprojecting {seq_name}-{cam_extrs.stem} {(idx/amount_of_points)*100}%")
+                depth_val = d_img[h][w][0]
+                unp = render.scene.camera.unproject(w, h, depth_val, cam_i.width, cam_i.height)
+                if not math.isinf(unp[0]) and not math.isinf(unp[1]) and not math.isinf(unp[2]):
+                    [_, idx, _] = pcd_tree.search_knn_vector_3d(unp, 1)
+                    r = [int(w), int(h), int(idx[0])]
+                    unprojections['w%dxh%d' % (w, h)] = r
+            print(f"Saving unprojection for {cam_extrs.stem}")
+            pickle.dump(unprojections, open(unp_path / f"{cam_extrs.stem}.pkl", 'wb'))
+        # # for w in cam_i.width:
+        #     for h in cam_i.height:
+        #         unp = render.scene.camera.unproject(w,h,)
+        # for idx, r in enumerate(results):
+        #     (w, h) = r[0]
+        #     print(w, h)
+        #     if 0 <= w <= cam_i.width and 0 <= h <= cam_i.height:
+        #         print(idx / len(results))
+        #         shot_unprojection.append([w, h, idx])
+        # print(idx)
+        # cv2.project_po
+        # unp = render.scene.camera.unproject(cam_i.width, cam_i.height, cam_e["depth"])
+        # print(unp)
+        # frame_points = render.scene.camera.unproject()
+        # unproj_path = path_dataset / "unprojections / "
+
+    @staticmethod
+    def process_sequence(multithreaded=False):
         unprocessed_seqs = list(get_folder_diff("depth", "fragments"))
         unprocessed_seqs.sort()
         seq_path = unprocessed_seqs[0]
-        create_paths([
-            us.data_path / "fragments" / seq_path.stem / "optimized",
-            us.data_path / "fragments" / seq_path.stem / "pointclouds",
-            us.data_path / "fragments" / seq_path.stem / "unoptimized"])
-        for seq_path in unprocessed_seqs:
-            print(f"Starting pipeline for {seq_path.name}")
-            [color_files, depth_files] = get_rgbd_file_lists(seq_path)
-            assert len(color_files) == len(depth_files)
-            config = create_config(seq_path)
-            print(seq_path)
-            n_files = len(color_files)
-            n_fragments = int(
-                math.ceil(float(n_files) / config["n_frames_per_fragment"]))
+        # create_paths([us.data_path / "fragments" / seq_path.stem / "unoptimized"])
 
-            if multithreaded is True:
-                from joblib import Parallel, delayed
-                import multiprocessing
-                MAX_THREAD = min(multiprocessing.cpu_count(), n_fragments)
-                Parallel(n_jobs=MAX_THREAD)(delayed(PointCloudGenerator.process_single_fragment)(
-                    fragment_id, color_files, depth_files, n_files, n_fragments, create_config(seq_path))
-                                            for fragment_id in range(n_fragments))
-            else:
-                for fragment_id in range(n_fragments):
-                    PointCloudGenerator.process_single_fragment(fragment_id, color_files, depth_files,
-                                                                n_files, n_fragments, config)
-                    break
-            # break
+        for seq_path in unprocessed_seqs:
+            # process_sequence(us.data_path, seq_path.name)
+            config = create_config(seq_path)
+            pcd = PointCloudGenerator.build_pointcloud(us.data_path, seq_path.name)
+            PointCloudGenerator.unproject_pcd(us.data_path, pcd, seq_path.name, True)
+            break
+
+        #     print(f"Starting pipeline for {seq_path.name}")
+        #     [color_files, depth_files] = get_rgbd_file_lists(seq_path)
+        #     assert len(color_files) == len(depth_files)
+        #     print(seq_path)
+        #     n_files = len(color_files)
+        #     n_fragments = int(
+        #         math.ceil(float(n_files) / config["n_frames_per_fragment"]))
+        #
+        #     if multithreaded is True:
+        #         from joblib import Parallel, delayed
+        #         import multiprocessing
+        #         MAX_THREAD = min(multiprocessing.cpu_count(), n_fragments)
+        #         Parallel(n_jobs=MAX_THREAD)(delayed(PointCloudGenerator.process_single_fragment)(
+        #             fragment_id, color_files, depth_files, n_files, n_fragments, create_config(seq_path))
+        #                                     for fragment_id in range(n_fragments))
+        #     else:
+        #         for fragment_id in range(n_fragments):
+        #             PointCloudGenerator.process_single_fragment(fragment_id, color_files, depth_files,
+        #                                                         n_files, n_fragments, config)
+        #             break
+        #     # break
