@@ -20,7 +20,7 @@ class SegmentationMasksConversion:
         diff = get_folder_diff("raw_annotations", "seg_maps")
 
         self.images_to_queue(diff)
-        self.queue_worker.start_execution(10)
+        self.queue_worker.start_execution(5)
         # create_folders(proc_data_path, with_seq=False)
 
         print("Done converting")

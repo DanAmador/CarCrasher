@@ -17,7 +17,6 @@ import numpy as np
 import random
 
 
-
 @dataclass(unsafe_hash=True)
 class StaticCamera:
     camera: Camera
@@ -179,6 +178,9 @@ class BasicCarChase(WithLidarView):
     def setup_scenario(self, steps_per_sec=24):
 
         self.bb.with_scenario(level=Levels.WEST_COAST)
+
+        cam = self.bb.cam_setup(annotation=True)
+        self.bb.with_car(vehicle_id="ego", sensors={"camera": cam, "lidar": Lidar()}, rot=(0, 0, 180)),
         self.bb.build_environment(ai_mode="span", hud=True)
 
         start_pos = [(-741.79, 80.56, 119.13), (-667.98, 154.64, 117.40)]
@@ -198,7 +200,7 @@ class BasicCarChase(WithLidarView):
             car_name = f"car_{i}"
             cam = self.bb.cam_setup(annotation=True)
             self.bb.with_car(vehicle_id=car_name, sensors={"camera": cam, "lidar": Lidar()}, pos=new_pos,
-                             rot=(0, 180, 0)),
+                             rot=(0, 0, 180)),
             # rot_quat=(-1, 0, 0.3826834, 0.9238795))
             car = self.bb.get_vehicle(car_name)
             cars.append(car)

@@ -50,8 +50,8 @@ class BeamBuilder:
         bmng.open(launch=launch)
         return bmng
 
-    def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=False, annotation=False,
-                  instance=False, first_person=False) -> Camera:
+    def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=True, annotation=True,
+                  instance=True, first_person=False) -> Camera:
         if first_person:
             cam_pos = (0, 2, 2)
         self.camera = Camera(cam_pos, cam_dir, 75, (1920, 1080), near_far=(1, 50), colour=colour, depth=depth,

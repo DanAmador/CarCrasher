@@ -96,7 +96,7 @@ class ImageSequence:
         ])
         # car_pos_matrix = [np.array()]
 
-        data = copy.copy(cam.data)
+        data = cam.data
         data["camera"] = {
             "fov": cam.fov,
             "width": cam.resolution[0],
