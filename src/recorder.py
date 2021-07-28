@@ -1,13 +1,13 @@
-import copy
 import json
 import random
-import threading
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List
 
 import numpy as np
 from beamngpy import Vehicle
+from beamngpy.sensors import Camera
 
 from BeamBuilder import BeamBuilder
 from thread_worker import ThreadQueueWorker
@@ -31,7 +31,7 @@ class Capture:
             if beamName == "camera":
                 with open((f_path / f"{self.name}.json").absolute(), "w") as f:
                     json.dump(img, f, cls=NumpyArrayEncoder)
-            elif beamName == "pointclouds":
+            elif beamName == "pointclouds" and "points" in self.data:
 
                 vertices = self.data.get("points")
                 # vertices = points.reshape(points.size // 3, 3)
@@ -61,15 +61,41 @@ class Capture:
 
 
 @dataclass
-class ImageSequence:
+class ImageSequence(ABC):
     captures: List[Capture]
     entry_path: Path
 
-    def __init__(self, data_path_entry: Path, vehicle: Vehicle):
+    def __init__(self, data_path_entry: Path):
         create_paths([data_path_entry])
         self.entry_path = data_path_entry
         self.seq_folder = create_folders(self.entry_path)
         self.captures = []
+
+    @abstractmethod
+    def capture_frame(self, current_frame):
+        pass
+
+
+class StaticCamSequence(ImageSequence):
+
+    def __init__(self, data_path_entry: Path, camera: Camera, camera_id):
+        super().__init__(data_path_entry)
+        self.cam = camera
+        self.cam_id = camera_id
+        self.data = {}
+
+    def capture_frame(self, current_frame):
+        self.captures.append(
+            Capture(current_frame, self.data, f"{str(current_frame).zfill(6)}", self.entry_path, self.seq_folder))
+
+    def capture_frame_wrapper(self, current_frame, camera_frame):
+        self.data = camera_frame
+        self.capture_frame(current_frame)
+
+
+class CarSequence(ImageSequence):
+    def __init__(self, data_path_entry: Path, vehicle: Vehicle):
+        super().__init__(data_path_entry)
         self.vehicle = vehicle
         self.points = np.array([])
 
@@ -82,7 +108,6 @@ class ImageSequence:
         points = []
         if lidar:
             points = lidar.data["points"].reshape(lidar.data["points"].size // 3, 3)
-        pic_name = f"{str(current_frame).zfill(6)}"
         # print(f"current_capture {current_frame} of {total_captures}")
         local_cam_pos = np.array(cam.pos)
         local_cam_dir = np.array(cam.direction)[None, :]
@@ -102,14 +127,15 @@ class ImageSequence:
             "width": cam.resolution[0],
             "height": cam.resolution[1],
             "depth": cam.near_far[1],
-            "world_car_pos": world_car_pos ,
+            "world_car_pos": world_car_pos,
             "local_cam_pos": local_cam_pos,
             "euler_rot": np.reshape(car_pos_matrix @ local_cam_dir.T, (3,)),
             "car_dir": car_dir,
             "up": up
         }
         data["points"] = points
-        self.captures.append(Capture(current_frame, data, pic_name, self.entry_path, self.seq_folder))
+        self.captures.append(
+            Capture(current_frame, data, f"{str(current_frame).zfill(6)}", self.entry_path, self.seq_folder))
 
 
 @dataclass()
@@ -154,13 +180,16 @@ class SequenceManager:
             current_capture += 1
             frame_buffer += 1
             print(f"current_capture {current_capture} of {total_captures}")
+            static_cameras = self.bb.bmng.render_cameras()
             for sequence in self.scenario.sequences:
-                sequence.capture_frame(current_capture)
+                if isinstance(sequence, StaticCamSequence):
+                    sequence.capture_frame_wrapper(current_capture, static_cameras[sequence.cam_id])
+                else:
+                    sequence.capture_frame(current_capture)
 
             if frame_buffer > batch_idx or current_capture == total_captures:
                 frame_buffer = 0
                 self.save_frames()
-            self.bb.bmng.render_cameras()
             self.bb.bmng.step(wait_time)
             self.scenario.on_recording_step()
             self.bb.bmng.pause()
