@@ -24,24 +24,6 @@ def build_intrinsic():
     return intrinsic
 
 
-def create_config(seq_path):
-    return {
-        "name": "Beam Dataset",
-        "path_dataset": str(seq_path.parent.absolute()),
-        "max_depth": 50,
-        "voxel_size": 2,
-        "max_depth_diff": 5,
-        "n_frames_per_fragment": 5,
-        "n_keyframes_per_n_frame": 5,
-        "preference_loop_closure_odometry": 0.1,
-        "preference_loop_closure_registration": 5.0,
-        "tsdf_cubic_size": 20,
-        "icp_method": "color",
-        "global_registration": "ransac",
-        "seq_name": seq_path.name,
-        "python_multi_threading": True
-    }
-
 
 def build_pointcloud(path_dataset, seq_name):
     merged = o3d.geometry.PointCloud()

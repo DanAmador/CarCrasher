@@ -5,8 +5,7 @@ import numpy as np
 
 import src.DatasetMapper as dsm
 from src.DataProcessing.common import get_folder_diff, get_all_files_in_path
-from src.thread_worker import ThreadQueueWorker
-from src.util import create_paths, beam2CityLabelMap
+from src.util import create_paths, beam2CityLabelMap, ThreadQueueWorker
 
 
 class SegmentationMasksConversion:
