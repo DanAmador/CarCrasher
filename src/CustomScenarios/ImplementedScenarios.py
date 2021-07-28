@@ -93,7 +93,7 @@ class BasicCarChase(WithLidarView):
 
         target: Vehicle = self.bb.ego_vehicle
         cars = []
-        num_cars = 0
+        num_cars = 3
         cars.append(target)
 
         target.ai_set_mode(AIMode.SPAN)
