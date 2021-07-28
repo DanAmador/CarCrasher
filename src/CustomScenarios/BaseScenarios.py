@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 
 from OpenGL.GL import *
 from OpenGL.GLUT import *
-from beamngpy.sensors import Lidar
+from beamngpy import Vehicle
+from beamngpy.sensors import Lidar, Camera
+from typing import Tuple, List
 
 import src.BeamBuilder as BeamBuilder
 from src.Recording.Sequence import CarSequence, StaticCamSequence
@@ -15,7 +17,8 @@ class AbstractRecordingScenario(ABC):
         self.bb = bb
         self.sequences = []
         self.static_cameras = []
-        self.setup_scenario()
+        self.vehicles = []
+        self.initialize_scenario()
 
     @abstractmethod
     def on_recording_step(self):
@@ -25,19 +28,21 @@ class AbstractRecordingScenario(ABC):
         return
 
     @abstractmethod
-    def setup_scenario(self, steps_per_sec=24):
-        return []
+    def setup_scenario(self) -> Tuple[List[Vehicle], List[Tuple[Camera, str]]]:
+        return [], []
 
-    def create_sequences(self, car_list=None, static_cam_list=None):
-        if static_cam_list is None:
-            static_cam_list = []
-        if car_list is None:
-            car_list = []
-        sequences_list = []
+    def initialize_scenario(self):
+        cars, cams = self.setup_scenario()
+        print(cars, cams)
+        self.create_sequences(cars, cams)
 
-        sequences_list.extend([CarSequence(us.data_path, car) for car in car_list])
-        sequences_list.extend([StaticCamSequence(us.data_path, cam, cam_id) for cam, cam_id in static_cam_list])
-        self.sequences = sequences_list
+    def load_json_scene(self, json_path):
+        pass
+
+    def create_sequences(self, vehicles, static_cameras):
+        self.sequences = []
+        self.sequences.extend([CarSequence(us.data_path, car) for car in vehicles])
+        self.sequences.extend([StaticCamSequence(us.data_path, cam, cam_id) for cam, cam_id in static_cameras])
 
 
 class WithLidarView(AbstractRecordingScenario):

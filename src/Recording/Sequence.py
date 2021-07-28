@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List
@@ -39,10 +38,6 @@ class StaticCamSequence(ImageSequence):
     def capture_frame(self, current_frame):
         self.captures.append(
             Capture(current_frame, self.data, f"{str(current_frame).zfill(6)}", self.entry_path, self.seq_folder))
-
-    def capture_frame_wrapper(self, current_frame, camera_frame):
-        self.data = camera_frame
-        self.capture_frame(current_frame)
 
 
 class CarSequence(ImageSequence):

@@ -24,8 +24,6 @@ class SequenceManager:
 
                 seq.captures = []
 
-        # $capture.save_to_file()
-
     def save_worker(self):
         while True:
             capture = self.worker_q.work_q.get()
@@ -50,9 +48,9 @@ class SequenceManager:
             static_cameras = self.bb.bmng.render_cameras()
             for sequence in self.scenario.sequences:
                 if isinstance(sequence, StaticCamSequence):
-                    sequence.capture_frame_wrapper(current_capture, static_cameras[sequence.cam_id])
-                else:
-                    sequence.capture_frame(current_capture)
+                    sequence.data = static_cameras[sequence.cam_id]
+
+                sequence.capture_frame(current_capture)
 
             if frame_buffer > batch_idx or current_capture == total_captures:
                 frame_buffer = 0

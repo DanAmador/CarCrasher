@@ -1,13 +1,17 @@
 import random
+from typing import Tuple, List
 
 from beamngpy import Vehicle
-from beamngpy.sensors import Lidar
+from beamngpy.sensors import Lidar, Camera
 
 from src.CustomScenarios.BaseScenarios import WithLidarView
 from src.config import AIMode, Levels
 
 
 class TestCrash(WithLidarView):
+
+    def on_recording_step(self):
+        pass
 
     def spawn_car_random_position(self, index) -> Vehicle:
         car_name = f"car_{index}"
@@ -17,7 +21,7 @@ class TestCrash(WithLidarView):
                                    sensors={"camera": cam, "lidar": Lidar()})
         return vehicle
 
-    def setup_scenario(self, steps_per_sec=24):
+    def setup_scenario(self):
         self.bb.with_scenario(level=Levels.SMALL_GRID)
 
         # self.make_camera_static(cam, vehicle, (0, -2, 10))
@@ -33,7 +37,27 @@ class TestCrash(WithLidarView):
             car.ai_set_target(vehicles[target_idx].vid)
             print(f"setting {vehicles[target_idx].vid} as target for {idx}")
             car.ai_set_speed(200, "limit")
-        self.create_sequences(vehicles)
+        return vehicles, []
+
+class JsonLoaderScenarioTest(WithLidarView):
+
+    def setup_scenario(self) -> Tuple[List[Vehicle], List[Tuple[Camera, str]]]:
+       test_json = {
+            "cars": [
+                {
+                    "car_id": "test_car",
+                    "position": []
+                }
+            ],
+           "cameras": [
+               {
+                   "position": [-5.15, 1.79, 3.84, 0.108795, -0.127232, 0.7493, 0.640722]
+               }
+           ]
+        }
+
+    def on_recording_step(self):
+        pass
 
 
 class FallFromSkyScenario(WithLidarView):
@@ -41,7 +65,7 @@ class FallFromSkyScenario(WithLidarView):
     def on_recording_step(self):
         pass
 
-    def setup_scenario(self, steps_per_sec=24):
+    def setup_scenario(self):
         import random
         self.bb.with_scenario(level=Levels.SMALL_GRID)
 
@@ -52,7 +76,7 @@ class FallFromSkyScenario(WithLidarView):
         # self.make_camera_static(cam, vehicle, (0, -2, 10))
 
         self.bb.build_environment()
-        self.create_sequences([self.bb.ego_vehicle])
+        return [vehicle], [ ]
 
 
 class StaticCameraTest(WithLidarView):
@@ -60,7 +84,7 @@ class StaticCameraTest(WithLidarView):
     def on_recording_step(self):
         pass
 
-    def setup_scenario(self, steps_per_sec=24):
+    def setup_scenario(self):
         self.bb.with_scenario(level=Levels.SMALL_GRID)
 
         cam_tuple = self.bb.cam_setup(annotation=True, first_person=True, static_camera=True)
@@ -70,10 +94,10 @@ class StaticCameraTest(WithLidarView):
                                    sensors={"camera": cam, "lidar": Lidar()})
         # self.make_camera_static(cam, vehicle, (0, -2, 10))
 
-        self.bb.build_environment(ai_mode="random")
+        self.bb.build_environment()
 
         vehicle.ai_set_speed(200, "set")
-        self.create_sequences([vehicle], [cam_tuple])
+        return [vehicle], [cam_tuple]
 
 
 class BasicCarChase(WithLidarView):
@@ -81,7 +105,7 @@ class BasicCarChase(WithLidarView):
     def on_recording_step(self):
         pass
 
-    def setup_scenario(self, steps_per_sec=24):
+    def setup_scenario(self):
 
         self.bb.with_scenario(level=Levels.WEST_COAST)
 
@@ -118,4 +142,4 @@ class BasicCarChase(WithLidarView):
             else:
                 print(f"Basic Car {i}  has no target")
 
-        self.create_sequences(cars)
+        return cars, []
