@@ -5,6 +5,7 @@ from beamngpy import Vehicle
 from beamngpy.sensors import Lidar, Camera
 
 from src.CustomScenarios.BaseScenarios import WithLidarView
+from src.CustomScenarios.SceneData import SceneData
 from src.config import AIMode, Levels
 
 
@@ -39,22 +40,31 @@ class TestCrash(WithLidarView):
             car.ai_set_speed(200, "limit")
         return vehicles, []
 
+
 class JsonLoaderScenarioTest(WithLidarView):
 
-    def setup_scenario(self) -> Tuple[List[Vehicle], List[Tuple[Camera, str]]]:
-       test_json = {
+    def setup_scenario(self) -> SceneData:
+        test_json = {
+            "level": "west_coast_usa",
             "cars": [
                 {
                     "car_id": "test_car",
-                    "position": []
+                    "position": [-351.39, 293.59, 105.25, -0.0416857, -0.0851289, 0.894061, -0.437801],
+                    "model": "etk800"
                 }
             ],
-           "cameras": [
-               {
-                   "position": [-5.15, 1.79, 3.84, 0.108795, -0.127232, 0.7493, 0.640722]
-               }
-           ]
+            "cameras": [
+                # {
+                #     "position": [-5.15, 1.79, 3.84, 0.108795, -0.127232, 0.7493, 0.640722]
+                # },
+                {
+                    "position": [-334.97, 290.03, 113.97, 0.126316, 0.142928, -0.735552, 0.650061]
+                }
+            ]
         }
+
+        sd = SceneData.load_json_scene(test_json, self.bb)
+        return sd
 
     def on_recording_step(self):
         pass
@@ -76,7 +86,7 @@ class FallFromSkyScenario(WithLidarView):
         # self.make_camera_static(cam, vehicle, (0, -2, 10))
 
         self.bb.build_environment()
-        return [vehicle], [ ]
+        return SceneData([vehicle], [])
 
 
 class StaticCameraTest(WithLidarView):
@@ -97,7 +107,7 @@ class StaticCameraTest(WithLidarView):
         self.bb.build_environment()
 
         vehicle.ai_set_speed(200, "set")
-        return [vehicle], [cam_tuple]
+        return SceneData([vehicle], [cam_tuple])
 
 
 class BasicCarChase(WithLidarView):
@@ -142,4 +152,4 @@ class BasicCarChase(WithLidarView):
             else:
                 print(f"Basic Car {i}  has no target")
 
-        return cars, []
+        return SceneData(cars, [])

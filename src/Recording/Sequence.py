@@ -48,12 +48,12 @@ class CarSequence(ImageSequence):
 
     def capture_frame(self, current_frame):
         self.vehicle.poll_sensors()
-        lidar = self.vehicle.sensors["lidar"]
         cam = self.vehicle.sensors["camera"]
         state = self.vehicle.sensors["state"].data
 
         points = []
-        if lidar:
+        if "lidar" in self.vehicle.sensors:
+            lidar = self.vehicle.sensors["lidar"]
             points = lidar.data["points"].reshape(lidar.data["points"].size // 3, 3)
         # print(f"current_capture {current_frame} of {total_captures}")
         local_cam_pos = np.array(cam.pos)

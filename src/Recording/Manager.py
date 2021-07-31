@@ -1,17 +1,18 @@
 from dataclasses import dataclass
 
 from src.BeamBuilder import BeamBuilder
+from src.CustomScenarios.BaseScenarios import AbstractRecordingScenario
 from src.Recording.Sequence import StaticCamSequence
 from src.util import ThreadQueueWorker
 
 
 @dataclass()
 class SequenceManager:
-    def __init__(self, bb: BeamBuilder, scenario):
+    def __init__(self, bb: BeamBuilder, scenario: AbstractRecordingScenario):
 
         self.bb: BeamBuilder = bb
+        self.scenario: AbstractRecordingScenario = scenario
         self.threads = []
-        self.scenario = scenario
         self.worker_q = ThreadQueueWorker(self.save_worker)
         self.worker_q.start_execution()
 
@@ -45,9 +46,21 @@ class SequenceManager:
             current_capture += 1
             frame_buffer += 1
             print(f"current_capture {current_capture} of {total_captures}")
-            static_cameras = self.bb.bmng.render_cameras()
+            static_cameras = {}
+            if len(self.bb.bmng.scenario.cameras) > 0:
+                static_cameras = self.bb.bmng.render_cameras()
             for sequence in self.scenario.sequences:
                 if isinstance(sequence, StaticCamSequence):
+
+                    # cam = self.bb.bmng.scenario.cameras[sequence.cam_id]
+                    # req = cam.encode_engine_request()
+                    # request = dict(type='SensorRequest', sensors=req)
+                    # print(f"Sending request for {sequence.cam_id}")
+                    # self.bb.bmng.send(request)
+                    # response = self.bb.bmng.recv()
+                    # print(f"Got response for {sequence.cam_id}")
+                    # cam_data = response['data']
+                    # sequence.data = self.bb.bmng.scenario.decode_frames(cam_data)
                     sequence.data = static_cameras[sequence.cam_id]
 
                 sequence.capture_frame(current_capture)
