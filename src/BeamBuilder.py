@@ -42,6 +42,7 @@ class BeamBuilder:
             print(f"Setting ai mode {ai_mode}")
             self.ego_vehicle.ai_set_mode(mode=ai_mode)
         print("Environment has been built")
+        self.bmng.resume()
         # self.bmng.close()
 
     @staticmethod
@@ -71,7 +72,7 @@ class BeamBuilder:
         return self
 
     def with_car(self, model: Cars = Cars.ETK, vehicle_id="car", pos=(-717, 101, 118), rot=None,
-                 rot_quat=(0, 0, 0.3826834, 0.9238795), sensors=None):
+                 rot_quat=(0, 0, 0.3826834, 0.9238795), sensors=None, cling=True):
         if sensors is None:
             sensors = {}
         vehicle = Vehicle(vehicle_id, model=model, licence='AntonGinzburg')
@@ -90,7 +91,7 @@ class BeamBuilder:
         else:
             if rot is not None:
                 rot_quat = None
-            self.scenario.add_vehicle(vehicle, pos=pos, rot=rot, rot_quat=rot_quat)
+            self.scenario.add_vehicle(vehicle, pos=pos, rot=rot, rot_quat=rot_quat, cling=cling)
 
         if len(self.vehicles) == 0:
             self.ego_vehicle = vehicle

@@ -11,7 +11,7 @@ from beamngpy.sensors import Camera, Lidar
 from src.BeamBuilder import BeamBuilder
 from src.Recording.Sequence import CarSequence, StaticCamSequence
 from src.config import UserSettings as us
-from src.util import quaternion_to_euler_angle_vectorized
+from src.util import quaternion_to_euler_vec
 
 
 @dataclass
@@ -37,6 +37,7 @@ class SceneData:
     def load_json_scene(json_dict, bb: BeamBuilder) -> SceneData:
         def parse_bmng_pos(bmng_pos):
             return bmng_pos[:3], bmng_pos[-4:]
+
         bb.with_scenario(level=json_dict["level"])
         cars = []
         cams = []
@@ -53,7 +54,8 @@ class SceneData:
 
         for static_cam in json_dict["cameras"]:
             pos, rot_quat = parse_bmng_pos(static_cam["position"])
-            cam_dir = quaternion_to_euler_angle_vectorized(*rot_quat)
+            cam_dir = quaternion_to_euler_vec(*rot_quat)
+            print(f"quat {rot_quat} --- angle: {cam_dir}")
             cam_tup = bb.cam_setup(static_camera=True, cam_pos=pos, cam_dir=cam_dir)
             cams.append(cam_tup)
         bb.build_environment()

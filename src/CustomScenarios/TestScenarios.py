@@ -11,9 +11,6 @@ from src.config import AIMode, Levels
 
 class TestCrash(WithLidarView):
 
-    def on_recording_step(self):
-        pass
-
     def spawn_car_random_position(self, index) -> Vehicle:
         car_name = f"car_{index}"
         cam, _ = self.bb.cam_setup(annotation=True, first_person=True)
@@ -54,20 +51,21 @@ class JsonLoaderScenarioTest(WithLidarView):
                 }
             ],
             "cameras": [
-                # {
-                #     "position": [-5.15, 1.79, 3.84, 0.108795, -0.127232, 0.7493, 0.640722]
-                # },
                 {
-                    "position": [-334.97, 290.03, 113.97, 0.126316, 0.142928, -0.735552, 0.650061]
-                }
+                    "position": [-346.04998779297, 284.54000854492, 109.94999694824, -0.030925733968616,
+                                 0.015348200686276, 0.44428959488869, 0.89521771669388]
+                },
+                # {
+                #     "position": [-334.97, 290.03, 113.97, 0.126316, 0.142928, -0.735552, 0.650061]
+                # }
             ]
         }
-
+        # position 1 euler = -2.391787, 3.153309,52.855541
         sd = SceneData.load_json_scene(test_json, self.bb)
         return sd
 
-    def on_recording_step(self):
-        pass
+    def should_record_predicate(self) -> bool:
+        return True
 
 
 class FallFromSkyScenario(WithLidarView):
@@ -91,13 +89,11 @@ class FallFromSkyScenario(WithLidarView):
 
 class StaticCameraTest(WithLidarView):
 
-    def on_recording_step(self):
-        pass
-
     def setup_scenario(self):
         self.bb.with_scenario(level=Levels.SMALL_GRID)
 
         cam_tuple = self.bb.cam_setup(annotation=True, first_person=True, static_camera=True)
+        cam_tuple2 = self.bb.cam_setup(annotation=True, first_person=True, static_camera=True)
         cam, _ = self.bb.cam_setup(annotation=True, first_person=True)
         vehicle = self.bb.with_car(pos=(1, 0, 0),
                                    rot=(0, 0, 0),
@@ -111,9 +107,6 @@ class StaticCameraTest(WithLidarView):
 
 
 class BasicCarChase(WithLidarView):
-
-    def on_recording_step(self):
-        pass
 
     def setup_scenario(self):
 

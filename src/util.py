@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 
 
-def quaternion_to_euler_angle_vectorized(x, y, z, w):
+def quaternion_to_euler_vec(x, y, z, w):
     ysqr = y * y
 
     t0 = +2.0 * (w * x + y * z)

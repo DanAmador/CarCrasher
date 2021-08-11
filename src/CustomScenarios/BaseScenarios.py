@@ -15,9 +15,10 @@ class AbstractRecordingScenario(ABC):
         self.sequences = []
         self.initialize_scenario()
 
-    @abstractmethod
-    def on_recording_step(self):
+    def should_record_predicate(self) -> bool:
+        return False
 
+    def on_recording_step(self):
         return
 
     @abstractmethod
