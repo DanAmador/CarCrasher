@@ -41,6 +41,7 @@ class SceneData:
         bb.with_scenario(level=json_dict["level"])
         cars = []
         cams = []
+        cars_dict = {}
         for car in json_dict["cars"]:
             cam, _ = bb.cam_setup(first_person=True if "first_person" in car else False)
             car_name = car["car_id"]
@@ -49,7 +50,10 @@ class SceneData:
             sensors = {'camera': cam}
             if "lidar" in car:
                 sensors["lidar"] = Lidar()
+
             vehicle: Vehicle = bb.with_car(vehicle_id=car_name, model=model, pos=pos, rot=rot_quat, sensors=sensors)
+            cars_dict[car_name] = vehicle
+
             cars.append(vehicle)
 
         for static_cam in json_dict["cameras"]:
@@ -59,4 +63,10 @@ class SceneData:
             cam_tup = bb.cam_setup(static_camera=True, cam_pos=pos, cam_dir=cam_dir)
             cams.append(cam_tup)
         bb.build_environment()
+        for car in json_dict["cars"]:
+            vehicle = cars_dict[car["car_id"]]
+            if "ai" in car:
+                vehicle.ai_set_mode(car["ai"])
+                if "max_speed" in car:
+                    vehicle.ai_set_speed(car["max_speed"], "set")
         return SceneData(cars, cams)

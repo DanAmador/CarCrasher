@@ -6,10 +6,10 @@ import CustomScenarios as cs
 import keyboard
 
 if __name__ == "__main__":
-    framerate = 10
-    steps_per_sec = 24
+    framerate = 30
+    simulation_steps_per_frame = 3
 
-    bb = BeamBuilder(launch=False, steps_per_sec=steps_per_sec)
+    bb = BeamBuilder(launch=False, steps_per_sec=framerate)
 
     scenario = cs.JsonLoaderScenarioTest(bb)
     # bb.bmng.set_relative_camera(pos=(2,2,2))
@@ -20,9 +20,10 @@ if __name__ == "__main__":
     print("Press S key to record clip")
     while True:
         # time.sleep(3)
-        if scenario.should_record_predicate() or keyboard:
+        if scenario.should_record_predicate():
             print("Starting recording")
-            manager.capture_footage(steps_per_sec=steps_per_sec, framerate=framerate, duration=5
+            bb.bmng.set_steps_per_second(framerate * simulation_steps_per_frame)
+            manager.capture_footage(simulation_steps_per_frame=simulation_steps_per_frame, framerate=framerate, duration=5
                                     # total_captures=10
                                     )
             break

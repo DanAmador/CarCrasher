@@ -7,8 +7,7 @@ from beamngpy.sensors import Lidar, Camera
 from src.CustomScenarios.BaseScenarios import WithLidarView
 from src.CustomScenarios.SceneData import SceneData
 from src.config import AIMode, Levels
-
-
+from datetime import datetime
 class TestCrash(WithLidarView):
 
     def spawn_car_random_position(self, index) -> Vehicle:
@@ -39,22 +38,26 @@ class TestCrash(WithLidarView):
 
 
 class JsonLoaderScenarioTest(WithLidarView):
-
+    def __init__(self,bb):
+        super(JsonLoaderScenarioTest, self).__init__(bb)
+        self.start_time = datetime.now()
     def setup_scenario(self) -> SceneData:
         test_json = {
-            "level": "west_coast_usa",
+            "level": "ownmap",
             "cars": [
                 {
                     "car_id": "test_car",
-                    "position": [-351.39, 293.59, 105.25, -0.0416857, -0.0851289, 0.894061, -0.437801],
-                    "model": "etk800"
+                    "position":[4.40, -355.40, 1.01, 0.0182628, -0.000119876, 0.00656274, 0.999812],
+                    "model": "etk800",
+                    "ai": "span",
+                    "max_speed": 300,
+                    "first_person": True
                 }
             ],
             "cameras": [
-                {
-                    "position": [-346.04998779297, 284.54000854492, 109.94999694824, -0.030925733968616,
-                                 0.015348200686276, 0.44428959488869, 0.89521771669388]
-                },
+                # {
+                #     "position": [13.78, -53.91, 8.90, 0.15007, 0.020832, -0.135909, 0.979068]
+                # },
                 # {
                 #     "position": [-334.97, 290.03, 113.97, 0.126316, 0.142928, -0.735552, 0.650061]
                 # }
@@ -65,7 +68,8 @@ class JsonLoaderScenarioTest(WithLidarView):
         return sd
 
     def should_record_predicate(self) -> bool:
-        return True
+        time_passed = datetime.now() - self.start_time
+        return time_passed.seconds > 5
 
 
 class FallFromSkyScenario(WithLidarView):

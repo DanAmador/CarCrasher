@@ -43,8 +43,11 @@ class ThreadQueueWorker:
             thread.start()
 
         if timeout is not None:
-            for thread in self.threads:  # iterates over the threads
-                thread.join(timeout)  # waits until the thread has finished work
+            self.wait_until_done(timeout)
+
+    def wait_until_done(self, timeout):
+        for thread in self.threads:  # iterates over the threads
+            thread.join(timeout)  # waits until the thread has finished work
 
     def push_to_queue(self, to_add):
         self.work_q.put(to_add)
@@ -137,10 +140,10 @@ beam2CityLabelMap = {
     "BUILDINGS": "building",
     "POLE": "truck",
     "TRUCK": "truck",
-    "BACKGROUND": "person",
+    "BACKGROUND": "sky",
     "DASHED_LINE": "person",
     "COBBLESTONE": "person",
-    "NATURE": "person",
+    "NATURE": "vegetation",
     "OBSTACLES": "person",
     "DRIVING_INSTRUCTIONS": "person",
     "RESTRICTED_STREET": "person",
@@ -149,13 +152,13 @@ beam2CityLabelMap = {
     "SOLID_LINE": "person",
     "SPEED_BUMP": "person",
     "TRAFFIC_SIGNALS": "person",
-    "TRAFFIC_SIGNS": "person",
+    "TRAFFIC_SIGNS": "building",
     "TRUCK_TRAILERS": "person",
     "ZEBRA_CROSSING": "person",
     "GUARD_RAIL": "person",
-    "WATER": "person",
-    "ROCK": "person",
-    "SAND": "person",
-    "GRASS": "person",
-    "MUD": "person",
+    "WATER": "vegetation",
+    "ROCK": "vegetation",
+    "SAND": "vegetation",
+    "GRASS": "vegetation",
+    "MUD": "vegetation",
 }

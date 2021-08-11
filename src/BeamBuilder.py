@@ -55,7 +55,7 @@ class BeamBuilder:
                   instance=True, first_person=False, static_camera=False) -> Tuple[Camera, str]:
         if first_person:
             cam_pos = (0, 2, 2)
-        camera = Camera(cam_pos, cam_dir, 75, (1920, 1080), colour=colour, depth=depth,
+        camera = Camera(cam_pos, cam_dir, 75, (1024, 512), colour=colour, depth=depth,
                         annotation=annotation, instance=instance,
                         # depth_inverse=True
                         )
