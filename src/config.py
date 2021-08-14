@@ -15,6 +15,7 @@ class Levels:
     INDUSTRIAL = "industrial"
     EAST_COAST_USA = "east_coast_usa"
     SMALL_GRID = "smallgrid"
+    GRIDMAP = "gridmap"
 
 
 class Cars:

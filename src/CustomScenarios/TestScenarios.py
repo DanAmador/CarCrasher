@@ -8,6 +8,8 @@ from src.CustomScenarios.BaseScenarios import WithLidarView
 from src.CustomScenarios.SceneData import SceneData
 from src.config import AIMode, Levels
 from datetime import datetime
+
+
 class TestCrash(WithLidarView):
 
     def spawn_car_random_position(self, index) -> Vehicle:
@@ -38,16 +40,17 @@ class TestCrash(WithLidarView):
 
 
 class JsonLoaderScenarioTest(WithLidarView):
-    def __init__(self,bb):
+    def __init__(self, bb):
         super(JsonLoaderScenarioTest, self).__init__(bb)
         self.start_time = datetime.now()
+
     def setup_scenario(self) -> SceneData:
         test_json = {
-            "level": "ownmap",
+            "level": "smallgrid",
             "cars": [
                 {
                     "car_id": "test_car",
-                    "position":[4.40, -355.40, 1.01, 0.0182628, -0.000119876, 0.00656274, 0.999812],
+                    "position": [59.03, 86.14, 3.05, 0.0189849, -0.00283056, 0.147438, 0.988885],
                     "model": "etk800",
                     "ai": "span",
                     "max_speed": 300,
@@ -56,14 +59,16 @@ class JsonLoaderScenarioTest(WithLidarView):
             ],
             "cameras": [
                 # {
-                #     "position": [13.78, -53.91, 8.90, 0.15007, 0.020832, -0.135909, 0.979068]
+                #     "position": [49.60, 90.78, 6.16, 0.137144, -0.187947, 0.785636, 0.573275],
+                #     "fov": 50
                 # },
-                # {
-                #     "position": [-334.97, 290.03, 113.97, 0.126316, 0.142928, -0.735552, 0.650061]
-                # }
+                {
+                    "position": [60.19, 78.05, 7.42, 0.375808, 0.0165959, -0.040877, 0.925647],
+                    "fov": 80
+                }
             ]
         }
-        # position 1 euler = -2.391787, 3.153309,52.855541
+        # position 1 euler =  -33.249096, -30.807463,132.597778
         sd = SceneData.load_json_scene(test_json, self.bb)
         return sd
 

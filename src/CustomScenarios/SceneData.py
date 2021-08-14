@@ -11,7 +11,7 @@ from beamngpy.sensors import Camera, Lidar
 from src.BeamBuilder import BeamBuilder
 from src.Recording.Sequence import CarSequence, StaticCamSequence
 from src.config import UserSettings as us
-from src.util import quaternion_to_euler_vec
+from src.util import quaternion_to_direction_vector
 
 
 @dataclass
@@ -43,7 +43,8 @@ class SceneData:
         cams = []
         cars_dict = {}
         for car in json_dict["cars"]:
-            cam, _ = bb.cam_setup(first_person=True if "first_person" in car else False)
+            fov = 50 if "fov" not in car else car["fov"]
+            cam, _ = bb.cam_setup(first_person=True if "first_person" in car else False,fov=fov)
             car_name = car["car_id"]
             model = car["model"]
             pos, rot_quat = parse_bmng_pos(car["position"])
@@ -51,16 +52,17 @@ class SceneData:
             if "lidar" in car:
                 sensors["lidar"] = Lidar()
 
-            vehicle: Vehicle = bb.with_car(vehicle_id=car_name, model=model, pos=pos, rot=rot_quat, sensors=sensors)
+            vehicle: Vehicle = bb.with_car(vehicle_id=car_name, model=model, pos=pos, rot_quat=rot_quat, sensors=sensors)
             cars_dict[car_name] = vehicle
 
             cars.append(vehicle)
 
         for static_cam in json_dict["cameras"]:
             pos, rot_quat = parse_bmng_pos(static_cam["position"])
-            cam_dir = quaternion_to_euler_vec(*rot_quat)
+            cam_dir = quaternion_to_direction_vector(rot_quat, 1)
+            fov = static_cam["fov"]
             print(f"quat {rot_quat} --- angle: {cam_dir}")
-            cam_tup = bb.cam_setup(static_camera=True, cam_pos=pos, cam_dir=cam_dir)
+            cam_tup = bb.cam_setup(static_camera=True, cam_pos=pos, cam_dir=cam_dir, fov=fov)
             cams.append(cam_tup)
         bb.build_environment()
         for car in json_dict["cars"]:

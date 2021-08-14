@@ -7,26 +7,13 @@ from pathlib import Path
 import numpy as np
 
 
-def quaternion_to_euler_vec(x, y, z, w):
-    ysqr = y * y
+from beamngpy import compute_rotation_matrix
 
-    t0 = +2.0 * (w * x + y * z)
-    t1 = +1.0 - 2.0 * (x * x + ysqr)
-    X = np.degrees(np.arctan2(t0, t1))
 
-    t2 = +2.0 * (w * y - z * x)
-    t2 = np.where(t2 > +1.0, +1.0, t2)
-    # t2 = +1.0 if t2 > +1.0 else t2
-
-    t2 = np.where(t2 < -1.0, -1.0, t2)
-    # t2 = -1.0 if t2 < -1.0 else t2
-    Y = np.degrees(np.arcsin(t2))
-
-    t3 = +2.0 * (w * z + x * y)
-    t4 = +1.0 - 2.0 * (ysqr + z * z)
-    Z = np.degrees(np.arctan2(t3, t4))
-
-    return X, Y, Z
+#Axis x y z
+def quaternion_to_direction_vector(quaternion, axis = 0):
+    rot_matrix = compute_rotation_matrix(quaternion)
+    return rot_matrix[axis % 3, :]
 
 
 class ThreadQueueWorker:

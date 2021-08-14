@@ -52,10 +52,10 @@ class BeamBuilder:
         return bmng
 
     def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=True, annotation=True,
-                  instance=True, first_person=False, static_camera=False) -> Tuple[Camera, str]:
+                  instance=True, first_person=False, static_camera=False, fov=50) -> Tuple[Camera, str]:
         if first_person:
             cam_pos = (0, 2, 2)
-        camera = Camera(cam_pos, cam_dir, 75, (1024, 512), colour=colour, depth=depth,
+        camera = Camera(cam_pos, cam_dir, fov, (1024, 512), colour=colour, depth=depth,
                         annotation=annotation, instance=instance,
                         # depth_inverse=True
                         )
@@ -87,7 +87,7 @@ class BeamBuilder:
 
         if self.scenario is None:
             print("No scenario defined while building vehicle, building default")
-            self.with_scenario(Levels.WEST_COAST, name=self.scenario_name)
+            self.with_scenario(Levels.SMALL_GRID, name=self.scenario_name)
         else:
             if rot is not None:
                 rot_quat = None
