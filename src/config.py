@@ -19,6 +19,11 @@ class Levels:
 
 class Cars:
     ETK = "etk800"
+    VAN = "van"
+    ETKC = "etkc"
+    TRUCK = "semi"
+    OLD = "Serpent Beverly Sedan 1959"
+    DOPE = "2010 Dopel Imperium EcoTec"
 
 
 """
