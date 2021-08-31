@@ -1,0 +1,22 @@
+{
+  "CatMummy_LowPoly": {
+    "name": "CatMummy_LowPoly",
+    "mapTo": "CatMummy_LowPoly",
+    "class": "material",
+    "persistentId": "a0b46eb8-47dd-46e9-8f4d-8f8e84032057",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  }
+}

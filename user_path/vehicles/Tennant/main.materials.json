@@ -1,0 +1,22 @@
+{
+  "Tennant_Anthropomorph_LowPoly": {
+    "name": "Tennant_Anthropomorph_LowPoly",
+    "mapTo": "Anthropomorph_LowPoly",
+    "class": "material",
+    "persistentId": "ce2823ed-0220-4e6c-838d-a2607c432a46",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  }
+}

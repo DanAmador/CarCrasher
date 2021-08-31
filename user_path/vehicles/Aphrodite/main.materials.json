@@ -1,0 +1,22 @@
+{
+  "Aphrodite_LowPoly": {
+    "name": "Aphrodite_LowPoly",
+    "mapTo": "Aphrodite_LowPoly",
+    "class": "material",
+    "persistentId": "a86612b2-4cae-42c5-8f74-1ef50f69dbfc",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  }
+}

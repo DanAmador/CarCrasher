@@ -1,0 +1,22 @@
+{
+  "OrchidOut": {
+    "name": "OrchidOut",
+    "mapTo": "OrchidOut",
+    "class": "material",
+    "persistentId": "0d182e91-b947-46d8-bdd1-5c5f84c2e1d0",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  }
+}

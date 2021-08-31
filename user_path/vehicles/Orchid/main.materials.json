@@ -1,0 +1,23 @@
+{
+  "Orchid": {
+    "name": "Orchid",
+    "mapTo": "Orchid",
+    "class": "material",
+    "persistentId": "562e88e1-b51f-483f-b68c-7a34e904100a",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "order_simset": 0,
+    "translucentBlendOp": "None"
+  }
+}

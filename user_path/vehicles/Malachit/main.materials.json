@@ -1,0 +1,22 @@
+{
+  "Malachit_LowPoly": {
+    "name": "Malachit_LowPoly",
+    "mapTo": "Malachit_LowPoly",
+    "class": "material",
+    "persistentId": "9f691e28-8ec1-49ea-b882-656ec0413a9c",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  }
+}

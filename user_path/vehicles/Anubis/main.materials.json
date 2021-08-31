@@ -1,0 +1,23 @@
+{
+  "Anubis_LowPoly": {
+    "name": "Anubis_LowPoly",
+    "mapTo": "Anubis_LowPoly",
+    "class": "material",
+    "persistentId": "307f1965-923b-4cd7-8d51-fe83ea36a05b",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "order_simset": -1903599425,
+    "translucentBlendOp": "None"
+  }
+}

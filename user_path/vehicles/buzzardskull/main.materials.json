@@ -1,0 +1,50 @@
+{
+  "SkullAbomination_down_001": {
+    "name": "SkullAbomination_down_001",
+    "mapTo": "down.001",
+    "class": "material",
+    "persistentId": "45071992-f7e1-404b-9769-7408b96d89cf",
+    "Stages": [
+      {
+        "colorMap": "czaszka_wilka_down.001_Diffuse.jpg",
+        "doubleSided" : true
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp" : "None"
+  },
+  "SkullAbomination_myszol_mat": {
+    "name": "SkullAbomination_myszol_mat",
+    "mapTo": "myszol-mat",
+    "class": "material",
+    "persistentId": "ecf46d7e-87b5-4b47-b7ee-b0ca9bd2ded6",
+    "Stages": [
+      {
+        "colorMap": "myszol-mat_Diffuse.jpg",
+        "doubleSided" : true
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "SkullAbomination_up_001": {
+    "name": "SkullAbomination_up_001",
+    "mapTo": "up.001",
+    "class": "material",
+    "persistentId": "def82e15-6b89-478e-a648-ae60998124a3",
+    "Stages": [
+      {
+        "colorMap": "czaszka_wilka_up.001_Diffuse.jpg",
+        "doubleSided" : true
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  }
+}

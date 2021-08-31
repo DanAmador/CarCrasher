@@ -1,0 +1,447 @@
+{
+  "StreetViewCam_Cam1": {
+    "name": "StreetViewCam_Cam1",
+    "mapTo": "Cam1",
+    "class": "Material",
+    "persistentId": "d257b566-8a3e-45d0-91a2-a24a2cd377a3",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_0_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote": {
+    "name": "StreetViewCam_material_0_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "mapTo": "material_0_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "class": "Material",
+    "persistentId": "d926e1ff-2c19-4cf2-8ad6-a89d84142608",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "order_simset": 0,
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_19_2010_dopel_imperium_ecotec_efixturetype__eft_mirror": {
+    "name": "StreetViewCam_material_19_2010_dopel_imperium_ecotec_efixturetype__eft_mirror",
+    "mapTo": "material_19_2010_dopel_imperium_ecotec_efixturetype__eft_mirror",
+    "class": "Material",
+    "persistentId": "742131ab-58d7-4205-80ab-b42a1168654d",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_1_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote": {
+    "name": "StreetViewCam_material_1_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "mapTo": "material_1_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "class": "Material",
+    "persistentId": "5547d2ca-c637-4c5b-bf21-7bcc7b274a53",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "order_simset": 0,
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_20_2010_dopel_imperium_ecotec_efixturetype__eft_mirror": {
+    "name": "StreetViewCam_material_20_2010_dopel_imperium_ecotec_efixturetype__eft_mirror",
+    "mapTo": "material_20_2010_dopel_imperium_ecotec_efixturetype__eft_mirror",
+    "class": "Material",
+    "persistentId": "0ad89586-e100-4db1-a8e4-3ccfb33c5e11",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_21_2010_dopel_imperium_ecotec_efixturetype__eft_mirror": {
+    "name": "StreetViewCam_material_21_2010_dopel_imperium_ecotec_efixturetype__eft_mirror",
+    "mapTo": "material_21_2010_dopel_imperium_ecotec_efixturetype__eft_mirror",
+    "class": "Material",
+    "persistentId": "35102994-0ec5-4247-adce-7e4042119ce2",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_2_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote": {
+    "name": "StreetViewCam_material_2_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "mapTo": "material_2_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "class": "Material",
+    "persistentId": "793b90fd-cace-4b09-aef2-b95f5c725845",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "order_simset": 0,
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_38_2010_dopel_imperium_ecotec_efixturetype__eft_number": {
+    "name": "StreetViewCam_material_38_2010_dopel_imperium_ecotec_efixturetype__eft_number",
+    "mapTo": "material_38_2010_dopel_imperium_ecotec_efixturetype__eft_number",
+    "class": "Material",
+    "persistentId": "c26fbeca-77a1-4bad-b348-574fdc84f274",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_3_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote": {
+    "name": "StreetViewCam_material_3_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "mapTo": "material_3_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "class": "Material",
+    "persistentId": "4ecb5a9c-5944-4d7a-b9f0-024e08aa8df9",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "order_simset": 0,
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_4_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote": {
+    "name": "StreetViewCam_material_4_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "mapTo": "material_4_2010_dopel_imperium_ecotec_2010_dopel_imperium_ecote",
+    "class": "Material",
+    "persistentId": "c36d8028-437e-4bac-a184-74bfa70dc54f",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "order_simset": 0,
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_62_2010_dopel_imperium_ecotec_inl_block_mid_actor_c_0_": {
+    "name": "StreetViewCam_material_62_2010_dopel_imperium_ecotec_inl_block_mid_actor_c_0_",
+    "mapTo": "material_62_2010_dopel_imperium_ecotec_inl_block_mid_actor_c_0_",
+    "class": "Material",
+    "persistentId": "953856da-42ac-4d55-9f08-f4e676358bbf",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_63_2010_dopel_imperium_ecotec_inl_block_mid_actor_c_0_": {
+    "name": "StreetViewCam_material_63_2010_dopel_imperium_ecotec_inl_block_mid_actor_c_0_",
+    "mapTo": "material_63_2010_dopel_imperium_ecotec_inl_block_mid_actor_c_0_",
+    "class": "Material",
+    "persistentId": "924d8717-1450-4fba-ac4b-4dc939d0c363",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_64_2010_dopel_imperium_ecotec_inl_dohc_4_belt_c_0_v60_": {
+    "name": "StreetViewCam_material_64_2010_dopel_imperium_ecotec_inl_dohc_4_belt_c_0_v60_",
+    "mapTo": "material_64_2010_dopel_imperium_ecotec_inl_dohc_4_belt_c_0_v60_",
+    "class": "Material",
+    "persistentId": "86d7726e-8adf-4ba2-82d0-7e452184d72a",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_65_2010_dopel_imperium_ecotec_pulley_dohc_tensionpulle": {
+    "name": "StreetViewCam_material_65_2010_dopel_imperium_ecotec_pulley_dohc_tensionpulle",
+    "mapTo": "material_65_2010_dopel_imperium_ecotec_pulley_dohc_tensionpulle",
+    "class": "Material",
+    "persistentId": "851ba7bd-4666-4792-a386-e40b4adabbcf",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_66_2010_dopel_imperium_ecotec_inl_dohc_4_belt_c_0_v60_": {
+    "name": "StreetViewCam_material_66_2010_dopel_imperium_ecotec_inl_dohc_4_belt_c_0_v60_",
+    "mapTo": "material_66_2010_dopel_imperium_ecotec_inl_dohc_4_belt_c_0_v60_",
+    "class": "Material",
+    "persistentId": "d8f45cf7-2094-407e-9e6a-01fdb7a45a66",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_67_2010_dopel_imperium_ecotec_headerflange_mid_c_0_sta": {
+    "name": "StreetViewCam_material_67_2010_dopel_imperium_ecotec_headerflange_mid_c_0_sta",
+    "mapTo": "material_67_2010_dopel_imperium_ecotec_headerflange_mid_c_0_sta",
+    "class": "Material",
+    "persistentId": "157a7098-e33f-4390-99d1-fc6016abb2fd",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_68_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node": {
+    "name": "StreetViewCam_material_68_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node",
+    "mapTo": "material_68_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node",
+    "class": "Material",
+    "persistentId": "57aa2dca-2084-4c96-acb9-732e2b711964",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_69_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node": {
+    "name": "StreetViewCam_material_69_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node",
+    "mapTo": "material_69_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node",
+    "class": "Material",
+    "persistentId": "5cd6df17-32b3-4b80-9c80-e38223bb89bb",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_70_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node": {
+    "name": "StreetViewCam_material_70_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node",
+    "mapTo": "material_70_2010_dopel_imperium_ecotec_a_turbo_builder_c_0_node",
+    "class": "Material",
+    "persistentId": "e09c8490-2f73-495b-8eab-32e34c59140b",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_71_2010_dopel_imperium_ecotec_inl_dohc_4_5_frontcover_": {
+    "name": "StreetViewCam_material_71_2010_dopel_imperium_ecotec_inl_dohc_4_5_frontcover_",
+    "mapTo": "material_71_2010_dopel_imperium_ecotec_inl_dohc_4_5_frontcover_",
+    "class": "Material",
+    "persistentId": "34a21201-ed52-45d8-b34b-7b772875ed87",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_72_2010_dopel_imperium_ecotec_inl_dohc_4_rockercover_m": {
+    "name": "StreetViewCam_material_72_2010_dopel_imperium_ecotec_inl_dohc_4_rockercover_m",
+    "mapTo": "material_72_2010_dopel_imperium_ecotec_inl_dohc_4_rockercover_m",
+    "class": "Material",
+    "persistentId": "bf72aa0d-9d52-4ad2-8f15-4ad1838d7392",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  },
+  "StreetViewCam_material_73_2010_dopel_imperium_ecotec_a_ignition_system_coilpa": {
+    "name": "StreetViewCam_material_73_2010_dopel_imperium_ecotec_a_ignition_system_coilpa",
+    "mapTo": "material_73_2010_dopel_imperium_ecotec_a_ignition_system_coilpa",
+    "class": "Material",
+    "persistentId": "f5284fb6-7828-4d83-a06b-35ae835949c4",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  }
+}

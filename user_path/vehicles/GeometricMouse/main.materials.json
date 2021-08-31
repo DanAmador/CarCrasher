@@ -1,0 +1,23 @@
+{
+  "GeometricMouse": {
+    "name": "GeometricMouse",
+    "mapTo": "GeometricMouse",
+    "class": "material",
+    "persistentId": "ede0d1b2-f590-4373-92d4-59dd19b55baa",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "order_simset": 163416528,
+    "translucentBlendOp": "None"
+  }
+}

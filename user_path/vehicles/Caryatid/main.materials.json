@@ -1,0 +1,22 @@
+{
+  "Caryatid_LowPoly": {
+    "name": "Caryatid_LowPoly",
+    "mapTo": "Caryatid_LowPoly",
+    "class": "material",
+    "persistentId": "779884ff-ef61-4c30-bfd6-898736cc944f",
+    "Stages": [
+      {
+        "diffuseColor": [
+          0.800000012,
+          0.800000012,
+          0.800000012,
+          1
+        ]
+      },
+      {},
+      {},
+      {}
+    ],
+    "translucentBlendOp": "None"
+  }
+}
