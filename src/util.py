@@ -1,4 +1,3 @@
-import math
 import os
 import queue
 import threading
@@ -7,7 +6,6 @@ from pathlib import Path
 
 import numpy as np
 from beamngpy.beamngcommon import compute_rotation_matrix
-
 
 
 def quaternion_to_direction_vector(quaternion, axis=0):

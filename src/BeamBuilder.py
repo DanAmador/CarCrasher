@@ -87,7 +87,7 @@ class BeamBuilder:
 
         if self.scenario is None:
             print("No scenario defined while building vehicle, building default")
-            self.with_scenario(Levels.WEST_COAST, name=self.scenario_name)
+            self.with_scenario(Levels.SMALL_GRID, name=self.scenario_name)
         else:
             if rot is not None:
                 rot_quat = angle_to_quat(rot)
