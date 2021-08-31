@@ -1,3 +1,4 @@
+import math
 import os
 import queue
 import threading
@@ -5,28 +6,15 @@ from json import JSONEncoder
 from pathlib import Path
 
 import numpy as np
+from beamngpy.beamngcommon import compute_rotation_matrix
 
 
-def quaternion_to_euler_vec(x, y, z, w):
-    ysqr = y * y
 
-    t0 = +2.0 * (w * x + y * z)
-    t1 = +1.0 - 2.0 * (x * x + ysqr)
-    X = np.degrees(np.arctan2(t0, t1))
-
-    t2 = +2.0 * (w * y - z * x)
-    t2 = np.where(t2 > +1.0, +1.0, t2)
-    # t2 = +1.0 if t2 > +1.0 else t2
-
-    t2 = np.where(t2 < -1.0, -1.0, t2)
-    # t2 = -1.0 if t2 < -1.0 else t2
-    Y = np.degrees(np.arcsin(t2))
-
-    t3 = +2.0 * (w * z + x * y)
-    t4 = +1.0 - 2.0 * (ysqr + z * z)
-    Z = np.degrees(np.arctan2(t3, t4))
-
-    return X, Y, Z
+def quaternion_to_direction_vector(quaternion, axis=0):
+    rot_matrix = compute_rotation_matrix(quaternion)
+    vec = rot_matrix[axis % 3, :]
+    print(f"Quat: {quaternion} - Vector: {vec} - Axis: {axis}")
+    return vec
 
 
 class ThreadQueueWorker:

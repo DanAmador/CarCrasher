@@ -9,7 +9,7 @@ if __name__ == "__main__":
     framerate = 30
     simulation_steps_per_frame = 3
 
-    bb = BeamBuilder(launch=False, steps_per_sec=framerate)
+    bb = BeamBuilder(launch=True, steps_per_sec=framerate)
 
     scenario = cs.JsonLoaderScenarioTest(bb)
     # bb.bmng.set_relative_camera(pos=(2,2,2))

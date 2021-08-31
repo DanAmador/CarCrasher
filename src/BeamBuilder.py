@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Tuple
 
 import config
-from beamngpy import BeamNGpy, Scenario, Vehicle
+from beamngpy import BeamNGpy, Scenario, Vehicle, angle_to_quat
 from beamngpy.sensors import Camera, Lidar
 from config import UserSettings as cfg
 from config import Levels, Cars
@@ -52,10 +52,10 @@ class BeamBuilder:
         return bmng
 
     def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=True, annotation=True,
-                  instance=True, first_person=False, static_camera=False) -> Tuple[Camera, str]:
+                  instance=True, first_person=False, static_camera=False, fov=50) -> Tuple[Camera, str]:
         if first_person:
             cam_pos = (0, 2, 2)
-        camera = Camera(cam_pos, cam_dir, 75, (1024, 512), colour=colour, depth=depth,
+        camera = Camera(cam_pos, cam_dir, fov, (1024, 512), colour=colour, depth=depth,
                         annotation=annotation, instance=instance,
                         # depth_inverse=True
                         )
@@ -90,8 +90,8 @@ class BeamBuilder:
             self.with_scenario(Levels.WEST_COAST, name=self.scenario_name)
         else:
             if rot is not None:
-                rot_quat = None
-            self.scenario.add_vehicle(vehicle, pos=pos, rot=rot, rot_quat=rot_quat, cling=cling)
+                rot_quat = angle_to_quat(rot)
+            self.scenario.add_vehicle(vehicle, pos=pos, rot_quat=rot_quat, cling=cling)
 
         if len(self.vehicles) == 0:
             self.ego_vehicle = vehicle
