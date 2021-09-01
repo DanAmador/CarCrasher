@@ -1,18 +1,14 @@
 import json
 import math
 import pickle
-import time
 
+import cv2
 import numpy as np
 import open3d as o3d
-import torch
-from beamngpy import compute_rotation_matrix, angle_to_quat
 from open3d.cpu.pybind.visualization import rendering
 
 from src.config import UserSettings as us
-from src.util import create_paths
 from .common import get_folder_diff
-import cv2
 
 
 def build_intrinsic():
@@ -20,9 +16,8 @@ def build_intrinsic():
 
     (fx, fy) = intrinsic.get_focal_length()
     (cx, cy) = intrinsic.get_principal_point()
-    intrinsic.set_intrinsics(1920, 1080, fx, fy, cx, cy)
+    intrinsic.set_intrinsics(1024, 512, fx, fy, cx, cy)
     return intrinsic
-
 
 
 def build_pointcloud(path_dataset, seq_name):
