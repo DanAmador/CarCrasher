@@ -14,17 +14,9 @@ class FirstScenario(WithLidarView):
         test_json = {
             "level": Levels.INDUSTRIAL,
             "cars": [
-                # {
-                #    "car_id": "test_car",
-                #    "position": [4.40, -355.40, 1.01, 0.0182628, -0.000119876, 0.00656274, 0.999812],
-                #    "model": "etk800",
-                #    "ai": "span",
-                #    "max_speed": 300,
-                #    "first_person": True
-                # },
                 {
                     "car_id": "police_back_right",
-                    "position": [-383.54, -112.78, 42.34, 0.0142582, -0.0141653, 0.704651, 0.70927],
+                    "position": [-383.54, -112.78, 42.34, -0.00372912, -0.00315651, -0.646066, 0.763266],
                     "model": "etk800",
                     "ai": "span",
                     "max_speed": 40,
@@ -33,7 +25,7 @@ class FirstScenario(WithLidarView):
                 },
                 {
                     "car_id": "police_back_left",
-                    "position": [-383.56, -109.81, 42.34, 0.0142582, -0.0141653, 0.704651, 0.70927],
+                    "position": [-383.56, -109.81, 42.34, 0.00477008, 0.00451204, -0.687169, 0.726468],
                     "model": "etk800",
                     "ai": "span",
                     "max_speed": 40,
@@ -41,7 +33,7 @@ class FirstScenario(WithLidarView):
                 },
                 {
                     "car_id": "police_front_right",
-                    "position": [-308.98, -114.53, 41.96, -0.000485358, 0.000511862, 0.725644, 0.68807],
+                    "position": [-308.98, -114.53, 41.96, -0.00729508, -0.00694865, -0.68967, 0.724054],
                     "model": "etkc",
                     "ai": "span",
                     "max_speed": 40,
@@ -49,101 +41,117 @@ class FirstScenario(WithLidarView):
                 },
                 {
                     "car_id": "police_front_left",
-                    "position": [-308.78, -110.63, 41.75, 0.00781297, -0.00737831, 0.686554, 0.726999],
+                    "position": [-308.78, -110.63, 41.75, -0.0103203, -0.00980974, -0.688881, 0.724734],
                     "model": "etkc",
                     "ai": "span",
                     "max_speed": 40,
                     "first_person": True
                 },
                 {
-                    "car_id": "oldtimner",
-                    "position": [-303.60, -113.25, 41.61, -0.000504249, 0.000493366, 0.699351, 0.714778],
-                    "model": "Serpent Beverly Sedan 1959",
+                    "car_id": "oldie",
+                    "position": [-303.60, -113.25, 41.61, -0.0139384, -0.0135561, -0.697076, 0.716734],
+                    "model": "oldtimer",
                     "ai": "span",
                     "max_speed": 40,
                     "first_person": True
                 },
-                # {
-                #     "car_id": "orange_van_front_left",
-                #     "position": [-320.13, -110.92, 43.24, 0.0520454, -0.0464531, 0.664266, 0.744234],
-                #     "model": "van",
-                #     "ai": "span",
-                #     "max_speed": 40,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "orange_van_front_right",
-                #     "position": [-319.83, -114.49, 42.98, 0.0260095, -0.0259837, 0.706278, 0.706979],
-                #     "model": "van",
-                #     "ai": "span",
-                #     "max_speed": 40,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "white_van",
-                #     "position": [-330.48, -113.98, 42.77, 0.0259258, -0.0260442, 0.708237, 0.705017],
-                #     "model": "van",
-                #     "ai": "span",
-                #     "max_speed": 40,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "murica_truck",
-                #     "position": [-332.35, -109.85, 43.52, 0.088969, -0.0917006, 0.711833, 0.690629],
-                #     "model": "semi",
-                #     "ai": "span",
-                #     "max_speed": 40,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "van_truck_left",
-                #     "position": [-341.54, -109.74, 43.05, 0.00240331, -0.0024651, 0.716019, 0.698072],
-                #     "model": "van",
-                #     "ai": "span",
-                #     "max_speed": 40,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "van_truck_right",
-                #     "position": [-341.65, -113.45, 43.05, 0.0250068, -0.02549, 0.713384, 0.699863],
-                #     "model": "van",
-                #     "ai": "span",
-                #     "max_speed": 40,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "orange_truck_back_left",
-                #     "position": [-351.00, -109.75, 42.65, 0.0269897, -0.0279153, 0.718383, 0.694564],
-                #     "model": "van",
-                #     "ai": "span",
-                #     "max_speed": 40,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "orange_truck_back_right",
-                #     "position": [-350.75, -113.62, 42.57, 0.0295953, -0.0297306, 0.708095, 0.70487],
-                #     "model": "van",
-                #     "ai": "span",
-                #     "max_speed": 40,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "first_google_car",
-                #     "position": [-256.28, -106.18, 41.35, 0.0197539, -0.100565, 0.976082, 0.191731],
-                #     "model": "2010 Dopel Imperium EcoTec",
-                #     "ai": "disabled",
-                #     "max_speed": 0,
-                #     "first_person": True
-                # },
-                # {
-                #     "car_id": "second_google_car",
-                #     "position": [-213.34, -10.10, 40.60, 0.0345355, -0.0142065, 0.380164, 0.924165],
-                #     "model": "2010 Dopel Imperium EcoTec",
-                #     "ai": "disabled",
-                #     "max_speed": 0,
-                #     "first_person": True
-                #
-                # }
+                {
+                     "car_id": "orange_once_van_front_left",
+                     "position": [-320.13, -110.92, 43.24, 0.0211522, 0.0201477, -0.689412, 0.723781],
+                     "model": "van",
+                     "ai": "span",
+                     "max_speed": 40,
+                     "first_person": True
+                },
+                {
+                     "car_id": "orange_once_van_front_right",
+                     "position": [-319.83, -114.49, 42.98, 0.0101612, 0.00943942, -0.680541, 0.732579],
+                     "model": "van",
+                     "ai": "span",
+                     "max_speed": 40,
+                     "first_person": True
+                },
+                {
+                     "car_id": "flatbed_truck",
+                     "position": [-330.48, -113.98, 42.77, 0.000235508, 0.000215754, -0.675506, 0.737354],
+                     "model": "van",
+                     "ai": "span",
+                     "max_speed": 40,
+                     "first_person": True
+                },
+                {
+                    "car_id": "murica_truck",
+                    "position": [-332.35, -109.85, 43.52, 0.0245456, 0.0241223, -0.700515, 0.712807],
+                    "model": "semi",
+                    "ai": "span",
+                    "max_speed": 40,
+                    "first_person": True
+                },
+                {
+                     "car_id": "van_truck_left",
+                     "position": [-341.54, -109.74, 43.05, 0.00829754, 0.00834913, -0.709246, 0.704863],
+                     "model": "van",
+                     "ai": "span",
+                     "max_speed": 40,
+                     "first_person": True
+                },
+                {
+                     "car_id": "van_truck_right",
+                     "position": [-341.65, -113.45, 43.05, 0.0206972, 0.0194828, -0.685145, 0.727852],
+                     "model": "van",
+                     "ai": "span",
+                     "max_speed": 40,
+                     "first_person": True
+                },
+                {
+                     "car_id": "orange_once_truck_back_left",
+                     "position": [-351.00, -109.75, 42.65, 0.0118151, 0.0121893, -0.717941, 0.695897],
+                     "model": "van",
+                     "ai": "span",
+                     "max_speed": 40,
+                     "first_person": True
+                },
+                {
+                     "car_id": "orange_once_truck_back_right",
+                     "position": [-350.75, -113.62, 42.57, 0.0123366, 0.0116612, -0.686835, 0.726615],
+                     "model": "van",
+                     "ai": "span",
+                     "max_speed": 40,
+                     "first_person": True
+                },
+                {
+                     "car_id": "first_google_car",
+                     "position": [-256.28, -106.18, 41.35, -0.00237524, -0.000715758, -0.288525, 0.957469],
+                     "model": "dopel",
+                     "ai": "disabled",
+                     "max_speed": 0,
+                     "first_person": True
+                },
+                {
+                     "car_id": "second_google_car",
+                     "position": [-213.34, -10.10, 40.60, -0.00163257, -0.00421831, 0.932583, -0.360927],
+                     "model": "dopel",
+                     "ai": "disabled",
+                     "max_speed": 0,
+                     "first_person": True
+                },
+                {
+                    "car_id": "maybachtest",
+                    "position": [-290.78, -110.63, 41.75, -0.0103203, -0.00980974, -0.688881, 0.724734],
+                    "model": "maybach",
+                    "ai": "span",
+                    "max_speed": 40,
+                    "first_person": True
+                },
+                #Props
+                {
+                    "car_id": "proptest",
+                    "position": [-367.88, -110.81, 42.51, 0.00665086, -0.00706784, 0.728229, 0.685265],
+                    "model": "Aphrodite",
+                    "ai": "disabled",
+                    "max_speed": 0,
+                    "first_person": True
+                }
             ],
             "cameras": [
                 # {

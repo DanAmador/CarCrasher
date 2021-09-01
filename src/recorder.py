@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     bb = BeamBuilder(launch=True, steps_per_sec=framerate)
 
-    scenario = cs.JsonLoaderScenarioTest(bb)
+    scenario = cs.FirstScenario(bb)
 
     manager = SequenceManager(bb, scenario)
     print("Press S key to record clip")
