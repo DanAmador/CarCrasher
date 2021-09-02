@@ -54,7 +54,7 @@ class JsonLoaderScenarioTest(WithLidarView):
                     "ai": AIMode.DISABLED,
                     "max_speed": 300,
                     "first_person": True,
-                "cam": True
+                    "cam": True
                 }
             ],
             "cameras": [
@@ -83,9 +83,6 @@ class JsonLoaderScenarioTest(WithLidarView):
 
 
 class FallFromSkyScenario(WithLidarView):
-
-    def on_recording_step(self):
-        pass
 
     def setup_scenario(self):
         import random

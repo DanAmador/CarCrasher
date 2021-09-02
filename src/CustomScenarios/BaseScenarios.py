@@ -18,8 +18,6 @@ class AbstractRecordingScenario(ABC):
     def should_record_predicate(self) -> bool:
         return False
 
-    def on_recording_step(self):
-        return
 
     @abstractmethod
     def setup_scenario(self) -> SceneData:

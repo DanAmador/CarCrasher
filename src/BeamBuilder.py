@@ -17,7 +17,6 @@ class BeamBuilder:
         self.vehicles = {}
         self.ego_vehicle = None
         self.scenario_name = scenario_name
-        self.meshes = []
         self.steps_per_second = steps_per_sec
 
     def build_environment(self, hud=False, ai_mode=None):
@@ -32,7 +31,6 @@ class BeamBuilder:
         self.bmng.set_steps_per_second(self.steps_per_second)
 
         self.scenario.make(self.bmng)
-        # self.meshes = self.scenario.find_procedural_meshes()
 
         self.bmng.set_deterministic()
         self.bmng.load_scenario(self.scenario)

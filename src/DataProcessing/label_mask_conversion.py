@@ -3,7 +3,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-import src.DatasetMapper as dsm
+import src.DataProcessing as dsm
 from src.DataProcessing.common import get_folder_diff, get_all_files_in_path
 from src.util import create_paths, beam2CityLabelMap, ThreadQueueWorker
 

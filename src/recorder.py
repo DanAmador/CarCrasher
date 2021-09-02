@@ -1,9 +1,8 @@
-import time
+import keyboard
 
+import CustomScenarios as cs
 from BeamBuilder import BeamBuilder
 from Recording.Manager import SequenceManager
-import CustomScenarios as cs
-import keyboard
 
 if __name__ == "__main__":
     framerate = 30

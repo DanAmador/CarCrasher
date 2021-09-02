@@ -12,7 +12,6 @@ class SequenceManager:
 
         self.bb: BeamBuilder = bb
         self.scenario: AbstractRecordingScenario = scenario
-        self.threads = []
         self.worker_q = ThreadQueueWorker(self.save_worker)
         self.worker_q.start_execution()
 
@@ -60,7 +59,6 @@ class SequenceManager:
                 # self.worker_q.wait_until_done(2)
                 self.save_frames()
             self.bb.bmng.step(simulation_steps_per_frame)
-            self.scenario.on_recording_step()
             self.bb.bmng.pause()
 
         self.bb.bmng.resume()

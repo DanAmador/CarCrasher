@@ -1,7 +1,7 @@
 from __future__ import annotations
-from dataclasses import dataclass
 
-from typing import List, Tuple, Dict, Set
+from dataclasses import dataclass
+from typing import List, Tuple, Dict
 
 
 # Adapted from https://github.com/mcordts/cityscapesScripts/blob/aeb7b82531f86185ce287705be28f452ba3ddbb8/cityscapesscripts/helpers/labels.py#L62
@@ -36,13 +36,6 @@ class Dataset:
 
     def get_label(self, name: str):
         return self.labels.get(name, None)
-
-    def get_all_group_labels(self, group_name: str):
-        group = []
-        for label in self.labels.values():
-            if label.category == group_name:
-                group.append(label)
-        return group
 
     def create_mappings_from_dict(self, mapping_dict: Dict[str, List[str]], other_dataset: Dataset, grayscale=False):
         for key, label in mapping_dict.items():
