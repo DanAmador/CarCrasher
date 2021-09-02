@@ -1,0 +1,396 @@
+{
+  "level": "industrial",
+  "cars": [
+    {
+      "car_id": "police_back_right",
+      "position": [
+        -375.09,
+        -112.07,
+        42.12,
+        0.00477806,
+        0.0046566,
+        -0.697931,
+        0.716134
+      ],
+      "model": "etk800",
+      "max_speed": 40,
+      "first_person": true,
+      "cam": true,
+      "lane": "right"
+    },
+    {
+      "car_id": "police_back_left",
+      "position": [
+        -374.64,
+        -108.66,
+        41.98,
+        0.0454517,
+        0.0463628,
+        -0.712582,
+        0.698579
+      ],
+      "model": "etk800",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "left"
+    },
+    {
+      "car_id": "police_front_right",
+      "position": [
+        -317.89,
+        -113.69,
+        41.83,
+        0.0109552,
+        0.0115941,
+        -0.726758,
+        0.686708
+      ],
+      "model": "etkc",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "right"
+    },
+    {
+      "car_id": "police_front_left",
+      "position": [
+        -316.83,
+        -110.56,
+        41.86,
+        0.0182314,
+        0.0175685,
+        -0.693672,
+        0.719846
+      ],
+      "model": "etkc",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "left"
+    }
+  ],
+  "cameras": [
+    {
+      "position": [
+        13.78,
+        -53.91,
+        8.90,
+        0.15007,
+        0.020832,
+        -0.135909,
+        0.979068
+      ]
+    },
+    {
+      "position": [
+        -334.97,
+        290.03,
+        113.97,
+        0.126316,
+        0.142928,
+        -0.735552,
+        0.650061
+      ]
+    },
+    {
+      "position": [
+        -238.73,
+        -89.77,
+        66.70,
+        -0.12936,
+        -0.24496,
+        0.849666,
+        -0.448697
+      ]
+    },
+    {
+      "position": [
+        -241.75,
+        -120.30,
+        55.37,
+        0.142871,
+        0.0873563,
+        -0.514284,
+        0.841112
+      ]
+    },
+    {
+      "position": [
+        -258.25,
+        -105.68,
+        42.58,
+        0.0113626,
+        -0.0385524,
+        0.958431,
+        0.282479
+      ]
+    },
+    {
+      "position": [
+        -224.80,
+        44.95,
+        72.62,
+        0.046881,
+        -0.210012,
+        0.953115,
+        0.212764
+      ]
+    },
+    {
+      "position": [
+        -334.89,
+        274.13,
+        55.78,
+        0.148702,
+        -0.0178154,
+        0.117614,
+        0.981701
+      ]
+    },
+    {
+      "position": [
+        -219.52,
+        -8.03,
+        40.56,
+        -0.0220088,
+        0.015967,
+        0.587006,
+        0.809126
+      ]
+    }
+  ],
+  "for_later": [
+     {
+      "car_id": "oldie",
+      "position": [
+        -310.94,
+        -112.36,
+        41.80,
+        0.0112533,
+        0.0113051,
+        -0.708639,
+        0.705391
+      ],
+      "model": "oldtimer",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "central"
+    },
+    {
+      "car_id": "orange_once_van_front_left",
+      "position": [
+        -328.67,
+        -110.05,
+        42.63,
+        0.0509541,
+        0.0567378,
+        -0.741844,
+        0.666222
+      ],
+      "model": "van",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "left"
+    },
+    {
+      "car_id": "orange_once_van_front_right",
+      "position": [
+        -328.63,
+        -113.89,
+        42.43,
+        0.00854435,
+        0.00811994,
+        -0.688827,
+        0.72483
+      ],
+      "model": "van",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "right"
+    },
+    {
+      "car_id": "flatbed_truck",
+      "position": [
+        -339.48,
+        -113.98,
+        42.77,
+        0.000235508,
+        0.000215754,
+        -0.675506,
+        0.737354
+      ],
+      "model": "semi",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "right"
+    },
+    {
+      "car_id": "murica_truck",
+      "position": [
+        -339.14,
+        -111.33,
+        43.03,
+        0.0321781,
+        0.0344848,
+        -0.730323,
+        0.681472
+      ],
+      "model": "semi",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "left"
+    },
+    {
+      "car_id": "van_truck_left",
+      "position": [
+        -350.42,
+        -109.31,
+        43.14,
+        0.0519268,
+        0.0544232,
+        -0.721456,
+        0.688362
+      ],
+      "model": "semi",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "left"
+    },
+    {
+      "car_id": "van_truck_right",
+      "position": [
+        -350.59,
+        -113.01,
+        43.14,
+        0.0421167,
+        0.043684,
+        -0.718577,
+        0.692795
+      ],
+      "model": "semi",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "right"
+    },
+    {
+      "car_id": "orange_once_truck_back_left",
+      "position": [
+        -363.01,
+        -108.99,
+        42.57,
+        0.0603574,
+        0.0651319,
+        -0.730582,
+        0.677027
+      ],
+      "model": "van",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true
+    },
+    {
+      "car_id": "orange_once_truck_back_right",
+      "position": [
+        -363.59,
+        -112.77,
+        42.37,
+        0.0075854,
+        0.00773736,
+        -0.714042,
+        0.700019
+      ],
+      "model": "van",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "right"
+    },
+    {
+      "car_id": "first_google_car",
+      "position": [
+        -256.28,
+        -106.18,
+        41.35,
+        -0.00237524,
+        -0.000715758,
+        -0.288525,
+        0.957469
+      ],
+      "model": "dopel",
+      "ai": "disabled",
+      "max_speed": 0,
+      "first_person": true
+    },
+    {
+      "car_id": "second_google_car",
+      "position": [
+        -213.34,
+        -10.10,
+        40.60,
+        -0.00163257,
+        -0.00421831,
+        0.932583,
+        -0.360927
+      ],
+      "model": "dopel",
+      "ai": "disabled",
+      "max_speed": 0,
+      "first_person": true
+    },
+    {
+      "car_id": "limousine_left",
+      "position": [
+        -323.24,
+        -110.57,
+        42.01,
+        0.0131147,
+        0.0123771,
+        -0.686249,
+        0.727143
+      ],
+      "model": "maybach",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "left"
+    },
+    {
+      "car_id": "limousine_right",
+      "position": [
+        -323.47,
+        -113.50,
+        42.01,
+        0.0312032,
+        0.0310876,
+        -0.705109,
+        0.707729
+      ],
+      "model": "maybach",
+      "ai": "span",
+      "max_speed": 40,
+      "first_person": true,
+      "lane": "right"
+    },
+    {
+      "car_id": "proptest",
+      "position": [
+        -367.88,
+        -110.81,
+        42.51,
+        0.00665086,
+        -0.00706784,
+        0.728229,
+        0.685265
+      ],
+      "model": "Aphrodite",
+      "ai": "disabled",
+      "max_speed": 0,
+      "first_person": true
+    }
+  ]
+}

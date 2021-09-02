@@ -7,6 +7,7 @@ class UserSettings:
     beam_tech_path = project_root / "BeamNG.tech"
     user_path = project_root / "user_path"
     data_path = project_root / "data" / "beamng"
+    json_path = project_root / "src" / "jsons"
 
 
 class Levels:

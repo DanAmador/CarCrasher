@@ -95,7 +95,7 @@ class FallFromSkyScenario(WithLidarView):
         # self.make_camera_static(cam, vehicle, (0, -2, 10))
 
         self.bb.build_environment()
-        return SceneData([vehicle], [])
+        return SceneData({vehicle.vid: vehicle}, [])
 
 
 class StaticCameraTest(WithLidarView):
@@ -114,7 +114,7 @@ class StaticCameraTest(WithLidarView):
         self.bb.build_environment()
 
         vehicle.ai_set_speed(200, "set")
-        return SceneData([vehicle], [cam_tuple])
+        return SceneData({vehicle.vid: vehicle}, [cam_tuple])
 
 
 class BasicCarChase(WithLidarView):
@@ -156,4 +156,4 @@ class BasicCarChase(WithLidarView):
             else:
                 print(f"Basic Car {i}  has no target")
 
-        return SceneData(cars, [])
+        return SceneData({car.vid: car for car in cars}, [])

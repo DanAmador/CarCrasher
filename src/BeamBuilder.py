@@ -47,6 +47,7 @@ class BeamBuilder:
     def beam_factory(launch=False) -> BeamNGpy:
         bmng = BeamNGpy('localhost', 64256, home=cfg.beam_tech_path, user=cfg.user_path)
         bmng.open(launch=launch)
+        bmng.setup_workspace()
         return bmng
 
     def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=True, annotation=True,
