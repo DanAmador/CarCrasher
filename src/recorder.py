@@ -8,7 +8,7 @@ if __name__ == "__main__":
     framerate = 30
     simulation_steps_per_frame = 3
 
-    bb = BeamBuilder(launch=True, steps_per_sec=framerate)
+    bb = BeamBuilder(launch=True)
 
     scenario = cs.FirstScenario(bb)
 

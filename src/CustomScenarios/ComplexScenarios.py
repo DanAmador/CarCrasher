@@ -31,12 +31,12 @@ class FirstScenario(WithLidarView):
         # position 1 euler = -2.391787, 3.153309,52.855541
         #
         #
-        # for car in jay["cars"]:
-        #     if "lane" in car:
-        #         print("Ayyy lmao")
-        #         lane = lanes.get(car["lane"], None)
-        #         print(lane)
-        #         vehicle = sd.vehicles[car["car_id"]]
-        #         vehicle.ai_set_script(lane, False)
+        for car in jay["cars"]:
+            if "lane" in car:
+                print("Ayyy lmao")
+                lane = lanes.get(car["lane"], None)
+                print(lane)
+                vehicle = sd.vehicles[car["car_id"]]
+                vehicle.ai_set_script(lane, False)
 
         return sd

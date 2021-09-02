@@ -11,13 +11,12 @@ from config import Levels, Cars
 
 class BeamBuilder:
 
-    def __init__(self, launch=False, scenario_name="Beam Builder", steps_per_sec=60):
+    def __init__(self, launch=False, scenario_name="Beam Builder"):
         self.bmng = self.beam_factory(launch)
         self.scenario = None
         self.vehicles = {}
         self.ego_vehicle = None
         self.scenario_name = scenario_name
-        self.steps_per_second = steps_per_sec
 
     def build_environment(self, hud=False, ai_mode=None):
 
@@ -27,8 +26,6 @@ class BeamBuilder:
         if self.ego_vehicle is None:
             cam, _ = self.cam_setup()
             self.with_car(sensors={"camera": cam, "lidar": Lidar()})
-
-        self.bmng.set_steps_per_second(self.steps_per_second)
 
         self.scenario.make(self.bmng)
 
@@ -47,7 +44,6 @@ class BeamBuilder:
     def beam_factory(launch=False) -> BeamNGpy:
         bmng = BeamNGpy('localhost', 64256, home=cfg.beam_tech_path, user=cfg.user_path)
         bmng.open(launch=launch)
-        bmng.setup_workspace()
         return bmng
 
     def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=True, annotation=True,
