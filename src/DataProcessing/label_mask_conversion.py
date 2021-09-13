@@ -12,26 +12,35 @@ class SegmentationMasksConversion:
     def __init__(self, use_grayscale):
         self.grayscale = use_grayscale
         self.queue_worker = ThreadQueueWorker(self.convert_worker)
-
         self.bmng_dataset = dsm.beamng_dataset
 
         self.bmng_dataset.create_mappings_from_dict(beam2CityLabelMap, dsm.cityscapes, self.grayscale)
-        diff = get_folder_diff("raw_annotations", "seg_maps")
 
-        self.images_to_queue(diff)
-        self.queue_worker.start_execution(5)
+        # self.queue_worker.start_execution(10)
         # create_folders(proc_data_path, with_seq=False)
 
-        print("Done converting")
-
-    def images_to_queue(self, path_list):
-        for unprocessed in path_list:
+    def get_all_images(self):
+        diff = get_folder_diff("raw_annotations", "seg_maps")
+        for unprocessed in diff:
             save_path = Path(str(unprocessed.absolute()).replace("raw_annotations", "seg_maps"))
             create_paths([save_path])
 
             pics = get_all_files_in_path(unprocessed)
             for pic in pics:
-                self.queue_worker.push_to_queue((pic, save_path))
+                yield pic, save_path
+
+    def images_to_queue(self):
+        for pic, save_path in self.get_all_images():
+            self.queue_worker.push_to_queue((pic, save_path))
+
+    def process_all_single_thread(self):
+        total = 0
+        for pic, save_path in self.get_all_images():
+            total += 1
+            if total % 20 == 0:
+                print(save_path)
+            self.convert(pic, save_path)
+        print("Done converting")
 
     def convert_worker(self):
         while True:

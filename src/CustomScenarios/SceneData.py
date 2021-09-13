@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Tuple, Dict, Any
 
-from beamngpy import Vehicle
+from beamngpy import Vehicle, angle_to_quat
 from beamngpy.sensors import Camera, Lidar
 
 from src.BeamBuilder import BeamBuilder
@@ -44,7 +44,7 @@ class SceneData:
         cams = []
         cars_dict = {}
 
-        for car in json_dict["cars"]:
+        for car in json_dict.get("cars", []):
             sensors = {}
             if car.get("cam", False):
                 fov = car.get("fov", 50)
@@ -57,15 +57,15 @@ class SceneData:
             car_name = car["car_id"]
             model = car["model"]
             pos, rot_quat = parse_bmng_pos(car["position"])
-
+            cling = car.get("cling", True)
             vehicle: Vehicle = bb.with_car(vehicle_id=car_name, model=model, pos=pos, rot_quat=rot_quat,
-                                           sensors=sensors)
+                                           sensors=sensors, cling=cling)
             cars_dict[car_name] = vehicle
             if "camera" in sensors:
                 setattr(vehicle, 'should_record', True)
             else:
                 setattr(vehicle, 'should_record', False)
-        for static_cam in json_dict["cameras"]:
+        for static_cam in json_dict.get("cameras", []):
             pos, rot_quat = parse_bmng_pos(static_cam["position"])
             cam_dir = quaternion_to_direction_vector(rot_quat, 1)
             fov = static_cam.get("fov", 40)
@@ -73,7 +73,7 @@ class SceneData:
             cam_tup = bb.cam_setup(static_camera=True, cam_pos=pos, cam_dir=cam_dir, fov=fov)
             cams.append(cam_tup)
         bb.build_environment()
-        for car in json_dict["cars"]:
+        for car in json_dict.get("cars", []):
             vehicle = cars_dict[car["car_id"]]
             if "ai" in car:
                 vehicle.ai_set_mode(car["ai"])

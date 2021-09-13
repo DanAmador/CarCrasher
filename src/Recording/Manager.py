@@ -31,7 +31,6 @@ class SequenceManager:
 
     def capture_footage(self, simulation_steps_per_frame=60, framerate: int = 24, total_captures: int = 240,
                         duration=None):
-        current_capture = 0
 
         print(
             f"Recording {len(self.scenario.sequences)} sequences at  {framerate}fps every  steps at {simulation_steps_per_frame} physics steps per frame ")
@@ -39,6 +38,7 @@ class SequenceManager:
             total_captures = framerate * duration
         batch_idx = min(total_captures / 50, 3)
         frame_buffer = 0
+        current_capture = 0
 
         while current_capture <= total_captures:
 

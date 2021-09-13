@@ -3,5 +3,8 @@ from DataProcessing.label_mask_conversion import SegmentationMasksConversion
 
 if __name__ == "__main__":
     dc = SegmentationMasksConversion(use_grayscale=True)
+    # dc.process_all_single_thread()
+    dc.images_to_queue()
+    dc.queue_worker.start_execution(10)
     # unproject_dataset(multithreaded=False)
 

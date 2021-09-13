@@ -7,6 +7,7 @@ from beamngpy.sensors import Lidar
 from src.CustomScenarios.BaseScenarios import WithLidarView
 from src.CustomScenarios.SceneData import SceneData
 from src.config import AIMode, Levels
+import numpy as np
 
 
 class TestCrash(WithLidarView):
@@ -157,3 +158,65 @@ class BasicCarChase(WithLidarView):
                 print(f"Basic Car {i}  has no target")
 
         return SceneData({car.vid: car for car in cars}, [])
+
+
+class PaperCompare(WithLidarView):
+    def __init__(self, bb):
+        self.compare_list = []
+        self.is_recording = False
+        super().__init__(bb)
+
+    @staticmethod
+    def get_json(first_person):
+        return {
+            "level": Levels.KONRAD,
+            "cars": [
+                {
+                    "car_id": "crasher",
+                    "position": [8.83, -574.10, 0.59, 0.00107191, -0.0308801, 0.998921, 0.0346746],
+                    "model": "etk800",
+                    "ai": AIMode.CHASE,
+                    "max_speed": 300,
+                    "first_person": first_person,
+                    "cam": True
+                },
+                {
+                    "car_id": "target",
+                    "position": [1.30, -326.09, 0.71, 0.0187382, 0.0283661, -0.833902, 0.550864],
+                    "model": "etk800",
+                    "first_person": first_person,
+                    "cam": True
+                },
+            ],
+
+            "cameras": [
+                {
+                    "position": [17.06, -324.29, 5.01, 0.0920134, -0.0415484, 0.409434, 0.906736],
+                    "fov": 80
+                }
+            ]
+        }
+
+    def should_record_predicate(self) -> bool:
+        if len(self.compare_list) > 0 and not self.is_recording:
+            sensor1 = self.compare_list[0].poll_sensors()
+            sensor2 = self.compare_list[1].poll_sensors()
+            if "state" in sensor1 and "state" in sensor2:
+                state1 = sensor1["state"]["state"]
+                state2 = sensor2["state"]["state"]
+                if "pos" in state1 and "pos" in state2:
+                    pos1 = np.array(state1["pos"])
+                    pos2 = np.array(state2["pos"])
+                    dist = np.linalg.norm(pos1 - pos2)
+                    if dist < 150:
+                        self.is_recording = True
+                        return True
+        return self.is_recording
+
+    def setup_scenario(self) -> SceneData:
+        sd = SceneData.load_json_scene(self.get_json(True), self.bb)
+        crasher = sd.vehicles["crasher"]
+        target = sd.vehicles["target"]
+        crasher.ai_set_target(target.vid)
+        self.compare_list = [crasher, target]
+        return sd
