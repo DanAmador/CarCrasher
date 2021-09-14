@@ -5,8 +5,8 @@ from BeamBuilder import BeamBuilder
 from Recording.Manager import SequenceManager
 
 if __name__ == "__main__":
-    framerate = 30
-    simulation_steps_per_frame = 1
+    framerate = 60
+    simulation_steps_per_frame = 3
 
     bb = BeamBuilder(launch=True)
 
@@ -19,7 +19,7 @@ if __name__ == "__main__":
         if scenario.should_record_predicate() or keyboard.is_pressed("z"):
             print("Starting recording")
             bb.bmng.set_steps_per_second(framerate * simulation_steps_per_frame)
-            manager.capture_footage(simulation_steps_per_frame=simulation_steps_per_frame, framerate=framerate, duration=10
+            manager.capture_footage(simulation_steps_per_frame=simulation_steps_per_frame, framerate=framerate, duration=7
                                     # total_captures=10
                                     )
             break

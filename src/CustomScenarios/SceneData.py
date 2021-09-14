@@ -48,7 +48,7 @@ class SceneData:
             sensors = {}
             if car.get("cam", False):
                 fov = car.get("fov", 50)
-                cam, _ = bb.cam_setup(first_person=car.get("first_Person", True), fov=fov)
+                cam, _ = bb.cam_setup(first_person=car.get("first_person", True), fov=fov)
                 sensors['camera'] = cam
 
             if car.get("lidar", False):
