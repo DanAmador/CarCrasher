@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     bb = BeamBuilder(launch=True)
 
-    scenario = cs.PaperCompare(bb)
+    scenario = cs.JsonLoaderScenarioTest(bb)
 
     manager = SequenceManager(bb, scenario)
     print("Press R key to record clip")
