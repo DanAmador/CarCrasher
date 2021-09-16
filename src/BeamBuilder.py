@@ -67,7 +67,7 @@ class BeamBuilder:
         return self
 
     def with_car(self, model: Cars = Cars.ETK, vehicle_id="car", pos=(-717, 101, 118), rot=None,
-                 rot_quat=(0, 0, 0.3826834, 0.9238795), sensors=None, cling=True):
+                 rot_quat=(0, 0, 0.3826834, 0.9238795), sensors=None, cling=True, confg = None):
         if sensors is None:
             sensors = {}
         vehicle = Vehicle(vehicle_id, model=model, licence='AntonGinzburg')
@@ -90,7 +90,11 @@ class BeamBuilder:
 
         if len(self.vehicles) == 0:
             self.ego_vehicle = vehicle
-
+        #if confg is not None and vehicle is not None:
+        #    print("Before call")
+        #    print(self.bmng)
+        #    self.bmng.set_part_config(vehicle, confg)
+        #    print("After call")
         self.vehicles[vehicle_id] = vehicle
         return vehicle
 
