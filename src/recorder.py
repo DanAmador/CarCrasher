@@ -5,23 +5,20 @@ from BeamBuilder import BeamBuilder
 from Recording.Manager import SequenceManager
 
 if __name__ == "__main__":
-    framerate = 60
-    simulation_steps_per_frame = 3
 
     bb = BeamBuilder(launch=True)
 
     scenario = cs.FirstScenario(bb)
 
     manager = SequenceManager(bb, scenario)
-    print("Press R key to record clip")
+    bb.bmng.set_steps_per_second(60)
+
+    print("Press the Z key to record clip")
     while True:
         # time.sleep(3)
         if scenario.should_record_predicate() or keyboard.is_pressed("z"):
             print("Starting recording")
-            bb.bmng.set_steps_per_second(framerate * simulation_steps_per_frame)
-            manager.capture_footage(simulation_steps_per_frame=simulation_steps_per_frame, framerate=framerate, duration=7
-                                    # total_captures=10
-                                    )
+            manager.capture_footage()
             break
 
     print("Recording Finished")

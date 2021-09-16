@@ -1,10 +1,9 @@
+import json
 from datetime import datetime
 
 from src.CustomScenarios.BaseScenarios import WithLidarView
 from src.CustomScenarios.SceneData import SceneData
-from src.config import Levels
 from src.config import UserSettings as us
-import json
 
 
 class FirstScenario(WithLidarView):
@@ -47,7 +46,6 @@ class FirstScenario(WithLidarView):
         for car in jay["cars"]:
             if "lane" in car:
                 lane = lanes.get(car["lane"], None)
-                print(lane)
                 vehicle = sd.vehicles[car["car_id"]]
                 vehicle.ai_set_script(lane)
 

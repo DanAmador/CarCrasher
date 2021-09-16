@@ -13,11 +13,12 @@ class AbstractRecordingScenario(ABC):
     def __init__(self, bb: BeamBuilder):
         self.bb: BeamBuilder = bb
         self.sequences = []
-        self.initialize_scenario()
+        self.framerate = 60
+        self.duration = 5
+        self.simulation_steps_per_frame = 3
 
     def should_record_predicate(self) -> bool:
         return False
-
 
     @abstractmethod
     def setup_scenario(self) -> SceneData:
