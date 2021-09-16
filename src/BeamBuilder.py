@@ -49,7 +49,8 @@ class BeamBuilder:
     def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=True, annotation=True,
                   instance=True, first_person=False, static_camera=False, fov=50) -> Tuple[Camera, str]:
         if first_person:
-            cam_pos = (0, 2, 2)
+            cam_pos = (0, 2, 1)
+            cam_dir = (0, 1, 0)
         camera = Camera(cam_pos, cam_dir, fov, (1024, 512), colour=colour, depth=depth,
                         annotation=annotation, instance=instance,
                         # depth_inverse=True

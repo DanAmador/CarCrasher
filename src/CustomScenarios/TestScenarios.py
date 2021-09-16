@@ -184,14 +184,22 @@ class PaperCompare(WithLidarView):
                     "car_id": "target",
                     "position": [1.30, -326.09, 0.71, 0.0187382, 0.0283661, -0.833902, 0.550864],
                     "model": "etk800",
-                    "first_person": first_person,
+                    "first_person": False,
                     "cam": True
                 },
             ],
 
             "cameras": [
                 {
-                    "position": [17.06, -324.29, 5.01, 0.0920134, -0.0415484, 0.409434, 0.906736],
+                    "position": [-11.55, -298.23, 3.32, 0.0181259, -0.130022, 0.981851, 0.136876],
+                    "fov": 15
+                },
+                {
+                    "position": [-11.55, -298.23, 3.32, 0.0181259, -0.130022, 0.981851, 0.136876],
+                    "fov": 30
+                },
+                {
+                    "position": [-11.55, -298.23, 3.32, 0.0181259, -0.130022, 0.981851, 0.136876],
                     "fov": 80
                 }
             ]
@@ -208,6 +216,7 @@ class PaperCompare(WithLidarView):
                     pos1 = np.array(state1["pos"])
                     pos2 = np.array(state2["pos"])
                     dist = np.linalg.norm(pos1 - pos2)
+                    print(dist)
                     if dist < 150:
                         self.is_recording = True
                         return True

@@ -19,7 +19,8 @@ class SegmentationMasksConversion:
         # self.queue_worker.start_execution(10)
         # create_folders(proc_data_path, with_seq=False)
 
-    def get_all_images(self):
+    @staticmethod
+    def get_all_images():
         diff = get_folder_diff("raw_annotations", "seg_maps")
         for unprocessed in diff:
             save_path = Path(str(unprocessed.absolute()).replace("raw_annotations", "seg_maps"))
@@ -44,9 +45,12 @@ class SegmentationMasksConversion:
 
     def convert_worker(self):
         while True:
-            (img_path, save_path) = self.queue_worker.work_q.get()
-            print(img_path)
+            item = (img_path, save_path) = self.queue_worker.work_q.get()
+            if item is None:
+                break
+            self.queue_worker.work_q.task_done()
             self.convert(img_path, save_path)
+            print(img_path)
 
     def convert(self, pic: Path, save_path: Path):
         img_path = str((save_path / pic.name).absolute())

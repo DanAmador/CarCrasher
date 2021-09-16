@@ -5,6 +5,6 @@ if __name__ == "__main__":
     dc = SegmentationMasksConversion(use_grayscale=True)
     # dc.process_all_single_thread()
     dc.images_to_queue()
-    dc.queue_worker.start_execution(10)
+    dc.queue_worker.start_execution(30)
     # unproject_dataset(multithreaded=False)
 
