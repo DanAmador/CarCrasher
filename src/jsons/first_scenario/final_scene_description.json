@@ -8,6 +8,7 @@
       "max_speed": 40,
       "first_person": true,
       "lane": "right",
+      "cam": true,
       "parts": {
         "etkc_DSE": "etkc_DSE",
         "etkc_DSE_ABS": "etkc_DSE_ABS",
@@ -99,7 +100,7 @@
       "position": [-301.68, 59.10, 36.37, 0.0136235, -0.0169909, 0.779994, 0.625408],
       "model": "etkc",
       "max_speed": 40,
-      "first_person": true,
+      "cam": true,
       "lane": "left",
       "parts": {
         "etkc_DSE": "etkc_DSE",
@@ -194,32 +195,11 @@
       "ai": "span",
       "max_speed": 40,
       "first_person": true,
+      "cam": true,
       "lane": "central"
     }
   ],
   "cameras": [
-    {
-      "position": [
-        13.78,
-        -53.91,
-        8.90,
-        0.15007,
-        0.020832,
-        -0.135909,
-        0.979068
-      ]
-    },
-    {
-      "position": [
-        -334.97,
-        290.03,
-        113.97,
-        0.126316,
-        0.142928,
-        -0.735552,
-        0.650061
-      ]
-    },
     {
       "position": [
         -238.73,

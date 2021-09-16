@@ -10,6 +10,9 @@ class FirstScenario(WithLidarView):
     def __init__(self, bb):
         super().__init__(bb)
         self.start_time = datetime.now()
+        self.framerate = 60
+        self.duration = 40
+        self.simulation_steps_per_frame = 3
 
     @staticmethod
     def poly_script_from_points(poly, speed):
