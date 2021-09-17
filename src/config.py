@@ -17,7 +17,7 @@ class Levels:
     EAST_COAST_USA = "east_coast_usa"
     SMALL_GRID = "smallgrid"
     GRIDMAP = "gridmap"
-
+    KONRAD = "ownmap"
 
 class Cars:
     ETK = "etk800"

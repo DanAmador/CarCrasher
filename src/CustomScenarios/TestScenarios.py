@@ -7,6 +7,10 @@ from beamngpy.sensors import Lidar
 from src.CustomScenarios.BaseScenarios import WithLidarView
 from src.CustomScenarios.SceneData import SceneData
 from src.config import AIMode, Levels
+import numpy as np
+
+from src.config import UserSettings as us
+import json
 
 
 class TestCrash(WithLidarView):
@@ -158,3 +162,125 @@ class BasicCarChase(WithLidarView):
                 print(f"Basic Car {i}  has no target")
 
         return SceneData({car.vid: car for car in cars}, [])
+
+
+class PaperCompare(WithLidarView):
+    def __init__(self, bb):
+        super().__init__(bb)
+        self.compare_list = []
+        self.is_recording = False
+        self.simulation_steps_per_frame = 1
+        self.duration = 8
+
+    @staticmethod
+    def get_json(first_person):
+        return {
+            "level": Levels.KONRAD,
+            "cars": [
+                {
+                    "car_id": "crasher",
+                    "position": [8.83, -574.10, 0.59, 0.00107191, -0.0308801, 0.998921, 0.0346746],
+                    "model": "etk800",
+                    "ai": AIMode.CHASE,
+                    "max_speed": 300,
+                    "first_person": first_person,
+                    "cam": True
+                },
+                {
+                    "car_id": "target",
+                    "position": [1.30, -326.09, 0.71, 0.0187382, 0.0283661, -0.833902, 0.550864],
+                    "model": "etk800",
+                    "first_person": False,
+                    "cam": True
+                },
+            ],
+
+            "cameras": [
+
+            ]
+        }
+
+    def should_record_predicate(self) -> bool:
+        if len(self.compare_list) > 0 and not self.is_recording:
+            sensor1 = self.compare_list[0].poll_sensors()
+            sensor2 = self.compare_list[1].poll_sensors()
+            if "state" in sensor1 and "state" in sensor2:
+                state1 = sensor1["state"]["state"]
+                state2 = sensor2["state"]["state"]
+                if "pos" in state1 and "pos" in state2:
+                    pos1 = np.array(state1["pos"])
+                    pos2 = np.array(state2["pos"])
+                    dist = np.linalg.norm(pos1 - pos2)
+                    print(dist)
+                    if dist < 150:
+                        self.is_recording = True
+                        return True
+        return self.is_recording
+
+    def setup_scenario(self) -> SceneData:
+        sd = SceneData.load_json_scene(self.get_json(False), self.bb)
+        crasher = sd.vehicles["crasher"]
+        target = sd.vehicles["target"]
+        crasher.ai_set_target(target.vid)
+        self.compare_list = [crasher, target]
+        return sd
+
+
+class LoopScenario(WithLidarView):
+
+    def __init__(self, bb):
+        super().__init__(bb)
+        self.duration = 25
+
+    @staticmethod
+    def get_json(first_person):
+        return {
+            "level": Levels.KONRAD,
+            "cars": [
+                {
+                    "car_id": "looper",
+                    "position": [6.62, -411.39, 0.78, 0.000163614, 0.00535084, 0.999518, -0.0305626],
+                    "model": "etk800",
+                    "ai": AIMode.MANUAL,
+                    "max_speed": 300,
+                    "first_person": first_person,
+                    "cam": True
+                },
+
+            ],
+
+            "cameras": [
+
+            ]
+        }
+
+    @staticmethod
+    def poly_script_from_points(poly):
+        idx = 1
+        axes = ["x", "y", "z"]
+        ai_script = []
+        for p in poly:
+            entry = {}
+            for axis, val in enumerate(p):
+                if axis > 2:
+                    break
+                entry[axes[axis]] = val
+            entry["t"] = idx * 4
+            ai_script.append(entry)
+            idx += 1
+        return ai_script
+
+    def setup_scenario(self) -> SceneData:
+        # [9.57, -434.38, 1.54, 0.0140053],
+        loop_positions = json.loads((us.json_path / "LoopScenario" / "loop_positions.json").read_text())
+        ai_script = self.poly_script_from_points(loop_positions)
+        points = [p[0:3] for p in loop_positions]
+        print(points)
+        self.bb.bmng.add_debug_polyline(points, rgba_color=(1, 1, .6, 1), cling=True)
+        self.bb.bmng.add_debug_spheres(points, radii=[1 for p in points], rgba_colors=[(idx/len(p), idx/len(p), idx/len(p), 1) for idx,p in enumerate(points)],
+                                       cling=True)
+        sd = SceneData.load_json_scene(self.get_json(True), self.bb)
+        looper = sd.vehicles["looper"]
+        looper.ai_set_script(ai_script, cling=True)
+
+        return sd

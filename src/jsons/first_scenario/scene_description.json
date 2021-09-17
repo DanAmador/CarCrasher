@@ -65,6 +65,76 @@
       "max_speed": 40,
       "first_person": true,
       "lane": "left"
+    },
+    {
+      "car_id": "tennant",
+      "position": [-342.74, -111.54, 43.11, 0.0349517, -0.0361526, 0.718037, 0.694186],
+      "model": "Tennant",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "orchid_out",
+      "position": [-366.27, -112.67, 43.03, 0.0612372, -0.0641827, 0.720661, 0.687588],
+      "model": "OrchidOut",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "orchid",
+      "position": [-330.56, -113.87, 42.60, 0.056668, -0.0570494, 0.707177, 0.702449],
+      "model": "Orchid",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "malachit",
+      "position": [-342.74, -111.54, 43.11, 0.0349517, -0.0361526, 0.718037, 0.694186],
+      "model": "Malachit",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "geometric_mouse",
+      "position": [-354.22, -113.15, 45.10, 0.0752037, -0.0736881, 0.695983, 0.710297],
+      "model": "GeometricMouse",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "mummy",
+      "position": [-332.21, -109.39, 42.51, 0.0265997, -0.0283088, 0.728213, 0.684249],
+      "model": "CatMummy",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "caryatid",
+      "position": [-331.57, -110.32, 42.73, 0.0858033, -0.0936331, 0.73129, 0.670138],
+      "model": "Caryatid",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "aphrodite",
+      "position": [-330.07, -109.51, 42.79, 0.047057, -0.0475715, 0.709347, 0.701676],
+      "model": "Aphrodite",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "wolfskull",
+      "position": [-366.11, -108.92, 42.68, 0.00905628, -0.00908564, 0.708192, 0.705904],
+      "model": "SkullAbomination",
+      "first_person": true,
+      "cam": true
+    },
+    {
+      "car_id": "anubis",
+      "position": [-354.82, -109.56, 45.00, 0.040196, -0.0412035, 0.714617, 0.697144],
+      "model": "Anubis",
+      "first_person": true,
+      "cam": true
     }
   ],
   "cameras": [
