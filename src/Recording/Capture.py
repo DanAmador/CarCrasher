@@ -26,12 +26,16 @@ class Capture:
                 vertices = self.data.get("points")
 
                 with open((f_path / f"{self.name}.txt").absolute(), "w") as f:
+                    added_points = set()
                     for idx in range(len(vertices)):
-                        if idx > 5000:
+                        if idx > 10000:
                             break
                         try:
+
                             p = vertices[random.randint(0, len(vertices))]
-                            f.write(f"{p[0]} {p[1]} {p[2]}\n")
+                            if p not in added_points:
+                                f.write(f"{p[0]} {p[1]} {p[2]}\n")
+                                added_points.add(p)
                         except IndexError:
                             print(f"index error with {p}")
                             continue

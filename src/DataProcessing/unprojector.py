@@ -20,17 +20,41 @@ def build_intrinsic():
     return intrinsic
 
 
-def build_pointcloud(path_dataset, seq_name):
+def build_pointcloud(path_dataset, seq_name, offset=None):
     merged = o3d.geometry.PointCloud()
+    camera_pos = []
     pcd_path = path_dataset / "pointclouds" / seq_name
-
     pcd_paths = [p for p in pcd_path.iterdir() if p.is_file()]
 
     for p in pcd_paths:
         pcd = o3d.io.read_point_cloud(str(p.absolute()), print_progress=True, format="xyz")
         merged = merged + pcd
 
-    return merged
+    offset = None
+    cam_path = path_dataset / "camera" / seq_name
+    cams = [p for p in cam_path.iterdir() if p.is_file()]
+    for cam_file in cams:
+        cam = json.loads(cam_file.read_text())
+        if cam is None:
+            break
+        curr_pos = np.array(cam["world_car_pos"])
+        cam_extr = {
+            "position": curr_pos,
+            "rotation": cam["euler_rot"],
+
+        }
+        if offset is None:
+            offset = curr_pos
+            curr_pos = [0, 0, 0]
+        else:
+            curr_pos = curr_pos - offset
+
+        cam_extr["position"] = [float(e) for e in curr_pos]
+        camera_pos.append(cam_extr)
+    if offset is None:
+        offset = np.array([0, 0, 0])
+    merged.translate(-offset, True)
+    return merged, camera_pos
 
 
 def unproject_pcd(path_dataset, pcd, seq_name, save_image=False):
@@ -92,6 +116,26 @@ def unproject_dataset(multithreaded=False):
 
     for seq_path in unprocessed_seqs:
         # process_sequence(us.data_path, seq_path.name)
-        pcd = build_pointcloud(us.data_path, seq_path.name)
+        pcd, _ = build_pointcloud(us.data_path, seq_path.name)
         unproject_pcd(us.data_path, pcd, seq_path.name, True)
         break
+
+
+def merge_pcd_dataset():
+    unprocessed_seqs = list(get_folder_diff("depth", "fragments"))
+    unprocessed_seqs.sort()
+    # create_paths([us.data_path / "fragments" / seq_path.stem / "unoptimized"])
+    for seq_path in unprocessed_seqs:
+        # try:
+        # process_sequence(us.data_path, seq_path.name)
+        pcd, cams = build_pointcloud(us.data_path, seq_path.name, )
+        folder_path = us.data_path / "fragments" / seq_path.name
+        pcd_path = folder_path / "out.ply"
+        cam_path = folder_path / "cameras.json"
+        print(str(pcd_path.absolute()))
+        o3d.io.write_point_cloud(str(pcd_path.absolute()), pcd)
+
+        with open(cam_path, 'w') as f:
+            f.write(json.dumps(cams))
+    # except Exception as e:
+    #     print(e)

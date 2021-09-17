@@ -51,10 +51,11 @@ class JsonLoaderScenarioTest(WithLidarView):
                     "car_id": "test_car",
                     "position": [-298.71, -146.55, 42.57, 0.0338056, -0.0305805, 0.670149, 0.740825],
                     "model": "etk800",
-                    "ai": AIMode.DISABLED,
+                    "ai": AIMode.SPAN,
                     "max_speed": 300,
                     "first_person": True,
-                    "cam": True
+                    "cam": True,
+                    "lidar": True
                 }
             ],
             "cameras": [
