@@ -30,9 +30,9 @@ def build_pointcloud(path_dataset, seq_name, offset=None):
         pcd = o3d.io.read_point_cloud(str(p.absolute()), print_progress=True, format="xyz")
         merged = merged + pcd
 
-    offset = None
     cam_path = path_dataset / "camera" / seq_name
     cams = [p for p in cam_path.iterdir() if p.is_file()]
+    world_offset = None
     for cam_file in cams:
         cam = json.loads(cam_file.read_text())
         if cam is None:
@@ -43,17 +43,16 @@ def build_pointcloud(path_dataset, seq_name, offset=None):
             "rotation": cam["euler_rot"],
 
         }
-        if offset is None:
-            offset = curr_pos
-            curr_pos = [0, 0, 0]
+        if world_offset is None:
+            world_offset = curr_pos
+            curr_pos = world_offset + np.array(cam["local_cam_pos"])
         else:
-            curr_pos = curr_pos - offset
+            curr_pos = curr_pos - world_offset + np.array(cam["local_cam_pos"])
 
         cam_extr["position"] = [float(e) for e in curr_pos]
         camera_pos.append(cam_extr)
-    if offset is None:
-        offset = np.array([0, 0, 0])
-    merged.translate(-offset, True)
+
+    merged.translate(-world_offset, True)
     return merged, camera_pos
 
 
