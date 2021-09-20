@@ -10,8 +10,8 @@ class FirstScenario(WithLidarView):
     def __init__(self, bb):
         super().__init__(bb)
         self.start_time = datetime.now()
-        self.framerate = 60
-        self.duration = 40
+        self.framerate = 30
+        self.duration = 90
         self.simulation_steps_per_frame = 3
 
     @staticmethod
@@ -28,12 +28,12 @@ class FirstScenario(WithLidarView):
 
     def setup_scenario(self) -> SceneData:
         scenario_path = us.json_path / "first_scenario"
-        sd, jay = SceneData.from_json_file(scenario_path / "final_scene_description.json", self.bb)
+        sd, jay = SceneData.from_json_file(scenario_path / "middle_scene_description.json", self.bb)
         lane_names = ["central", "left", "right"]
 
         lanes = {
             lane: FirstScenario.poly_script_from_points(json.loads(
-                (scenario_path / f"final_lane_{lane}.json").read_text()), 2)for lane in lane_names}
+                (scenario_path / f"new_lane_{lane}.json").read_text()), 2)for lane in lane_names}
 
         # position 1 euler = -2.391787, 3.153309,52.855541
         #
