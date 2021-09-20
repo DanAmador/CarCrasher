@@ -5,7 +5,7 @@
       "car_id": "police_front_right",
       "position": [-326.980286, -114.599571, 41.142662, 0.00399715, 0.00394274, -0.702233, 0.711925],
       "model": "etkc",
-      "max_speed": 40,
+      "max_speed": 30,
       "lane": "right",
       "cam": true,
       "first_person": false,
@@ -105,7 +105,7 @@
       "car_id": "police_front_left",
       "position": [-326.219727, -111.469078, 41.194199, 0.00399715, 0.00394274, -0.702233, 0.711925],
       "model": "etkc",
-      "max_speed": 40,
+      "max_speed": 30,
       "cam": true,
       "first_person": false,
       "lane": "left",
@@ -206,7 +206,7 @@
       "position": [-321.092316, -113.160484, 41.106968, 0.00399715, 0.00394274, -0.702233, 0.711925],
       "model": "oldtimer",
       "ai": "span",
-      "max_speed": 40,
+      "max_speed": 30,
       "first_person": true,
       "cam": true,
       "lane": "central"
@@ -896,5 +896,6 @@
     }
   ],
     "for_later": [
+
   ]
 }
