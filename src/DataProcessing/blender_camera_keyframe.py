@@ -46,7 +46,7 @@ class OT_TestOpenFilebrowser(Operator, ImportHelper):
             # z = rot[2]
             # rot[2] = rot[1]
             # rot[1] = z
-            rot[0] = rot[0] + math.radians(59)
+            rot[0] = rot[0] + math.radians(60)
             rot[2] = -rot[2] + math.radians(20.6)
             project_camera.rotation_euler = tuple(rot)
             project_camera.keyframe_insert('rotation_euler')

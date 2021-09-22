@@ -26,10 +26,14 @@ def build_pointcloud(path_dataset, seq_name, offset=None):
     pcd_path = path_dataset / "pointclouds" / seq_name
     pcd_paths = [p for p in pcd_path.iterdir() if p.is_file()]
 
+    #Pointcloud
     for p in pcd_paths:
         pcd = o3d.io.read_point_cloud(str(p.absolute()), print_progress=True, format="xyz")
         merged = merged + pcd
-
+    merged = merged.voxel_down_sample(voxel_size=0.1)
+    merged.estimate_normals(
+        search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.3, max_nn=30))
+    # trajectory
     cam_path = path_dataset / "camera" / seq_name
     cams = [p for p in cam_path.iterdir() if p.is_file()]
     world_offset = None
