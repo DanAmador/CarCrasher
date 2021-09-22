@@ -314,7 +314,9 @@
   "linelock":"",
   "van_tubs":"van_tubs",
   "brakepad_R":"brakepad_R_premium",
-  "pickup_reversewarn":"pickup_reversewarn"
+  "pickup_reversewarn":"pickup_reversewarn",
+  "malachite_spot": "Malachite",
+  "orchid_spot": "OrchidOut"
 },
 "format":2,
 "model":"van"
@@ -423,7 +425,10 @@
   "linelock":"",
   "van_tubs":"van_tubs",
   "brakepad_R":"brakepad_R_premium",
-  "pickup_reversewarn":"pickup_reversewarn"
+  "pickup_reversewarn":"pickup_reversewarn",
+  "caryatid_spot": "Caryatid",
+  "aphrodite_spot": "Aphrodite",
+  "catmummy_spot": "CatMummy"
 },
 "format":2,
 "model":"van"
@@ -493,7 +498,9 @@
                   "semi_axle_R_2":"semi_axle_R_2",
                   "semi_door_L":"semi_door_L",
                   "semi_brake_R_1":"none",
-                  "semi_wheel_R_2":"semi_wheel_R_2"
+                  "semi_wheel_R_2":"semi_wheel_R_2",
+                  "wolfskull_spot": "WolfSkull",
+                  "orchid_spot": "Orchid"
                 },
                 "format":2
                 }
@@ -567,7 +574,8 @@
                 "semi_door_L":"semi_door_L",
                 "semi_brake_F":"semi_brake_F",
                 "semi_wheel_R_2":"semi_wheel_R_2_alt",
-                "paint_design":"semi_skin_patriot"
+                "paint_design":"semi_skin_patriot",
+                "Tennant_Spot": "Tennant"
               },
               "format":2
               }
@@ -638,7 +646,8 @@
   "semi_axle_F":"semi_axle_F",
   "semi_cargobox_reardoor_L":"semi_cargobox_reardoor_L",
   "semi_axle_R_2":"semi_axle_R_2",
-  "semi_wheel_R_2":"semi_wheel_R_2"
+  "semi_wheel_R_2":"semi_wheel_R_2",
+  "geo_mouse_spot":"GeometricMouse"
 },
 "format":2
 }
@@ -709,7 +718,8 @@
   "semi_axle_F":"semi_axle_F",
   "semi_cargobox_reardoor_L":"semi_cargobox_reardoor_L",
   "semi_axle_R_2":"semi_axle_R_2",
-  "semi_wheel_R_2":"semi_wheel_R_2"
+  "semi_wheel_R_2":"semi_wheel_R_2",
+  "anubis_spot": "Anubis"
 },
 "format":2
 }
