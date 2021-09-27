@@ -7,8 +7,6 @@
       "model": "etkc",
       "max_speed": 40,
       "lane": "right",
-      "cam": true,
-      "first_person": false,
       "parts": {
                 "vars":{
                 },
@@ -107,7 +105,7 @@
       "model": "etkc",
       "max_speed": 40,
       "cam": true,
-      "first_person": false,
+      "first_person": true,
       "lane": "left",
       "parts": {
                 "vars":{
@@ -209,7 +207,8 @@
       "max_speed": 40,
       "first_person": true,
       "cam": true,
-      "lane": "central"
+      "lane": "central",
+      "color": [0.0,0.8352941176470588, 1.0, 0.4]
     },
     {
       "car_id": "orange_van_right",
@@ -217,6 +216,7 @@
       "model": "van",
       "ai": "chase",
       "max_speed": 40,
+      "cam": true,
       "first_person": true,
       "offset": 8.0,
       "lane": "right",
@@ -314,9 +314,7 @@
   "linelock":"",
   "van_tubs":"van_tubs",
   "brakepad_R":"brakepad_R_premium",
-  "pickup_reversewarn":"pickup_reversewarn",
-  "malachite_spot": "Malachite",
-  "orchid_spot": "OrchidOut"
+  "pickup_reversewarn":"pickup_reversewarn"
 },
 "format":2,
 "model":"van"
@@ -328,7 +326,6 @@
       "model": "van",
       "ai": "chase",
       "max_speed": 40,
-      "first_person": true,
       "offset": 8.0,
       "lane": "left",
       "target": "limousine_left",
@@ -425,10 +422,7 @@
   "linelock":"",
   "van_tubs":"van_tubs",
   "brakepad_R":"brakepad_R_premium",
-  "pickup_reversewarn":"pickup_reversewarn",
-  "caryatid_spot": "Caryatid",
-  "aphrodite_spot": "Aphrodite",
-  "catmummy_spot": "CatMummy"
+  "pickup_reversewarn":"pickup_reversewarn"
 },
 "format":2,
 "model":"van"
@@ -440,7 +434,6 @@
       "model": "semi",
       "ai": "chase",
       "max_speed": 40,
-      "first_person": true,
       "offset": 16.0,
       "lane": "right",
       "target": "box_truck_right",
@@ -498,9 +491,7 @@
                   "semi_axle_R_2":"semi_axle_R_2",
                   "semi_door_L":"semi_door_L",
                   "semi_brake_R_1":"none",
-                  "semi_wheel_R_2":"semi_wheel_R_2",
-                  "wolfskull_spot": "WolfSkull",
-                  "orchid_spot": "Orchid"
+                  "semi_wheel_R_2":"semi_wheel_R_2"
                 },
                 "format":2
                 }
@@ -511,7 +502,6 @@
       "model": "semi",
       "ai": "chase",
       "max_speed": 40,
-      "first_person": true,
       "offset": 16.0,
       "lane": "left",
       "target": "box_truck_left",
@@ -574,8 +564,7 @@
                 "semi_door_L":"semi_door_L",
                 "semi_brake_F":"semi_brake_F",
                 "semi_wheel_R_2":"semi_wheel_R_2_alt",
-                "paint_design":"semi_skin_patriot",
-                "Tennant_Spot": "Tennant"
+                "paint_design":"semi_skin_patriot"
               },
               "format":2
               }
@@ -586,6 +575,7 @@
       "model": "semi",
       "ai": "chase",
       "max_speed": 40,
+      "cam": true,
       "first_person": true,
       "offset": 12.0,
       "lane": "right",
@@ -646,8 +636,7 @@
   "semi_axle_F":"semi_axle_F",
   "semi_cargobox_reardoor_L":"semi_cargobox_reardoor_L",
   "semi_axle_R_2":"semi_axle_R_2",
-  "semi_wheel_R_2":"semi_wheel_R_2",
-  "geo_mouse_spot":"GeometricMouse"
+  "semi_wheel_R_2":"semi_wheel_R_2"
 },
 "format":2
 }
@@ -658,7 +647,6 @@
       "model": "semi",
       "ai": "chase",
       "max_speed": 40,
-      "first_person": true,
       "offset": 12.0,
       "lane": "left",
       "target": "flatbed_front_right",
@@ -718,43 +706,10 @@
   "semi_axle_F":"semi_axle_F",
   "semi_cargobox_reardoor_L":"semi_cargobox_reardoor_L",
   "semi_axle_R_2":"semi_axle_R_2",
-  "semi_wheel_R_2":"semi_wheel_R_2",
-  "anubis_spot": "Anubis"
+  "semi_wheel_R_2":"semi_wheel_R_2"
 },
 "format":2
 }
-    },
-    {
-      "car_id": "first_google_car",
-      "position": [
-        -256.28,
-        -106.18,
-        41.35,
-        -0.00237524,
-        -0.000715758,
-        -0.288525,
-        0.957469
-      ],
-      "model": "dopel",
-      "ai": "disabled",
-      "max_speed": 0,
-      "first_person": true
-    },
-    {
-      "car_id": "second_google_car",
-      "position": [
-        -213.34,
-        -10.10,
-        40.60,
-        -0.00163257,
-        -0.00421831,
-        0.932583,
-        -0.360927
-      ],
-      "model": "dopel",
-      "ai": "disabled",
-      "max_speed": 0,
-      "first_person": true
     },
     {
       "car_id": "limousine_left",
@@ -762,10 +717,12 @@
       "model": "maybach",
       "ai": "chase",
       "max_speed": 40,
+      "cam": true,
       "first_person": true,
       "offset": 5.0,
       "lane": "left",
-      "target": "police_front_left"
+      "target": "police_front_left",
+      "color": [0.0,0.0,0.0, 0.4]
     },
     {
       "car_id": "limousine_right",
@@ -773,20 +730,20 @@
       "model": "maybach",
       "ai": "chase",
       "max_speed": 40,
-      "first_person": true,
       "offset": 5.0,
       "lane": "right",
-      "target": "police_front_right"
+      "target": "police_front_right",
+      "color": [0.0,0.2,0.6,0.4]
     },
     {
       "car_id": "police_back_right",
       "position": [-265.109619, 53.645332, 34.848579, -0.00617309, 0.00952154, 0.83903, 0.543967],
       "model": "etk800",
-      "ai": "chase",
-      "max_speed": 40,
+      "ai": "span",
+      "max_speed": 5,
       "first_person": true,
       "cam": true,
-      "offset": 20.0,
+      "offset": 30.0,
       "lane": "right",
       "target": "flatbed_truck",
      "parts":{
@@ -884,10 +841,9 @@
       "car_id": "police_back_left",
       "position": [-266.261902, 49.304642, 34.846180, -0.00617309, 0.00952154, 0.83903, 0.543967],
       "model": "etk800",
-      "ai": "chase",
-      "max_speed": 40,
-      "first_person": true,
-      "offset": 20.0,
+      "ai": "span",
+      "max_speed": 5,
+      "offset": 30.0,
       "lane": "left",
       "target": "murica_truck",
       "parts":{

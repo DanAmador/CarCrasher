@@ -148,3 +148,4 @@ beam2CityLabelMap = {
     "GRASS": "vegetation",
     "MUD": "vegetation",
 }
+
