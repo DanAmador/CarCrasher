@@ -142,7 +142,7 @@ beam2CityLabelMap = {
     "TRUCK_TRAILERS": "bus",
     "ZEBRA_CROSSING": "person",
     "GUARD_RAIL": "person",
-    "WATER": "vegetation",
+    "WATER": "license plate",
     "ROCK": "vegetation",
     "SAND": "terrain",
     "GRASS": "vegetation",
