@@ -2,7 +2,7 @@
   "level": "ownmap",
   "cars": [
     {
-      "car_id": "crasher",
+      "car_id": "crasher1",
       "position": [-80.62, 109.64, 2.61, 0.00300818, 0.00129054, -0.394257, 0.918994],
       "model": "maybach",
       "ai": "manual",
@@ -11,8 +11,24 @@
       "first_person": false
     },
     {
-      "car_id": "target",
-      "position": [67.53, 0.18, 2.90, -0.00228933, 0.0045071, 0.891567, 0.452861],
+      "car_id": "crasher2",
+      "position": [249.39, -68.35, 4.29, 0.0204474, -0.0288195, 0.815067, 0.578288],
+      "model": "maybach",
+      "ai": "manual",
+      "max_speed": 300,
+      "cam": true,
+      "first_person": false
+    },
+    {
+      "car_id": "target1",
+      "position": [92.49, -17.80, 2.37, 0.00466454, -0.0094746, 0.897116, 0.441668],
+      "model": "etk800",
+      "ai": "manual",
+      "max_speed": 40
+    },
+    {
+      "car_id": "target2",
+      "position": [-90.09, 72.47, 2.02, 0.0360909, -0.0508683, 0.813989, 0.577523],
       "model": "etk800",
       "ai": "manual",
       "max_speed": 40

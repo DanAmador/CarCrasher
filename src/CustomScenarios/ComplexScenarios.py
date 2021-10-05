@@ -113,15 +113,22 @@ class BaseCrashScenario(WithLidarView):
 class AnubisCrash(PaperCompare):
     def __init__(self, bb):
         super().__init__(bb)
-        self.duration = 10
+        self.duration = 30
         self.framerate = 30
-        self.predicate_distance = 290
+        self.predicate_distance = 400
+
     def setup_scenario(self) -> SceneData:
         scenario_path = us.json_path / "CrashScenes"
         sd, jay = SceneData.from_json_file(scenario_path / "CrashScene1.json", self.bb)
-        crasher = sd.vehicles["crasher"]
-        target = sd.vehicles["target"]
+        crasher_2 = sd.vehicles["crasher1"]
+        crasher = sd.vehicles["crasher2"]
+        target_2 = sd.vehicles["target1"]
+        target = sd.vehicles["target2"]
+        crasher_3 = sd.vehicles["crasher3"]
+        target_3 = sd.vehicles["target3"]
         crasher.ai_set_target(target.vid)
+        crasher_2.ai_set_target(target_2.vid)
+        crasher_3.ai_set_target(target_3.vid)
         self.compare_list = [crasher, target]
         return sd
 
@@ -131,15 +138,18 @@ class PharaoCrash(PaperCompare):
         super().__init__(bb)
         self.duration = 10
         self.framerate = 30
-        self.predicate_distance = 290
+        self.predicate_distance = 250
         self.target_position = np.array([27.202, 29.817, 0])
 
     def setup_scenario(self) -> SceneData:
         scenario_path = us.json_path / "CrashScenes"
         sd, jay = SceneData.from_json_file(scenario_path / "CrashScene2.json", self.bb)
-        crasher = sd.vehicles["crasher"]
-        target = sd.vehicles["target"]
+        crasher = sd.vehicles["crasher1"]
+        crasher_2 = sd.vehicles["crasher2"]
+        target = sd.vehicles["target1"]
+        target_2 = sd.vehicles["target2"]
         crasher.ai_set_target(target.vid)
+        crasher_2.ai_set_target(target_2.vid)
 
         self.compare_list = [crasher, target]
         return sd
@@ -171,15 +181,24 @@ class CentaurCrash(PaperCompare):
         super().__init__(bb)
         self.duration = 10
         self.framerate = 30
-        self.predicate_distance = 100
+        self.predicate_distance = 50
         self.target_position = np.array([-28.282, -260.103, 0])
 
     def setup_scenario(self) -> SceneData:
         scenario_path = us.json_path / "CrashScenes"
         sd, jay = SceneData.from_json_file(scenario_path / "CrashScene4.json", self.bb)
-        crasher = sd.vehicles["crasher"]
-        target = sd.vehicles["target"]
+        crasher_2 = sd.vehicles["crasher2"]
+        crasher = sd.vehicles["crasher1"]
+        target_2 = sd.vehicles["target2"]
+        target = sd.vehicles["target1"]
+        crasher_3 = sd.vehicles["crasher3"]
+        target_3 = sd.vehicles["target3"]
+        crasher_4 = sd.vehicles["crasher4"]
+        target_4 = sd.vehicles["target4"]
         crasher.ai_set_target(target.vid)
+        crasher_2.ai_set_target(target_2.vid)
+        crasher_3.ai_set_target(target_3.vid)
+        crasher_4.ai_set_target(target_4.vid)
 
         self.compare_list = [crasher, target]
         return sd
@@ -203,5 +222,53 @@ class BabaCrash(PaperCompare):
         crasher.ai_set_target(target.vid)
         crasher_2.ai_set_target(target_2.vid)
 
+        self.compare_list = [crasher, target]
+        return sd
+
+
+class KnotCrash(PaperCompare):
+    def __init__(self, bb):
+        super().__init__(bb)
+        self.duration = 15
+        self.framerate = 30
+        self.predicate_distance = 400
+        self.target_position = np.array([83.741, 62.396, 38.659])
+
+    def setup_scenario(self) -> SceneData:
+        scenario_path = us.json_path / "CrashScenes"
+        sd, jay = SceneData.from_json_file(scenario_path / "CrashScene6.json", self.bb)
+        crasher_2 = sd.vehicles["crasher2"]
+        crasher = sd.vehicles["crasher1"]
+        target_2 = sd.vehicles["target2"]
+        target = sd.vehicles["target1"]
+        crasher_3 = sd.vehicles["crasher3"]
+        target_3 = sd.vehicles["target3"]
+        crasher.ai_set_target(target.vid)
+        crasher_2.ai_set_target(target_2.vid)
+        crasher_3.ai_set_target(target_3.vid)
+        self.compare_list = [crasher, target]
+        return sd
+
+
+class UpdatedKnotCrash(PaperCompare):
+    def __init__(self, bb):
+        super().__init__(bb)
+        self.duration = 15
+        self.framerate = 30
+        self.predicate_distance = 400
+        self.target_position = np.array([92.061, -522.832, 0])
+
+    def setup_scenario(self) -> SceneData:
+        scenario_path = us.json_path / "CrashScenes"
+        sd, jay = SceneData.from_json_file(scenario_path / "CrashScene7.json", self.bb)
+        crasher_2 = sd.vehicles["crasher2"]
+        crasher = sd.vehicles["crasher1"]
+        target_2 = sd.vehicles["target2"]
+        target = sd.vehicles["target1"]
+        crasher_3 = sd.vehicles["crasher3"]
+        target_3 = sd.vehicles["target3"]
+        crasher.ai_set_target(target.vid)
+        crasher_2.ai_set_target(target_2.vid)
+        crasher_3.ai_set_target(target_3.vid)
         self.compare_list = [crasher, target]
         return sd

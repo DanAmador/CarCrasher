@@ -2,17 +2,57 @@
   "level": "ownmap",
   "cars": [
     {
-      "car_id": "crasher",
+      "car_id": "crasher1",
       "position": [-4.24, -184.11, 1.39, 0.00302535, -0.000519328, 0.169184, 0.98558],
       "model": "etk800",
       "ai": "manual",
-      "max_speed": 300,
-      "cam": true,
-      "first_person": false
+      "max_speed": 300
     },
     {
-      "car_id": "target",
+      "car_id": "crasher2",
+      "position": [32.28, -248.55, 1.93, 0.0080231, -0.00676909, 0.644813, 0.764268],
+      "model": "semi",
+      "ai": "manual",
+      "max_speed": 300
+    },
+    {
+      "car_id": "crasher3",
+      "position": [-131.69, -246.98, 2.58, 0.0132588, 0.00996837, -0.600854, 0.799187],
+      "model": "etk800",
+      "ai": "manual",
+      "max_speed": 300
+    },
+    {
+      "car_id": "crasher4",
+      "position": [-7.91, -308.14, 1.58, -0.000410875, 0.00186396, 0.976554, 0.215263],
+      "model": "semi",
+      "ai": "manual",
+      "max_speed": 300
+    },
+    {
+      "car_id": "target1",
       "position": [-32.03, -270.75, 2.90, -0.00209438, 0.000418163, 0.195795, 0.980642],
+      "model": "etk800",
+      "ai": "manual",
+      "max_speed": 40
+    },
+    {
+      "car_id": "target2",
+      "position": [-77.25, -271.74, 2.10, 0.0514751, -0.0829648, 0.845673, 0.524694],
+      "model": "etk800",
+      "ai": "manual",
+      "max_speed": 40
+    },
+    {
+      "car_id": "target3",
+      "position": [-9.23, -262.63, 2.22, 0.0113755, -0.000419706, 0.0368681, 0.999255],
+      "model": "etk800",
+      "ai": "manual",
+      "max_speed": 40
+    },
+    {
+      "car_id": "target4",
+      "position": [-43.08, -226.37, 1.79, -0.00376635, -0.000687343, -0.179529, 0.983745],
       "model": "etk800",
       "ai": "manual",
       "max_speed": 40

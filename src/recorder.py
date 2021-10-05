@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     bb = BeamBuilder(launch=True)
 
-    scenario = cs.BabaCrash(bb)
+    scenario = cs.UpdatedKnotCrash(bb)
 
     manager = SequenceManager(bb, scenario)
     bb.bmng.set_steps_per_second(30)
