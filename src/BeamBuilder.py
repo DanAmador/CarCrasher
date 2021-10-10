@@ -49,7 +49,7 @@ class BeamBuilder:
     def cam_setup(self, cam_pos=(0, -5, 2), cam_dir=(0, 1, -.3), colour=True, depth=True, annotation=True,
                   instance=True, first_person=False, static_camera=False, fov=50) -> Tuple[Camera, str]:
         if first_person:
-            cam_pos = (0, 2, 1)
+            cam_pos = (0, 2, 1.8)
             cam_dir = (0, 1, 0)
         camera = Camera(cam_pos, cam_dir, fov, (1024, 512), colour=colour, depth=depth,
                         annotation=annotation, instance=instance,
@@ -68,7 +68,7 @@ class BeamBuilder:
         return self
 
     def with_car(self, model: Cars = Cars.ETK, vehicle_id="car", pos=(-717, 101, 118), rot=None,
-                 rot_quat=(0, 0, 0.3826834, 0.9238795), sensors=None, cling=True):
+                 rot_quat=(0, 0, 0.3826834, 0.9238795), sensors=None, cling=True, confg=None):
         if sensors is None:
             sensors = {}
         vehicle = Vehicle(vehicle_id, model=model, licence='AntonGinzburg')
@@ -76,6 +76,8 @@ class BeamBuilder:
         while vehicle_id in self.vehicles.keys():
             repeated = [x for x in self.vehicles.keys() if x.find(vehicle_id) != -1]
             vehicle_id = f"{vehicle_id}_{len(repeated)}"
+
+
 
         for sensor_name, sensor in sensors.items():
             print(f"Attaching {sensor_name} to {vehicle_id}")
@@ -88,10 +90,15 @@ class BeamBuilder:
             if rot is not None:
                 rot_quat = angle_to_quat(rot)
             self.scenario.add_vehicle(vehicle, pos=pos, rot_quat=rot_quat, cling=cling)
-
+        if confg:
+            self.bmng.set_part_config(vehicle, confg)
         if len(self.vehicles) == 0:
             self.ego_vehicle = vehicle
-
+        # if confg is not None and vehicle is not None:
+        #    print("Before call")
+        #    print(self.bmng)
+        #    self.bmng.set_part_config(vehicle, confg)
+        #    print("After call")
         self.vehicles[vehicle_id] = vehicle
         return vehicle
 

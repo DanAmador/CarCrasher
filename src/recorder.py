@@ -9,10 +9,11 @@ if __name__ == "__main__":
     bb = BeamBuilder(launch=True)
 
 
+
     scenario = cs.PaperCompare(bb)
 
     manager = SequenceManager(bb, scenario)
-    bb.bmng.set_steps_per_second(60)
+    bb.bmng.set_steps_per_second(30)
 
     print("Press the Z key to record clip")
     while True:

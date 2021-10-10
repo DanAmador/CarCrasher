@@ -16,6 +16,7 @@ class AbstractRecordingScenario(ABC):
         self.framerate = 60
         self.duration = 5
         self.simulation_steps_per_frame = 3
+        self.is_recording = False
 
     def should_record_predicate(self) -> bool:
         return False

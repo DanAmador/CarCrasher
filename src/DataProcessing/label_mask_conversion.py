@@ -9,12 +9,13 @@ from src.util import create_paths, beam2CityLabelMap, ThreadQueueWorker
 
 
 class SegmentationMasksConversion:
-    def __init__(self, use_grayscale):
+    def __init__(self, use_grayscale, mapping_dict=None):
+        if mapping_dict is None:
+            mapping_dict = beam2CityLabelMap.copy()
         self.grayscale = use_grayscale
         self.queue_worker = ThreadQueueWorker(self.convert_worker)
         self.bmng_dataset = dsm.beamng_dataset
-
-        self.bmng_dataset.create_mappings_from_dict(beam2CityLabelMap, dsm.cityscapes, self.grayscale)
+        self.bmng_dataset.create_mappings_from_dict(mapping_dict, dsm.cityscapes, self.grayscale)
 
         # self.queue_worker.start_execution(10)
         # create_folders(proc_data_path, with_seq=False)

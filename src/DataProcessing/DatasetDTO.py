@@ -37,11 +37,12 @@ class Dataset:
     def get_label(self, name: str):
         return self.labels.get(name, None)
 
-    def create_mappings_from_dict(self, mapping_dict: Dict[str, List[str]], other_dataset: Dataset, grayscale=False):
+    def create_mappings_from_dict(self, mapping_dict: Dict[str, str], other_dataset: Dataset, grayscale=False):
         for key, label in mapping_dict.items():
             if label is not None:
                 self_label = self.get_label(key)
                 other_label = other_dataset.get_label(label)
+                print(self_label, other_label)
                 gray = other_label.id
                 gray_tup = (gray, gray, gray)
                 self.mappings[self_label.color] = other_label.color if not grayscale else gray_tup

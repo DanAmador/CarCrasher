@@ -171,6 +171,7 @@ class PaperCompare(WithLidarView):
         self.is_recording = False
         self.simulation_steps_per_frame = 1
         self.duration = 8
+        self.predicate_distance = 150
 
     @staticmethod
     def get_json(first_person):
@@ -212,7 +213,7 @@ class PaperCompare(WithLidarView):
                     pos2 = np.array(state2["pos"])
                     dist = np.linalg.norm(pos1 - pos2)
                     print(dist)
-                    if dist < 150:
+                    if dist < self.predicate_distance:
                         self.is_recording = True
                         return True
         return self.is_recording

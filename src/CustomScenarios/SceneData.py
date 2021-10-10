@@ -53,13 +53,13 @@ class SceneData:
 
             if car.get("lidar", False):
                 sensors["lidar"] = Lidar()
-
             car_name = car["car_id"]
             model = car["model"]
             pos, rot_quat = parse_bmng_pos(car["position"])
             cling = car.get("cling", True)
+            cfg = car.get("parts", None)
             vehicle: Vehicle = bb.with_car(vehicle_id=car_name, model=model, pos=pos, rot_quat=rot_quat,
-                                           sensors=sensors, cling=cling)
+                                           sensors=sensors, cling=cling, confg=cfg)
             cars_dict[car_name] = vehicle
             if "camera" in sensors:
                 setattr(vehicle, 'should_record', True)
