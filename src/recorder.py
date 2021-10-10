@@ -8,7 +8,9 @@ if __name__ == "__main__":
 
     bb = BeamBuilder(launch=True)
 
-    scenario = cs.UpdatedKnotCrash(bb)
+
+
+    scenario = cs.PaperCompare(bb)
 
     manager = SequenceManager(bb, scenario)
     bb.bmng.set_steps_per_second(30)
