@@ -1,6 +1,6 @@
 
 # CarCrasher
-Data extraction pipeline for BeamNG.tech used easily create scenarios to record and later enhance the footage with photorealistic Vid2Vid Neural Networks.
+Data extraction pipeline for BeamNG.tech used easily create scenarios to record and later enhance the footage with  Vid2Vid Neural Networks.
 
 It also includes a Blender script to explore the Point Cloud with the camera trajectory. 
 
